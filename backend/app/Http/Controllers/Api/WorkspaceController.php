@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Workspace;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class WorkspaceController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Display the authenticated user's workspaces.
      */
@@ -41,17 +45,26 @@ class WorkspaceController extends Controller
             ],
         ]);
 
-        $workspace = Workspace::create([
-            'owner_id' => $request->user()->id,
-            'name' => $validated['name'],
-            'slug' => $this->generateUniqueSlug($validated['name']),
-            'description' => $validated['description'] ?? null,
-            'visibility' => $validated['visibility'] ?? 'private',
-        ]);
+        $workspace = DB::transaction(
+            function () use ($request, $validated): Workspace {
+                $workspace = Workspace::create([
+                    'owner_id' => $request->user()->id,
+                    'name' => $validated['name'],
+                    'slug' => $this->generateUniqueSlug($validated['name']),
+                    'description' => $validated['description'] ?? null,
+                    'visibility' => $validated['visibility'] ?? 'private',
+                ]);
 
-        $workspace->members()->attach($request->user()->id, [
-            'role' => 'owner',
-        ]);
+                $workspace->members()->attach(
+                    $request->user()->id,
+                    [
+                        'role' => 'owner',
+                    ]
+                );
+
+                return $workspace;
+            }
+        );
 
         $workspace->load('owner:id,name,email');
 
@@ -64,9 +77,11 @@ class WorkspaceController extends Controller
     /**
      * Display one workspace.
      */
-    public function show(Request $request, Workspace $workspace): JsonResponse
-    {
-        $this->ensureMembership($request, $workspace);
+    public function show(
+        Request $request,
+        Workspace $workspace
+    ): JsonResponse {
+        $this->authorize('view', $workspace);
 
         $workspace->load([
             'owner:id,name,email',
@@ -85,11 +100,19 @@ class WorkspaceController extends Controller
         Request $request,
         Workspace $workspace
     ): JsonResponse {
-        $this->ensureOwner($request, $workspace);
+        $this->authorize('update', $workspace);
 
         $validated = $request->validate([
-            'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'name' => [
+                'sometimes',
+                'required',
+                'string',
+                'max:255',
+            ],
+            'description' => [
+                'nullable',
+                'string',
+            ],
             'visibility' => [
                 'sometimes',
                 Rule::in(['private', 'public']),
@@ -122,7 +145,7 @@ class WorkspaceController extends Controller
         Request $request,
         Workspace $workspace
     ): JsonResponse {
-        $this->ensureOwner($request, $workspace);
+        $this->authorize('delete', $workspace);
 
         $workspace->delete();
 
@@ -132,49 +155,28 @@ class WorkspaceController extends Controller
     }
 
     /**
-     * Ensure the authenticated user belongs to the workspace.
-     */
-    private function ensureMembership(
-        Request $request,
-        Workspace $workspace
-    ): void {
-        $isMember = $workspace->members()
-            ->where('users.id', $request->user()->id)
-            ->exists();
-
-        abort_unless($isMember, 403, 'You do not have access to this workspace.');
-    }
-
-    /**
-     * Ensure the authenticated user owns the workspace.
-     */
-    private function ensureOwner(
-        Request $request,
-        Workspace $workspace
-    ): void {
-        abort_unless(
-            $workspace->owner_id === $request->user()->id,
-            403,
-            'Only the workspace owner can perform this action.'
-        );
-    }
-
-    /**
-     * Generate a unique slug.
+     * Generate a unique workspace slug.
      */
     private function generateUniqueSlug(
         string $name,
         ?int $ignoreWorkspaceId = null
     ): string {
         $baseSlug = Str::slug($name);
+
+        if ($baseSlug === '') {
+            $baseSlug = 'workspace';
+        }
+
         $slug = $baseSlug;
         $counter = 2;
 
         while (
             Workspace::query()
                 ->when(
-                    $ignoreWorkspaceId,
-                    fn ($query) => $query->whereKeyNot($ignoreWorkspaceId)
+                    $ignoreWorkspaceId !== null,
+                    fn ($query) => $query->whereKeyNot(
+                        $ignoreWorkspaceId
+                    )
                 )
                 ->where('slug', $slug)
                 ->exists()
