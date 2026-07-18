@@ -9,8 +9,11 @@ if (!apiUrl) {
 export const apiClient = axios.create({
     baseURL: apiUrl,
     withCredentials: true,
+    withXSRFToken: true,
     headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
     },
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
 });
