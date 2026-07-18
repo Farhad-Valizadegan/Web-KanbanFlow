@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\WorkspaceController;
+use App\Http\Controllers\Api\WorkspaceMemberController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -11,9 +13,30 @@ Route::get('/health', function (): JsonResponse {
     ]);
 });
 
-Route::middleware('auth:sanctum')->get(
-    '/user',
-    function (Request $request): JsonResponse {
+Route::middleware('auth:sanctum')->group(function (): void {
+    Route::get('/user', function (Request $request): JsonResponse {
         return response()->json($request->user());
-    },
-);
+    });
+
+    Route::apiResource('workspaces', WorkspaceController::class);
+
+    Route::get(
+        'workspaces/{workspace}/members',
+        [WorkspaceMemberController::class, 'index']
+    );
+
+    Route::post(
+        'workspaces/{workspace}/members',
+        [WorkspaceMemberController::class, 'store']
+    );
+
+    Route::patch(
+        'workspaces/{workspace}/members/{user}',
+        [WorkspaceMemberController::class, 'update']
+    );
+
+    Route::delete(
+        'workspaces/{workspace}/members/{user}',
+        [WorkspaceMemberController::class, 'destroy']
+    );
+});
