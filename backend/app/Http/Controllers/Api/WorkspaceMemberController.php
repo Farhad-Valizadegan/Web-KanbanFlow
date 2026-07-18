@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Workspace;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class WorkspaceMemberController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * List all members of a workspace.
      */
@@ -18,7 +21,7 @@ class WorkspaceMemberController extends Controller
         Request $request,
         Workspace $workspace
     ): JsonResponse {
-        $this->ensureMembership($request, $workspace);
+        $this->authorize('view', $workspace);
 
         $members = $workspace->members()
             ->select('users.id', 'users.name', 'users.email')
@@ -37,7 +40,7 @@ class WorkspaceMemberController extends Controller
         Request $request,
         Workspace $workspace
     ): JsonResponse {
-        $this->ensureManagerOrOwner($request, $workspace);
+        $this->authorize('manageMembers', $workspace);
 
         $validated = $request->validate([
             'email' => [
@@ -55,7 +58,11 @@ class WorkspaceMemberController extends Controller
             ->where('email', $validated['email'])
             ->firstOrFail();
 
-        if ($workspace->members()->where('users.id', $user->id)->exists()) {
+        if (
+            $workspace->members()
+                ->where('users.id', $user->id)
+                ->exists()
+        ) {
             return response()->json([
                 'message' => 'User is already a workspace member.',
             ], 422);
@@ -84,7 +91,7 @@ class WorkspaceMemberController extends Controller
         Workspace $workspace,
         User $user
     ): JsonResponse {
-        $this->ensureOwner($request, $workspace);
+        $this->authorize('changeMemberRoles', $workspace);
 
         $validated = $request->validate([
             'role' => [
@@ -109,9 +116,12 @@ class WorkspaceMemberController extends Controller
             'User is not a member of this workspace.'
         );
 
-        $workspace->members()->updateExistingPivot($user->id, [
-            'role' => $validated['role'],
-        ]);
+        $workspace->members()->updateExistingPivot(
+            $user->id,
+            [
+                'role' => $validated['role'],
+            ]
+        );
 
         return response()->json([
             'message' => 'Workspace member role updated successfully.',
@@ -126,7 +136,7 @@ class WorkspaceMemberController extends Controller
         Workspace $workspace,
         User $user
     ): JsonResponse {
-        $this->ensureManagerOrOwner($request, $workspace);
+        $this->authorize('manageMembers', $workspace);
 
         abort_if(
             $user->id === $workspace->owner_id,
@@ -134,64 +144,20 @@ class WorkspaceMemberController extends Controller
             'The workspace owner cannot be removed.'
         );
 
+        $isMember = $workspace->members()
+            ->where('users.id', $user->id)
+            ->exists();
+
+        abort_unless(
+            $isMember,
+            404,
+            'User is not a member of this workspace.'
+        );
+
         $workspace->members()->detach($user->id);
 
         return response()->json([
             'message' => 'Workspace member removed successfully.',
         ]);
-    }
-
-    /**
-     * Ensure the authenticated user belongs to the workspace.
-     */
-    private function ensureMembership(
-        Request $request,
-        Workspace $workspace
-    ): void {
-        $isMember = $workspace->members()
-            ->where('users.id', $request->user()->id)
-            ->exists();
-
-        abort_unless(
-            $isMember,
-            403,
-            'You do not have access to this workspace.'
-        );
-    }
-
-    /**
-     * Ensure the authenticated user is the workspace owner.
-     */
-    private function ensureOwner(
-        Request $request,
-        Workspace $workspace
-    ): void {
-        abort_unless(
-            $workspace->owner_id === $request->user()->id,
-            403,
-            'Only the workspace owner can perform this action.'
-        );
-    }
-
-    /**
-     * Ensure the authenticated user is an owner or manager.
-     */
-    private function ensureManagerOrOwner(
-        Request $request,
-        Workspace $workspace
-    ): void {
-        if ($workspace->owner_id === $request->user()->id) {
-            return;
-        }
-
-        $role = $workspace->members()
-            ->where('users.id', $request->user()->id)
-            ->value('workspace_user.role');
-
-        abort_unless(
-            $role === 'manager',
-            403,
-            'Only the workspace owner or a manager can perform this action.'
-        );
     }
 }
