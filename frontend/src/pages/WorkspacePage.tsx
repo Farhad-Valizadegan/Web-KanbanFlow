@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
+import CreateProjectForm from '../features/projects/components/CreateProjectForm';
+import ProjectList from '../features/projects/components/ProjectList';
 import { getWorkspace } from '../features/workspaces/api';
 import WorkspaceMembers from '../features/workspaces/components/WorkspaceMembers';
 
@@ -77,6 +79,30 @@ function WorkspacePage() {
                             'No description has been added.'}
                     </p>
                 </header>
+
+                <section className="mt-10">
+                    <div>
+                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
+                            Projects
+                        </p>
+
+                        <h2 className="mt-2 text-2xl font-bold">
+                            Workspace projects
+                        </h2>
+
+                        <p className="mt-2 text-slate-400">
+                            Create and manage projects inside this workspace.
+                        </p>
+                    </div>
+
+                    <CreateProjectForm
+                        workspaceId={numericWorkspaceId}
+                    />
+
+                    <ProjectList
+                        workspaceId={numericWorkspaceId}
+                    />
+                </section>
 
                 <WorkspaceMembers workspace={workspace} />
             </section>
