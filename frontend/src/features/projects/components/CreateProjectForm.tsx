@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
 import { useState } from 'react';
 import { createProject } from '../api';
 import type {
@@ -16,6 +17,11 @@ interface FormState {
     status: ProjectStatus;
     start_date: string;
     due_date: string;
+}
+
+interface ApiErrorResponse {
+    message?: string;
+    errors?: Record<string, string[]>;
 }
 
 const initialFormState: FormState = {
@@ -40,6 +46,7 @@ function CreateProjectForm({
     const createMutation = useMutation({
         mutationFn: (input: CreateProjectInput) =>
             createProject(workspaceId, input),
+
         onSuccess: async () => {
             setForm(initialFormState);
             setErrorMessage(null);
@@ -48,9 +55,40 @@ function CreateProjectForm({
                 queryKey: ['projects', workspaceId],
             });
         },
-        onError: () => {
+
+        onError: (
+            error: AxiosError<ApiErrorResponse>,
+        ) => {
+            if (error.response?.status === 403) {
+                setErrorMessage(
+                    'Only the workspace owner or a manager can create projects.',
+                );
+                return;
+            }
+
+            if (error.response?.status === 401) {
+                setErrorMessage(
+                    'Your session has expired. Please sign in again.',
+                );
+                return;
+            }
+
+            const validationErrors =
+                error.response?.data.errors;
+
+            if (validationErrors) {
+                const firstError =
+                    Object.values(validationErrors)[0]?.[0];
+
+                if (firstError) {
+                    setErrorMessage(firstError);
+                    return;
+                }
+            }
+
             setErrorMessage(
-                'Unable to create the project. Check the submitted values.',
+                error.response?.data.message ??
+                    'Unable to create the project.',
             );
         },
     });
@@ -62,8 +100,12 @@ function CreateProjectForm({
 
         setErrorMessage(null);
 
-        if (!form.name.trim()) {
-            setErrorMessage('Project name is required.');
+        const projectName = form.name.trim();
+
+        if (!projectName) {
+            setErrorMessage(
+                'Project name is required.',
+            );
             return;
         }
 
@@ -79,7 +121,7 @@ function CreateProjectForm({
         }
 
         createMutation.mutate({
-            name: form.name.trim(),
+            name: projectName,
             description:
                 form.description.trim() || undefined,
             status: form.status,
@@ -108,6 +150,8 @@ function CreateProjectForm({
                                 name: event.target.value,
                             }))
                         }
+                        maxLength={255}
+                        required
                         className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
                         placeholder="Website redesign"
                     />
@@ -132,9 +176,11 @@ function CreateProjectForm({
                         <option value="active">
                             Active
                         </option>
+
                         <option value="completed">
                             Completed
                         </option>
+
                         <option value="archived">
                             Archived
                         </option>
@@ -168,6 +214,7 @@ function CreateProjectForm({
                     <input
                         type="date"
                         value={form.due_date}
+                        min={form.start_date || undefined}
                         onChange={(event) =>
                             setForm((current) => ({
                                 ...current,
@@ -190,11 +237,12 @@ function CreateProjectForm({
                     onChange={(event) =>
                         setForm((current) => ({
                             ...current,
-                            description: event.target.value,
+                            description:
+                                event.target.value,
                         }))
                     }
                     rows={4}
-                    className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                    className="mt-2 w-full resize-y border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
                     placeholder="Describe the project goals and scope."
                 />
             </label>
