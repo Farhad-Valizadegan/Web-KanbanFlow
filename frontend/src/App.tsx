@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import BoardPage from './pages/BoardPage';
 import DashboardPage from './pages/DashboardPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -28,6 +29,11 @@ function App() {
                 <Route
                     path="/workspaces/:workspaceId/projects/:projectId"
                     element={<ProjectPage />}
+                />
+
+                <Route
+                    path="/workspaces/:workspaceId/projects/:projectId/boards/:boardId"
+                    element={<BoardPage />}
                 />
             </Route>
         </Routes>
