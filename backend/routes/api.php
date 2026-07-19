@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BoardController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\WorkspaceController;
 use App\Http\Controllers\Api\WorkspaceMemberController;
@@ -47,5 +48,10 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::apiResource(
         'workspaces.projects',
         ProjectController::class
+    );
+
+    Route::apiResource(
+        'workspaces.projects.boards',
+        BoardController::class
     );
 });
