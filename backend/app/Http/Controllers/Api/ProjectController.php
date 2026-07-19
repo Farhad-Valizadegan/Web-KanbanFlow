@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Workspace;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -13,18 +12,14 @@ use Illuminate\Validation\Rule;
 
 class ProjectController extends Controller
 {
-    use AuthorizesRequests;
-
-    /**
-     * Display the workspace projects.
-     */
     public function index(
         Request $request,
         Workspace $workspace
     ): JsonResponse {
         $this->authorize('view', $workspace);
 
-        $projects = $workspace->projects()
+        $projects = $workspace
+            ->projects()
             ->with('creator:id,name,email')
             ->latest()
             ->get();
@@ -34,9 +29,6 @@ class ProjectController extends Controller
         ]);
     }
 
-    /**
-     * Store a project in the workspace.
-     */
     public function store(
         Request $request,
         Workspace $workspace
@@ -79,10 +71,14 @@ class ProjectController extends Controller
                 $workspace,
                 $validated['name']
             ),
-            'description' => $validated['description'] ?? null,
-            'status' => $validated['status'] ?? 'active',
-            'start_date' => $validated['start_date'] ?? null,
-            'due_date' => $validated['due_date'] ?? null,
+            'description' =>
+                $validated['description'] ?? null,
+            'status' =>
+                $validated['status'] ?? 'active',
+            'start_date' =>
+                $validated['start_date'] ?? null,
+            'due_date' =>
+                $validated['due_date'] ?? null,
         ]);
 
         $project->load('creator:id,name,email');
@@ -93,9 +89,6 @@ class ProjectController extends Controller
         ], 201);
     }
 
-    /**
-     * Display one project.
-     */
     public function show(
         Request $request,
         Workspace $workspace,
@@ -115,9 +108,6 @@ class ProjectController extends Controller
         ]);
     }
 
-    /**
-     * Update a project.
-     */
     public function update(
         Request $request,
         Workspace $workspace,
@@ -138,6 +128,7 @@ class ProjectController extends Controller
                 'max:255',
             ],
             'description' => [
+                'sometimes',
                 'nullable',
                 'string',
             ],
@@ -150,10 +141,12 @@ class ProjectController extends Controller
                 ]),
             ],
             'start_date' => [
+                'sometimes',
                 'nullable',
                 'date',
             ],
             'due_date' => [
+                'sometimes',
                 'nullable',
                 'date',
                 'after_or_equal:start_date',
@@ -164,11 +157,12 @@ class ProjectController extends Controller
             array_key_exists('name', $validated)
             && $validated['name'] !== $project->name
         ) {
-            $validated['slug'] = $this->generateUniqueSlug(
-                $workspace,
-                $validated['name'],
-                $project->id
-            );
+            $validated['slug'] =
+                $this->generateUniqueSlug(
+                    $workspace,
+                    $validated['name'],
+                    $project->id
+                );
         }
 
         $project->update($validated);
@@ -180,9 +174,6 @@ class ProjectController extends Controller
         ]);
     }
 
-    /**
-     * Delete a project.
-     */
     public function destroy(
         Request $request,
         Workspace $workspace,
@@ -202,9 +193,6 @@ class ProjectController extends Controller
         ]);
     }
 
-    /**
-     * Ensure the project belongs to the workspace.
-     */
     private function ensureProjectBelongsToWorkspace(
         Workspace $workspace,
         Project $project
@@ -216,9 +204,6 @@ class ProjectController extends Controller
         );
     }
 
-    /**
-     * Generate a unique project slug within a workspace.
-     */
     private function generateUniqueSlug(
         Workspace $workspace,
         string $name,
@@ -234,12 +219,15 @@ class ProjectController extends Controller
         $counter = 2;
 
         while (
-            $workspace->projects()
+            $workspace
+                ->projects()
+                ->withTrashed()
                 ->when(
                     $ignoreProjectId !== null,
-                    fn ($query) => $query->whereKeyNot(
-                        $ignoreProjectId
-                    )
+                    fn ($query) =>
+                        $query->whereKeyNot(
+                            $ignoreProjectId
+                        )
                 )
                 ->where('slug', $slug)
                 ->exists()
