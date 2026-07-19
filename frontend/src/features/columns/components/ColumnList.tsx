@@ -5,6 +5,8 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useState } from 'react';
+import CreateTaskForm from '../../tasks/components/CreateTaskForm';
+import TaskList from '../../tasks/components/TaskList';
 import {
     deleteColumn,
     getColumns,
@@ -40,6 +42,9 @@ function ColumnList({
     const queryClient = useQueryClient();
 
     const [editingColumnId, setEditingColumnId] =
+        useState<number | null>(null);
+
+    const [showTaskFormColumnId, setShowTaskFormColumnId] =
         useState<number | null>(null);
 
     const [editForm, setEditForm] =
@@ -185,6 +190,7 @@ function ColumnList({
 
     function beginEditing(column: Column) {
         setEditingColumnId(column.id);
+        setShowTaskFormColumnId(null);
         setErrorMessage(null);
 
         setEditForm({
@@ -200,6 +206,15 @@ function ColumnList({
     function cancelEditing() {
         setEditingColumnId(null);
         setErrorMessage(null);
+    }
+
+    function toggleTaskForm(columnId: number) {
+        setShowTaskFormColumnId(
+            currentColumnId =>
+                currentColumnId === columnId
+                    ? null
+                    : columnId,
+        );
     }
 
     function handleSave(column: Column) {
@@ -304,7 +319,7 @@ function ColumnList({
                 </p>
             )}
 
-            <div className="flex gap-4 overflow-x-auto pb-4">
+            <div className="flex gap-4 overflow-x-auto pb-6">
                 {columns.map((column) => {
                     const isEditing =
                         editingColumnId === column.id;
@@ -319,11 +334,15 @@ function ColumnList({
                         deleteMutation.variables ===
                             column.id;
 
+                    const isTaskFormVisible =
+                        showTaskFormColumnId ===
+                        column.id;
+
                     if (isEditing) {
                         return (
                             <article
                                 key={column.id}
-                                className="w-80 shrink-0 border border-blue-700 bg-slate-900 p-5"
+                                className="w-96 shrink-0 border border-blue-700 bg-slate-900 p-5"
                             >
                                 <label className="block">
                                     <span className="text-sm font-medium text-slate-300">
@@ -338,9 +357,7 @@ function ColumnList({
                                             event,
                                         ) =>
                                             setEditForm(
-                                                (
-                                                    current,
-                                                ) => ({
+                                                current => ({
                                                     ...current,
                                                     name: event
                                                         .target
@@ -368,9 +385,7 @@ function ColumnList({
                                             event,
                                         ) =>
                                             setEditForm(
-                                                (
-                                                    current,
-                                                ) => ({
+                                                current => ({
                                                     ...current,
                                                     position:
                                                         event
@@ -399,9 +414,7 @@ function ColumnList({
                                             event,
                                         ) =>
                                             setEditForm(
-                                                (
-                                                    current,
-                                                ) => ({
+                                                current => ({
                                                     ...current,
                                                     wip_limit:
                                                         event
@@ -451,7 +464,7 @@ function ColumnList({
                     return (
                         <article
                             key={column.id}
-                            className="w-80 shrink-0 border border-slate-800 bg-slate-900 p-5"
+                            className="w-96 shrink-0 border border-slate-800 bg-slate-900 p-5"
                         >
                             <div className="flex items-start justify-between gap-4">
                                 <div>
@@ -475,11 +488,45 @@ function ColumnList({
                                 </span>
                             </div>
 
-                            <div className="mt-5 min-h-28 border border-dashed border-slate-700 bg-slate-950 p-4">
-                                <p className="text-center text-sm text-slate-500">
-                                    Tasks will appear here.
-                                </p>
+                            <div className="mt-5">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        toggleTaskForm(
+                                            column.id,
+                                        )
+                                    }
+                                    className="w-full border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950"
+                                >
+                                    {isTaskFormVisible
+                                        ? 'Close task form'
+                                        : 'Add task'}
+                                </button>
+
+                                {isTaskFormVisible && (
+                                    <CreateTaskForm
+                                        workspaceId={
+                                            workspaceId
+                                        }
+                                        projectId={
+                                            projectId
+                                        }
+                                        boardId={boardId}
+                                        columnId={
+                                            column.id
+                                        }
+                                    />
+                                )}
                             </div>
+
+                            <TaskList
+                                workspaceId={
+                                    workspaceId
+                                }
+                                projectId={projectId}
+                                boardId={boardId}
+                                columnId={column.id}
+                            />
 
                             <div className="mt-5 flex gap-3 border-t border-slate-800 pt-4">
                                 <button
@@ -493,7 +540,7 @@ function ColumnList({
                                     }
                                     className="border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
                                 >
-                                    Edit
+                                    Edit column
                                 </button>
 
                                 <button
@@ -509,7 +556,7 @@ function ColumnList({
                                 >
                                     {isDeleting
                                         ? 'Deleting...'
-                                        : 'Delete'}
+                                        : 'Delete column'}
                                 </button>
                             </div>
                         </article>
