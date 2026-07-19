@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\WorkspaceController;
 use App\Http\Controllers\Api\WorkspaceMemberController;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +19,10 @@ Route::middleware('auth:sanctum')->group(function (): void {
         return response()->json($request->user());
     });
 
-    Route::apiResource('workspaces', WorkspaceController::class);
+    Route::apiResource(
+        'workspaces',
+        WorkspaceController::class
+    );
 
     Route::get(
         'workspaces/{workspace}/members',
@@ -38,5 +42,10 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::delete(
         'workspaces/{workspace}/members/{user}',
         [WorkspaceMemberController::class, 'destroy']
+    );
+
+    Route::apiResource(
+        'workspaces.projects',
+        ProjectController::class
     );
 });
