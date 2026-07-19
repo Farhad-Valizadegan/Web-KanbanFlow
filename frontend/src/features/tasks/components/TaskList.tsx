@@ -1,0 +1,713 @@
+import {
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
+import { useState } from 'react';
+import {
+    deleteTask,
+    getTasks,
+    updateTask,
+} from '../api';
+import type {
+    Task,
+    TaskPriority,
+    UpdateTaskInput,
+} from '../types';
+
+interface TaskListProps {
+    workspaceId: number;
+    projectId: number;
+    boardId: number;
+    columnId: number;
+}
+
+interface EditTaskFormState {
+    title: string;
+    description: string;
+    priority: TaskPriority;
+    position: string;
+    due_date: string;
+    completed: boolean;
+}
+
+interface ApiErrorResponse {
+    message?: string;
+    errors?: Record<string, string[]>;
+}
+
+function formatDate(value: string | null): string {
+    if (!value) {
+        return 'No due date';
+    }
+
+    return value.slice(0, 10);
+}
+
+function dateInputValue(value: string | null): string {
+    if (!value) {
+        return '';
+    }
+
+    return value.slice(0, 10);
+}
+
+function TaskList({
+    workspaceId,
+    projectId,
+    boardId,
+    columnId,
+}: TaskListProps) {
+    const queryClient = useQueryClient();
+
+    const [editingTaskId, setEditingTaskId] =
+        useState<number | null>(null);
+
+    const [editForm, setEditForm] =
+        useState<EditTaskFormState>({
+            title: '',
+            description: '',
+            priority: 'medium',
+            position: '0',
+            due_date: '',
+            completed: false,
+        });
+
+    const [errorMessage, setErrorMessage] =
+        useState<string | null>(null);
+
+    const queryKey = [
+        'tasks',
+        workspaceId,
+        projectId,
+        boardId,
+        columnId,
+    ];
+
+    const tasksQuery = useQuery({
+        queryKey,
+        queryFn: () =>
+            getTasks(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+            ),
+        retry: false,
+    });
+
+    const updateMutation = useMutation({
+        mutationFn: ({
+            taskId,
+            input,
+        }: {
+            taskId: number;
+            input: UpdateTaskInput;
+        }) =>
+            updateTask(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+                taskId,
+                input,
+            ),
+
+        onSuccess: async () => {
+            setEditingTaskId(null);
+            setErrorMessage(null);
+
+            await queryClient.invalidateQueries({
+                queryKey,
+            });
+        },
+
+        onError: (
+            error: AxiosError<ApiErrorResponse>,
+        ) => {
+            if (error.response?.status === 403) {
+                setErrorMessage(
+                    'You do not have permission to edit this task.',
+                );
+                return;
+            }
+
+            if (error.response?.status === 401) {
+                setErrorMessage(
+                    'Your session has expired. Please sign in again.',
+                );
+                return;
+            }
+
+            const validationErrors =
+                error.response?.data.errors;
+
+            if (validationErrors) {
+                const firstError =
+                    Object.values(
+                        validationErrors,
+                    )[0]?.[0];
+
+                if (firstError) {
+                    setErrorMessage(firstError);
+                    return;
+                }
+            }
+
+            setErrorMessage(
+                error.response?.data.message ??
+                    'Unable to update the task.',
+            );
+        },
+    });
+
+    const deleteMutation = useMutation({
+        mutationFn: (taskId: number) =>
+            deleteTask(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+                taskId,
+            ),
+
+        onSuccess: async () => {
+            setErrorMessage(null);
+
+            await queryClient.invalidateQueries({
+                queryKey,
+            });
+        },
+
+        onError: (
+            error: AxiosError<ApiErrorResponse>,
+        ) => {
+            if (error.response?.status === 403) {
+                setErrorMessage(
+                    'You do not have permission to delete this task.',
+                );
+                return;
+            }
+
+            if (error.response?.status === 401) {
+                setErrorMessage(
+                    'Your session has expired. Please sign in again.',
+                );
+                return;
+            }
+
+            setErrorMessage(
+                error.response?.data.message ??
+                    'Unable to delete the task.',
+            );
+        },
+    });
+
+    function beginEditing(task: Task) {
+        setEditingTaskId(task.id);
+        setErrorMessage(null);
+
+        setEditForm({
+            title: task.title,
+            description:
+                task.description ?? '',
+            priority: task.priority,
+            position: String(task.position),
+            due_date: dateInputValue(
+                task.due_date,
+            ),
+            completed:
+                task.completed_at !== null,
+        });
+    }
+
+    function cancelEditing() {
+        setEditingTaskId(null);
+        setErrorMessage(null);
+    }
+
+    function handleSave(task: Task) {
+        setErrorMessage(null);
+
+        const title = editForm.title.trim();
+        const position = Number(
+            editForm.position,
+        );
+
+        if (!title) {
+            setErrorMessage(
+                'Task title is required.',
+            );
+            return;
+        }
+
+        if (
+            !Number.isInteger(position) ||
+            position < 0
+        ) {
+            setErrorMessage(
+                'Position must be a non-negative whole number.',
+            );
+            return;
+        }
+
+        updateMutation.mutate({
+            taskId: task.id,
+            input: {
+                title,
+                description:
+                    editForm.description.trim() ||
+                    null,
+                priority: editForm.priority,
+                position,
+                due_date:
+                    editForm.due_date || null,
+                completed_at:
+                    editForm.completed
+                        ? task.completed_at ??
+                          new Date().toISOString()
+                        : null,
+            },
+        });
+    }
+
+    function handleToggleCompletion(
+        task: Task,
+    ) {
+        setErrorMessage(null);
+
+        updateMutation.mutate({
+            taskId: task.id,
+            input: {
+                completed_at:
+                    task.completed_at === null
+                        ? new Date().toISOString()
+                        : null,
+            },
+        });
+    }
+
+    function handleDelete(task: Task) {
+        const confirmed = window.confirm(
+            `Delete task "${task.title}"?`,
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        setErrorMessage(null);
+        deleteMutation.mutate(task.id);
+    }
+
+    if (tasksQuery.isPending) {
+        return (
+            <p className="mt-4 text-sm text-slate-500">
+                Loading tasks...
+            </p>
+        );
+    }
+
+    if (tasksQuery.isError) {
+        return (
+            <p className="mt-4 border border-red-900 bg-red-950/40 p-3 text-sm text-red-400">
+                Unable to load tasks.
+            </p>
+        );
+    }
+
+    const tasks = tasksQuery.data;
+
+    if (tasks.length === 0) {
+        return (
+            <p className="mt-4 border border-dashed border-slate-700 bg-slate-950 p-4 text-center text-sm text-slate-500">
+                No tasks in this column.
+            </p>
+        );
+    }
+
+    return (
+        <div className="mt-4">
+            {errorMessage && (
+                <p className="mb-4 border border-red-900 bg-red-950/40 p-3 text-sm text-red-400">
+                    {errorMessage}
+                </p>
+            )}
+
+            <div className="space-y-3">
+                {tasks.map((task) => {
+                    const isEditing =
+                        editingTaskId === task.id;
+
+                    const isSaving =
+                        updateMutation.isPending &&
+                        updateMutation.variables
+                            ?.taskId === task.id;
+
+                    const isDeleting =
+                        deleteMutation.isPending &&
+                        deleteMutation.variables ===
+                            task.id;
+
+                    if (isEditing) {
+                        return (
+                            <article
+                                key={task.id}
+                                className="border border-blue-700 bg-slate-950 p-4"
+                            >
+                                <label className="block">
+                                    <span className="text-sm font-medium text-slate-300">
+                                        Task title
+                                    </span>
+
+                                    <input
+                                        type="text"
+                                        value={
+                                            editForm.title
+                                        }
+                                        maxLength={255}
+                                        onChange={(
+                                            event,
+                                        ) =>
+                                            setEditForm(
+                                                (
+                                                    current,
+                                                ) => ({
+                                                    ...current,
+                                                    title: event
+                                                        .target
+                                                        .value,
+                                                }),
+                                            )
+                                        }
+                                        className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                    />
+                                </label>
+
+                                <label className="mt-4 block">
+                                    <span className="text-sm font-medium text-slate-300">
+                                        Priority
+                                    </span>
+
+                                    <select
+                                        value={
+                                            editForm.priority
+                                        }
+                                        onChange={(
+                                            event,
+                                        ) =>
+                                            setEditForm(
+                                                (
+                                                    current,
+                                                ) => ({
+                                                    ...current,
+                                                    priority:
+                                                        event
+                                                            .target
+                                                            .value as TaskPriority,
+                                                }),
+                                            )
+                                        }
+                                        className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                    >
+                                        <option value="low">
+                                            Low
+                                        </option>
+
+                                        <option value="medium">
+                                            Medium
+                                        </option>
+
+                                        <option value="high">
+                                            High
+                                        </option>
+
+                                        <option value="urgent">
+                                            Urgent
+                                        </option>
+                                    </select>
+                                </label>
+
+                                <label className="mt-4 block">
+                                    <span className="text-sm font-medium text-slate-300">
+                                        Position
+                                    </span>
+
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        value={
+                                            editForm.position
+                                        }
+                                        onChange={(
+                                            event,
+                                        ) =>
+                                            setEditForm(
+                                                (
+                                                    current,
+                                                ) => ({
+                                                    ...current,
+                                                    position:
+                                                        event
+                                                            .target
+                                                            .value,
+                                                }),
+                                            )
+                                        }
+                                        className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                    />
+                                </label>
+
+                                <label className="mt-4 block">
+                                    <span className="text-sm font-medium text-slate-300">
+                                        Due date
+                                    </span>
+
+                                    <input
+                                        type="date"
+                                        value={
+                                            editForm.due_date
+                                        }
+                                        onChange={(
+                                            event,
+                                        ) =>
+                                            setEditForm(
+                                                (
+                                                    current,
+                                                ) => ({
+                                                    ...current,
+                                                    due_date:
+                                                        event
+                                                            .target
+                                                            .value,
+                                                }),
+                                            )
+                                        }
+                                        className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                    />
+                                </label>
+
+                                <label className="mt-4 block">
+                                    <span className="text-sm font-medium text-slate-300">
+                                        Description
+                                    </span>
+
+                                    <textarea
+                                        rows={3}
+                                        value={
+                                            editForm.description
+                                        }
+                                        onChange={(
+                                            event,
+                                        ) =>
+                                            setEditForm(
+                                                (
+                                                    current,
+                                                ) => ({
+                                                    ...current,
+                                                    description:
+                                                        event
+                                                            .target
+                                                            .value,
+                                                }),
+                                            )
+                                        }
+                                        className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                    />
+                                </label>
+
+                                <label className="mt-4 flex items-center gap-3">
+                                    <input
+                                        type="checkbox"
+                                        checked={
+                                            editForm.completed
+                                        }
+                                        onChange={(
+                                            event,
+                                        ) =>
+                                            setEditForm(
+                                                (
+                                                    current,
+                                                ) => ({
+                                                    ...current,
+                                                    completed:
+                                                        event
+                                                            .target
+                                                            .checked,
+                                                }),
+                                            )
+                                        }
+                                        className="h-4 w-4"
+                                    />
+
+                                    <span className="text-sm text-slate-300">
+                                        Completed
+                                    </span>
+                                </label>
+
+                                <div className="mt-5 flex gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            handleSave(task)
+                                        }
+                                        disabled={
+                                            updateMutation.isPending
+                                        }
+                                        className="border border-blue-600 bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        {isSaving
+                                            ? 'Saving...'
+                                            : 'Save'}
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        onClick={
+                                            cancelEditing
+                                        }
+                                        disabled={
+                                            updateMutation.isPending
+                                        }
+                                        className="border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </article>
+                        );
+                    }
+
+                    return (
+                        <article
+                            key={task.id}
+                            className="border border-slate-700 bg-slate-950 p-4"
+                        >
+                            <div className="flex items-start justify-between gap-3">
+                                <div>
+                                    <h4
+                                        className={
+                                            task.completed_at
+                                                ? 'font-semibold text-slate-500 line-through'
+                                                : 'font-semibold text-slate-100'
+                                        }
+                                    >
+                                        {task.title}
+                                    </h4>
+
+                                    <p className="mt-1 text-xs text-slate-500">
+                                        Position{' '}
+                                        {task.position}
+                                    </p>
+                                </div>
+
+                                <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">
+                                    {task.priority}
+                                </span>
+                            </div>
+
+                            <p className="mt-3 text-sm leading-6 text-slate-400">
+                                {task.description ||
+                                    'No description.'}
+                            </p>
+
+                            <dl className="mt-3 space-y-2 text-xs">
+                                <div className="flex justify-between gap-3">
+                                    <dt className="text-slate-500">
+                                        Due
+                                    </dt>
+
+                                    <dd className="text-slate-300">
+                                        {formatDate(
+                                            task.due_date,
+                                        )}
+                                    </dd>
+                                </div>
+
+                                <div className="flex justify-between gap-3">
+                                    <dt className="text-slate-500">
+                                        Assignee
+                                    </dt>
+
+                                    <dd className="text-slate-300">
+                                        {task.assignee
+                                            ?.name ??
+                                            'Unassigned'}
+                                    </dd>
+                                </div>
+
+                                <div className="flex justify-between gap-3">
+                                    <dt className="text-slate-500">
+                                        Status
+                                    </dt>
+
+                                    <dd className="text-slate-300">
+                                        {task.completed_at
+                                            ? 'Completed'
+                                            : 'Open'}
+                                    </dd>
+                                </div>
+                            </dl>
+
+                            <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-800 pt-3">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        handleToggleCompletion(
+                                            task,
+                                        )
+                                    }
+                                    disabled={
+                                        updateMutation.isPending ||
+                                        deleteMutation.isPending
+                                    }
+                                    className="border border-emerald-800 px-3 py-2 text-xs font-medium text-emerald-400 hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    {isSaving
+                                        ? 'Updating...'
+                                        : task.completed_at
+                                          ? 'Reopen'
+                                          : 'Complete'}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        beginEditing(task)
+                                    }
+                                    disabled={
+                                        updateMutation.isPending ||
+                                        deleteMutation.isPending
+                                    }
+                                    className="border border-blue-700 px-3 py-2 text-xs font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Edit
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        handleDelete(task)
+                                    }
+                                    disabled={
+                                        updateMutation.isPending ||
+                                        deleteMutation.isPending
+                                    }
+                                    className="border border-red-800 px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    {isDeleting
+                                        ? 'Deleting...'
+                                        : 'Delete'}
+                                </button>
+                            </div>
+                        </article>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+export default TaskList;
