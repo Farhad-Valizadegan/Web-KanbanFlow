@@ -14,19 +14,24 @@ A full-stack project management application built with Laravel, React, TypeScrip
 
 ### Frontend
 
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
+- React 19
+- TypeScript 6
+- Vite 8
+- Tailwind CSS 4
 - Axios
 - TanStack Query
 - React Router
+- React Hook Form
+- Zod
+- dnd-kit
 
 ## Project Status
 
 ### Milestone 1 - Project Foundation
 
 Status: Completed
+
+Completed features:
 
 - Laravel backend setup
 - React and TypeScript frontend setup
@@ -42,9 +47,39 @@ Status: Completed
 - Frontend-to-backend health check
 - Git repository setup
 
+Dependencies installed during this milestone:
+
+#### Backend
+
+- `laravel/framework`
+- `laravel/sanctum`
+- `laravel/tinker`
+- `fakerphp/faker`
+- `mockery/mockery`
+- `phpunit/phpunit`
+- `nunomaduro/collision`
+- `laravel/pint`
+
+#### Frontend
+
+- `react`
+- `react-dom`
+- `typescript`
+- `vite`
+- `@vitejs/plugin-react`
+- `tailwindcss`
+- `@tailwindcss/vite`
+- `axios`
+- `@tanstack/react-query`
+- `react-router-dom`
+- `eslint`
+- `typescript-eslint`
+
 ### Milestone 2 - Authentication
 
 Status: Completed
+
+Completed features:
 
 - User registration
 - User login
@@ -55,6 +90,23 @@ Status: Completed
 - Protected dashboard
 - Authentication validation
 - Authentication tests
+
+Dependencies used for this milestone:
+
+#### Backend
+
+- `laravel/sanctum` for SPA authentication
+- `phpunit/phpunit` for authentication feature tests
+- `fakerphp/faker` for test data
+
+#### Frontend
+
+- `axios` for authentication API requests
+- `@tanstack/react-query` for authentication state and server-state caching
+- `react-router-dom` for protected routes and navigation
+- `react-hook-form` for form handling
+- `zod` for validation schemas
+- `@hookform/resolvers` for React Hook Form and Zod integration
 
 ### Milestone 3 - Workspace and Project Management
 
@@ -87,6 +139,75 @@ Status: Completed
 - Project empty state
 - Project date formatting
 - Automatic query refresh after creation and deletion
+
+Dependencies used for this milestone:
+
+#### Backend
+
+- `laravel/framework` for models, controllers, policies, validation, routing, migrations, factories, and Eloquent relationships
+- `laravel/sanctum` for authenticated workspace and project API access
+- `phpunit/phpunit` for workspace, member, and project feature tests
+- `fakerphp/faker` for workspace and project factories
+
+#### Frontend
+
+- `axios` for workspace, member, and project API requests
+- `@tanstack/react-query` for queries, mutations, and cache invalidation
+- `react-router-dom` for dashboard and workspace navigation
+- `react-hook-form` for structured forms
+- `zod` for frontend validation
+- `@hookform/resolvers` for form-schema integration
+- `tailwindcss` for the dashboard, workspace, member, and project interfaces
+
+## Installed Dependency Inventory
+
+### Backend runtime dependencies
+
+- `php`: `^8.3`
+- `laravel/framework`: `^13.8`
+- `laravel/sanctum`: `^4.0`
+- `laravel/tinker`: `^3.0`
+
+### Backend development dependencies
+
+- `fakerphp/faker`: `^1.23`
+- `laravel/pail`: `^1.2.5`
+- `laravel/pao`: `^1.0.6`
+- `laravel/pint`: `^1.27`
+- `mockery/mockery`: `^1.6`
+- `nunomaduro/collision`: `^8.6`
+- `phpunit/phpunit`: `^12.5.12`
+
+### Frontend runtime dependencies
+
+- `@dnd-kit/core`: `^6.3.1`
+- `@dnd-kit/sortable`: `^10.0.0`
+- `@dnd-kit/utilities`: `^3.2.2`
+- `@hookform/resolvers`: `^5.4.0`
+- `@tailwindcss/vite`: `^4.3.2`
+- `@tanstack/react-query`: `^5.101.2`
+- `axios`: `^1.18.1`
+- `react`: `^19.2.7`
+- `react-dom`: `^19.2.7`
+- `react-hook-form`: `^7.81.0`
+- `react-router-dom`: `^7.18.1`
+- `tailwindcss`: `^4.3.2`
+- `zod`: `^4.4.3`
+
+### Frontend development dependencies
+
+- `@eslint/js`: `^10.0.1`
+- `@types/node`: `^24.13.2`
+- `@types/react`: `^19.2.17`
+- `@types/react-dom`: `^19.2.3`
+- `@vitejs/plugin-react`: `^6.0.3`
+- `eslint`: `^10.6.0`
+- `eslint-plugin-react-hooks`: `^7.1.1`
+- `eslint-plugin-react-refresh`: `^0.5.3`
+- `globals`: `^17.7.0`
+- `typescript`: `~6.0.2`
+- `typescript-eslint`: `^8.62.0`
+- `vite`: `^8.1.1`
 
 ## Verification Status
 
@@ -123,6 +244,12 @@ Planned features:
 - Kanban frontend interface
 - Backend feature tests
 - Frontend verification
+
+Dependencies already installed for this milestone:
+
+- `@dnd-kit/core`
+- `@dnd-kit/sortable`
+- `@dnd-kit/utilities`
 
 ## Installation
 
