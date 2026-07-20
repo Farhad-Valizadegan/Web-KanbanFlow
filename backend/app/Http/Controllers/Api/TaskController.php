@@ -206,10 +206,7 @@ class TaskController extends Controller
                 'exists:users,id',
             ],
             'position' => [
-                'sometimes',
-                'required',
-                'integer',
-                'min:0',
+                'prohibited',
             ],
             'due_date' => [
                 'sometimes',

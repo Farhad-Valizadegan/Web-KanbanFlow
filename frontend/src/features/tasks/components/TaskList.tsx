@@ -33,7 +33,6 @@ interface EditTaskFormState {
     title: string;
     description: string;
     priority: TaskPriority;
-    position: string;
     due_date: string;
     completed: boolean;
 }
@@ -86,7 +85,6 @@ function TaskList({
             title: '',
             description: '',
             priority: 'medium',
-            position: '0',
             due_date: '',
             completed: false,
         });
@@ -229,7 +227,6 @@ function TaskList({
             title: task.title,
             description: task.description ?? '',
             priority: task.priority,
-            position: String(task.position),
             due_date: dateInputValue(
                 task.due_date,
             ),
@@ -247,23 +244,10 @@ function TaskList({
         setErrorMessage(null);
 
         const title = editForm.title.trim();
-        const position = Number(
-            editForm.position,
-        );
 
         if (!title) {
             setErrorMessage(
                 'Task title is required.',
-            );
-            return;
-        }
-
-        if (
-            !Number.isInteger(position) ||
-            position < 0
-        ) {
-            setErrorMessage(
-                'Position must be a non-negative whole number.',
             );
             return;
         }
@@ -276,7 +260,6 @@ function TaskList({
                     editForm.description.trim() ||
                     null,
                 priority: editForm.priority,
-                position,
                 due_date:
                     editForm.due_date || null,
                 completed_at:
@@ -474,35 +457,6 @@ function TaskList({
                                                         Urgent
                                                     </option>
                                                 </select>
-                                            </label>
-
-                                            <label className="mt-4 block">
-                                                <span className="text-sm font-medium text-slate-300">
-                                                    Position
-                                                </span>
-
-                                                <input
-                                                    type="number"
-                                                    min="0"
-                                                    step="1"
-                                                    value={
-                                                        editForm.position
-                                                    }
-                                                    onChange={(
-                                                        event,
-                                                    ) =>
-                                                        setEditForm(
-                                                            current => ({
-                                                                ...current,
-                                                                position:
-                                                                    event
-                                                                        .target
-                                                                        .value,
-                                                            }),
-                                                        )
-                                                    }
-                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                                />
                                             </label>
 
                                             <label className="mt-4 block">
