@@ -95,23 +95,36 @@ class TaskController extends Controller
             $validated['assigned_to'] ?? null
         );
 
-        $task = $column->tasks()->create([
-            'created_by' => $request->user()->id,
-            'assigned_to' =>
-                $validated['assigned_to'] ?? null,
-            'title' => $validated['title'],
-            'description' =>
-                $validated['description'] ?? null,
-            'priority' => $validated['priority'],
-            'position' =>
-                (int) $column
-                    ->tasks()
-                    ->max('position') + 1,
-            'due_date' =>
-                $validated['due_date'] ?? null,
-            'completed_at' =>
-                $validated['completed_at'] ?? null,
-        ]);
+        $task = DB::transaction(function () use (
+            $request,
+            $column,
+            $validated
+        ): Task {
+            $column->refresh();
+
+            $this->ensureColumnCanAcceptActiveTask(
+                $column,
+                $validated['completed_at'] ?? null
+            );
+
+            return $column->tasks()->create([
+                'created_by' => $request->user()->id,
+                'assigned_to' =>
+                    $validated['assigned_to'] ?? null,
+                'title' => $validated['title'],
+                'description' =>
+                    $validated['description'] ?? null,
+                'priority' => $validated['priority'],
+                'position' =>
+                    (int) $column
+                        ->tasks()
+                        ->max('position') + 1,
+                'due_date' =>
+                    $validated['due_date'] ?? null,
+                'completed_at' =>
+                    $validated['completed_at'] ?? null,
+            ]);
+        });
 
         $task->load([
             'creator',
@@ -222,8 +235,33 @@ class TaskController extends Controller
             );
         }
 
-        $task->update($validated);
+        DB::transaction(function () use (
+            $task,
+            $column,
+            $validated
+        ): void {
+            $task->refresh();
+            $column->refresh();
 
+            $isReopeningTask =
+                array_key_exists(
+                    'completed_at',
+                    $validated
+                ) &&
+                $validated['completed_at'] === null &&
+                $task->completed_at !== null;
+
+            if ($isReopeningTask) {
+                $this->ensureColumnCanAcceptActiveTask(
+                    $column,
+                    null
+                );
+            }
+
+            $task->update($validated);
+        });
+
+        $task->refresh();
         $task->load([
             'creator',
             'assignee',
@@ -449,18 +487,25 @@ class TaskController extends Controller
         Task $task,
         Column $destinationColumn
     ): void {
-        if (
-            $destinationColumn->wip_limit ===
-            null
-        ) {
+        $this->ensureColumnCanAcceptActiveTask(
+            $destinationColumn,
+            $task->completed_at
+        );
+    }
+
+    private function ensureColumnCanAcceptActiveTask(
+        Column $column,
+        mixed $completedAt
+    ): void {
+        if ($column->wip_limit === null) {
             return;
         }
 
-        if ($task->completed_at !== null) {
+        if ($completedAt !== null) {
             return;
         }
 
-        $activeTaskCount = $destinationColumn
+        $activeTaskCount = $column
             ->tasks()
             ->whereNull('completed_at')
             ->lockForUpdate()
@@ -468,11 +513,11 @@ class TaskController extends Controller
 
         if (
             $activeTaskCount >=
-            $destinationColumn->wip_limit
+            $column->wip_limit
         ) {
             throw ValidationException::withMessages([
                 'column_id' => [
-                    'The destination column has reached its WIP limit.',
+                    'The column has reached its WIP limit.',
                 ],
             ]);
         }

@@ -830,6 +830,132 @@ class TaskApiTest extends TestCase
         ]);
     }
 
+    public function test_active_task_cannot_be_created_when_column_wip_limit_is_reached(): void
+    {
+        $owner = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+
+        $column = Column::factory()->create([
+            'board_id' => $board->id,
+            'wip_limit' => 1,
+        ]);
+
+        Task::factory()->create([
+            'column_id' => $column->id,
+            'created_by' => $owner->id,
+            'completed_at' => null,
+        ]);
+
+        Sanctum::actingAs($owner);
+
+        $this->postJson(
+            $this->tasksUrl(
+                $workspace,
+                $project,
+                $board,
+                $column
+            ),
+            [
+                'title' => 'Blocked active task',
+                'priority' => 'medium',
+            ]
+        )
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('column_id');
+
+        $this->assertDatabaseMissing('tasks', [
+            'column_id' => $column->id,
+            'title' => 'Blocked active task',
+        ]);
+    }
+
+    public function test_completed_task_can_be_created_when_column_wip_limit_is_reached(): void
+    {
+        $owner = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+
+        $column = Column::factory()->create([
+            'board_id' => $board->id,
+            'wip_limit' => 1,
+        ]);
+
+        Task::factory()->create([
+            'column_id' => $column->id,
+            'created_by' => $owner->id,
+            'completed_at' => null,
+        ]);
+
+        Sanctum::actingAs($owner);
+
+        $this->postJson(
+            $this->tasksUrl(
+                $workspace,
+                $project,
+                $board,
+                $column
+            ),
+            [
+                'title' => 'Completed task',
+                'priority' => 'medium',
+                'completed_at' => now()->toDateTimeString(),
+            ]
+        )->assertCreated();
+    }
+
+    public function test_completed_task_cannot_be_reopened_when_column_wip_limit_is_reached(): void
+    {
+        $owner = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+
+        $column = Column::factory()->create([
+            'board_id' => $board->id,
+            'wip_limit' => 1,
+        ]);
+
+        Task::factory()->create([
+            'column_id' => $column->id,
+            'created_by' => $owner->id,
+            'completed_at' => null,
+        ]);
+
+        $completedTask = Task::factory()->create([
+            'column_id' => $column->id,
+            'created_by' => $owner->id,
+            'completed_at' => now(),
+        ]);
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->taskUrl(
+                $workspace,
+                $project,
+                $board,
+                $column,
+                $completedTask
+            ),
+            [
+                'completed_at' => null,
+            ]
+        )
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('column_id');
+
+        $this->assertDatabaseMissing('tasks', [
+            'id' => $completedTask->id,
+            'completed_at' => null,
+        ]);
+    }
+
     private function createWorkspaceFor(
         User $owner
     ): Workspace {
