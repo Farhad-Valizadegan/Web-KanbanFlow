@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ActivityLogController;
 use App\Http\Controllers\Api\BoardController;
 use App\Http\Controllers\Api\ColumnController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TaskCommentController;
 use App\Http\Controllers\Api\TaskController;
@@ -27,6 +28,46 @@ Route::middleware('auth:sanctum')->group(function (): void {
                 $request->user()
             );
         }
+    );
+
+    Route::get(
+        '/notifications',
+        [
+            NotificationController::class,
+            'index',
+        ]
+    );
+
+    Route::get(
+        '/notifications/unread-count',
+        [
+            NotificationController::class,
+            'unreadCount',
+        ]
+    );
+
+    Route::patch(
+        '/notifications/read-all',
+        [
+            NotificationController::class,
+            'markAllAsRead',
+        ]
+    );
+
+    Route::patch(
+        '/notifications/{notification}/read',
+        [
+            NotificationController::class,
+            'markAsRead',
+        ]
+    );
+
+    Route::delete(
+        '/notifications/{notification}',
+        [
+            NotificationController::class,
+            'destroy',
+        ]
     );
 
     Route::apiResource(
