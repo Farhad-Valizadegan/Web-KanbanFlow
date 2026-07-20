@@ -1,6 +1,8 @@
 import type { User } from '../auth/types';
 
-export type WorkspaceVisibility = 'private' | 'public';
+export type WorkspaceVisibility =
+    | 'private'
+    | 'public';
 
 export type WorkspaceRole =
     | 'owner'
@@ -8,7 +10,23 @@ export type WorkspaceRole =
     | 'member'
     | 'viewer';
 
-export interface WorkspaceMember extends User {
+export type ActivityAction =
+    | 'created'
+    | 'updated'
+    | 'moved'
+    | 'deleted'
+    | 'commented';
+
+export type ActivitySubjectType =
+    | 'workspace'
+    | 'project'
+    | 'board'
+    | 'column'
+    | 'task'
+    | 'comment';
+
+export interface WorkspaceMember
+    extends User {
     pivot: {
         workspace_id: number;
         user_id: number;
@@ -33,6 +51,29 @@ export interface Workspace {
     members?: WorkspaceMember[];
 }
 
+export interface ActivityLog {
+    id: number;
+    workspace_id: number;
+    user_id: number | null;
+    action: ActivityAction;
+    subject_type: ActivitySubjectType;
+    subject_id: number | null;
+    subject_name: string;
+    properties: Record<
+        string,
+        unknown
+    > | null;
+    created_at: string;
+    updated_at: string;
+    user?: User | null;
+}
+
+export interface ActivityLogFilters {
+    limit?: number;
+    action?: ActivityAction;
+    subject_type?: ActivitySubjectType;
+}
+
 export interface CreateWorkspaceInput {
     name: string;
     description?: string;
@@ -47,9 +88,15 @@ export interface UpdateWorkspaceInput {
 
 export interface AddWorkspaceMemberInput {
     email: string;
-    role: Exclude<WorkspaceRole, 'owner'>;
+    role: Exclude<
+        WorkspaceRole,
+        'owner'
+    >;
 }
 
 export interface UpdateWorkspaceMemberRoleInput {
-    role: Exclude<WorkspaceRole, 'owner'>;
+    role: Exclude<
+        WorkspaceRole,
+        'owner'
+    >;
 }

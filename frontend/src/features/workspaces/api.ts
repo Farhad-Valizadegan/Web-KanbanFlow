@@ -1,5 +1,7 @@
 import { apiClient } from '../../api/client';
 import type {
+    ActivityLog,
+    ActivityLogFilters,
     AddWorkspaceMemberInput,
     CreateWorkspaceInput,
     UpdateWorkspaceInput,
@@ -21,10 +23,15 @@ interface WorkspaceMembersResponse {
     data: WorkspaceMember[];
 }
 
+interface ActivityLogListResponse {
+    data: ActivityLog[];
+}
+
 export async function getWorkspaces(): Promise<Workspace[]> {
-    const response = await apiClient.get<WorkspaceListResponse>(
-        '/api/workspaces',
-    );
+    const response =
+        await apiClient.get<WorkspaceListResponse>(
+            '/api/workspaces',
+        );
 
     return response.data.data;
 }
@@ -32,9 +39,10 @@ export async function getWorkspaces(): Promise<Workspace[]> {
 export async function getWorkspace(
     workspaceId: number,
 ): Promise<Workspace> {
-    const response = await apiClient.get<WorkspaceResponse>(
-        `/api/workspaces/${workspaceId}`,
-    );
+    const response =
+        await apiClient.get<WorkspaceResponse>(
+            `/api/workspaces/${workspaceId}`,
+        );
 
     return response.data.data;
 }
@@ -42,10 +50,11 @@ export async function getWorkspace(
 export async function createWorkspace(
     input: CreateWorkspaceInput,
 ): Promise<Workspace> {
-    const response = await apiClient.post<WorkspaceResponse>(
-        '/api/workspaces',
-        input,
-    );
+    const response =
+        await apiClient.post<WorkspaceResponse>(
+            '/api/workspaces',
+            input,
+        );
 
     return response.data.data;
 }
@@ -54,10 +63,11 @@ export async function updateWorkspace(
     workspaceId: number,
     input: UpdateWorkspaceInput,
 ): Promise<Workspace> {
-    const response = await apiClient.put<WorkspaceResponse>(
-        `/api/workspaces/${workspaceId}`,
-        input,
-    );
+    const response =
+        await apiClient.put<WorkspaceResponse>(
+            `/api/workspaces/${workspaceId}`,
+            input,
+        );
 
     return response.data.data;
 }
@@ -65,15 +75,18 @@ export async function updateWorkspace(
 export async function deleteWorkspace(
     workspaceId: number,
 ): Promise<void> {
-    await apiClient.delete(`/api/workspaces/${workspaceId}`);
+    await apiClient.delete(
+        `/api/workspaces/${workspaceId}`,
+    );
 }
 
 export async function getWorkspaceMembers(
     workspaceId: number,
 ): Promise<WorkspaceMember[]> {
-    const response = await apiClient.get<WorkspaceMembersResponse>(
-        `/api/workspaces/${workspaceId}/members`,
-    );
+    const response =
+        await apiClient.get<WorkspaceMembersResponse>(
+            `/api/workspaces/${workspaceId}/members`,
+        );
 
     return response.data.data;
 }
@@ -106,4 +119,19 @@ export async function removeWorkspaceMember(
     await apiClient.delete(
         `/api/workspaces/${workspaceId}/members/${userId}`,
     );
+}
+
+export async function getWorkspaceActivities(
+    workspaceId: number,
+    filters: ActivityLogFilters = {},
+): Promise<ActivityLog[]> {
+    const response =
+        await apiClient.get<ActivityLogListResponse>(
+            `/api/workspaces/${workspaceId}/activities`,
+            {
+                params: filters,
+            },
+        );
+
+    return response.data.data;
 }
