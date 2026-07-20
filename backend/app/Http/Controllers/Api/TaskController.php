@@ -7,7 +7,9 @@ use App\Models\Board;
 use App\Models\Column;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Workspace;
+use App\Notifications\TaskAssignedNotification;
 use App\Services\ActivityLogger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -147,6 +149,12 @@ class TaskController extends Controller
                 ]
             );
 
+            $this->notifyAssignee(
+                $task,
+                $workspace,
+                $request->user()
+            );
+
             return $task;
         });
 
@@ -266,6 +274,9 @@ class TaskController extends Controller
             $task->refresh();
             $column->refresh();
 
+            $previousAssigneeId =
+                $task->assigned_to;
+
             $before =
                 $this->taskActivityState(
                     $task
@@ -304,6 +315,22 @@ class TaskController extends Controller
                         ),
                 ]
             );
+
+            $assigneeChanged =
+                array_key_exists(
+                    'assigned_to',
+                    $validated
+                ) &&
+                $previousAssigneeId !==
+                    $task->assigned_to;
+
+            if ($assigneeChanged) {
+                $this->notifyAssignee(
+                    $task,
+                    $workspace,
+                    $request->user()
+                );
+            }
         });
 
         $task->refresh();
@@ -674,6 +701,38 @@ class TaskController extends Controller
         abort_unless(
             $belongsToWorkspace,
             422
+        );
+    }
+
+    private function notifyAssignee(
+        Task $task,
+        Workspace $workspace,
+        User $assignedBy
+    ): void {
+        if ($task->assigned_to === null) {
+            return;
+        }
+
+        if (
+            $task->assigned_to ===
+            $assignedBy->id
+        ) {
+            return;
+        }
+
+        $assignee = User::query()
+            ->find($task->assigned_to);
+
+        if ($assignee === null) {
+            return;
+        }
+
+        $assignee->notify(
+            new TaskAssignedNotification(
+                $task,
+                $workspace,
+                $assignedBy
+            )
         );
     }
 
