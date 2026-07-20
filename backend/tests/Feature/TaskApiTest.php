@@ -360,9 +360,16 @@ class TaskApiTest extends TestCase
         $project = $this->createProjectFor($workspace, $owner);
         $board = $this->createBoardFor($project, $owner);
         $column = $this->createColumnFor($board);
-        $task = $this->createTaskFor($column, $owner);
+        $task = $this->createTaskFor(
+            $column,
+            $owner
+        );
 
-        $this->addMember($workspace, $manager, 'manager');
+        $this->addMember(
+            $workspace,
+            $manager,
+            'manager'
+        );
 
         Sanctum::actingAs($manager);
 
@@ -377,8 +384,8 @@ class TaskApiTest extends TestCase
             [
                 'title' => 'Updated Task',
                 'priority' => 'urgent',
-                'position' => 3,
-                'completed_at' => '2026-07-19 18:00:00',
+                'completed_at' =>
+                    '2026-07-19 18:00:00',
             ]
         );
 
@@ -394,8 +401,15 @@ class TaskApiTest extends TestCase
             )
             ->assertJsonPath(
                 'data.position',
-                3
+                $task->position
             );
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'title' => 'Updated Task',
+            'priority' => 'urgent',
+            'position' => $task->position,
+        ]);
     }
 
     public function test_regular_member_cannot_update_task(): void
@@ -956,6 +970,43 @@ class TaskApiTest extends TestCase
         ]);
     }
 
+    public function test_task_position_cannot_be_changed_through_standard_update(): void
+    {
+        $owner = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+        $column = $this->createColumnFor($board);
+
+        $task = Task::factory()->create([
+            'column_id' => $column->id,
+            'created_by' => $owner->id,
+            'position' => 1,
+        ]);
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->taskUrl(
+                $workspace,
+                $project,
+                $board,
+                $column,
+                $task
+            ),
+            [
+                'position' => 4,
+            ]
+        )
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('position');
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'position' => 1,
+        ]);
+    }
     private function createWorkspaceFor(
         User $owner
     ): Workspace {
