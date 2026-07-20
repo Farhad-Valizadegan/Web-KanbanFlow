@@ -1,8 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getBoard } from '../features/boards/api';
 import ColumnList from '../features/columns/components/ColumnList';
 import CreateColumnForm from '../features/columns/components/CreateColumnForm';
+
+export type BoardViewMode =
+    | 'detailed'
+    | 'overview';
 
 function BoardPage() {
     const {
@@ -27,6 +32,32 @@ function BoardPage() {
         numericProjectId > 0 &&
         Number.isInteger(numericBoardId) &&
         numericBoardId > 0;
+
+    const storageKey = `board-view-mode-${numericBoardId}`;
+
+    const [viewMode, setViewMode] =
+        useState<BoardViewMode>(() => {
+            const storedValue =
+                window.localStorage.getItem(
+                    storageKey,
+                );
+
+            if (
+                storedValue === 'overview' ||
+                storedValue === 'detailed'
+            ) {
+                return storedValue;
+            }
+
+            return 'detailed';
+        });
+
+    useEffect(() => {
+        window.localStorage.setItem(
+            storageKey,
+            viewMode,
+        );
+    }, [storageKey, viewMode]);
 
     const boardQuery = useQuery({
         queryKey: [
@@ -73,7 +104,13 @@ function BoardPage() {
 
     return (
         <main className="min-h-screen bg-slate-950 px-6 py-12 text-slate-100">
-            <section className="mx-auto max-w-7xl">
+            <section
+                className={
+                    viewMode === 'overview'
+                        ? 'mx-auto max-w-[1800px]'
+                        : 'mx-auto max-w-7xl'
+                }
+            >
                 <Link
                     to={`/workspaces/${numericWorkspaceId}/projects/${numericProjectId}`}
                     className="text-sm font-medium text-blue-400 hover:text-blue-300"
@@ -142,20 +179,66 @@ function BoardPage() {
                 </header>
 
                 <section className="mt-10">
-                    <div>
-                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                            Columns
-                        </p>
+                    <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+                        <div>
+                            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
+                                Columns
+                            </p>
 
-                        <h2 className="mt-2 text-2xl font-bold">
-                            Board workflow
-                        </h2>
+                            <h2 className="mt-2 text-2xl font-bold">
+                                Board workflow
+                            </h2>
 
-                        <p className="mt-2 max-w-3xl text-slate-400">
-                            Create and manage workflow columns.
-                            Tasks will later be displayed inside
-                            each column.
-                        </p>
+                            <p className="mt-2 max-w-3xl text-slate-400">
+                                Use detailed mode for full task information
+                                or overview mode to see more columns and
+                                tasks at once.
+                            </p>
+                        </div>
+
+                        <div className="flex w-fit border border-slate-700 bg-slate-900 p-1">
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setViewMode(
+                                        'detailed',
+                                    )
+                                }
+                                aria-pressed={
+                                    viewMode ===
+                                    'detailed'
+                                }
+                                className={
+                                    viewMode ===
+                                    'detailed'
+                                        ? 'bg-blue-600 px-4 py-2 text-sm font-semibold text-white'
+                                        : 'px-4 py-2 text-sm font-medium text-slate-400 hover:text-slate-100'
+                                }
+                            >
+                                Detailed
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setViewMode(
+                                        'overview',
+                                    )
+                                }
+                                aria-pressed={
+                                    viewMode ===
+                                    'overview'
+                                }
+                                className={
+                                    viewMode ===
+                                    'overview'
+                                        ? 'bg-blue-600 px-4 py-2 text-sm font-semibold text-white'
+                                        : 'px-4 py-2 text-sm font-medium text-slate-400 hover:text-slate-100'
+                                }
+                            >
+                                Overview
+                            </button>
+                        </div>
                     </div>
 
                     <CreateColumnForm
@@ -176,6 +259,7 @@ function BoardPage() {
                             numericProjectId
                         }
                         boardId={numericBoardId}
+                        viewMode={viewMode}
                     />
                 </section>
             </section>
