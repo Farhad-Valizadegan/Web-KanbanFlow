@@ -424,6 +424,8 @@ class BoardApiTest extends TestCase
             $owner
         );
 
+        $originalPosition = $board->position;
+
         $this->addMember(
             $workspace,
             $manager,
@@ -441,7 +443,6 @@ class BoardApiTest extends TestCase
             [
                 'name' => 'Updated Board',
                 'visibility' => 'private',
-                'position' => 3,
             ]
         );
 
@@ -461,8 +462,54 @@ class BoardApiTest extends TestCase
             )
             ->assertJsonPath(
                 'data.position',
-                3
+                $originalPosition
             );
+
+        $this->assertDatabaseHas('boards', [
+            'id' => $board->id,
+            'name' => 'Updated Board',
+            'slug' => 'updated-board',
+            'visibility' => 'private',
+            'position' => $originalPosition,
+        ]);
+    }
+
+    public function test_board_position_cannot_be_changed_through_standard_update(): void
+    {
+        $owner = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
+
+        $originalPosition = $board->position;
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->boardUrl(
+                $workspace,
+                $project,
+                $board
+            ),
+            [
+                'position' => 5,
+            ]
+        )
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(
+                'position'
+            );
+
+        $this->assertDatabaseHas('boards', [
+            'id' => $board->id,
+            'position' => $originalPosition,
+        ]);
     }
 
     public function test_regular_member_cannot_update_board(): void

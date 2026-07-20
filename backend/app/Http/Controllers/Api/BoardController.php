@@ -73,15 +73,19 @@ class BoardController extends Controller
             ),
             'description' =>
                 $validated['description'] ?? null,
-            'visibility' => $validated['visibility'],
+            'visibility' =>
+                $validated['visibility'],
             'position' =>
-                (int) $project->boards()->max('position') + 1,
+                (int) $project
+                    ->boards()
+                    ->max('position') + 1,
         ]);
 
         $board->load('creator');
 
         return response()->json([
-            'message' => 'Board created successfully.',
+            'message' =>
+                'Board created successfully.',
             'data' => $board,
         ], 201);
     }
@@ -138,14 +142,16 @@ class BoardController extends Controller
                 'in:workspace,private',
             ],
             'position' => [
-                'sometimes',
-                'required',
-                'integer',
-                'min:0',
+                'prohibited',
             ],
         ]);
 
-        if (array_key_exists('name', $validated)) {
+        if (
+            array_key_exists(
+                'name',
+                $validated
+            )
+        ) {
             $validated['slug'] =
                 $this->generateUniqueSlug(
                     $project,
@@ -158,7 +164,8 @@ class BoardController extends Controller
         $board->load('creator');
 
         return response()->json([
-            'message' => 'Board updated successfully.',
+            'message' =>
+                'Board updated successfully.',
             'data' => $board,
         ]);
     }
@@ -179,7 +186,8 @@ class BoardController extends Controller
         $board->delete();
 
         return response()->json([
-            'message' => 'Board deleted successfully.',
+            'message' =>
+                'Board deleted successfully.',
         ]);
     }
 
@@ -188,7 +196,8 @@ class BoardController extends Controller
         Project $project
     ): void {
         abort_unless(
-            $project->workspace_id === $workspace->id,
+            $project->workspace_id ===
+                $workspace->id,
             404
         );
     }
@@ -210,15 +219,17 @@ class BoardController extends Controller
     }
 
     /**
-     * Generate a unique board slug within the project,
-     * including soft-deleted boards.
+     * Generate a unique board slug within
+     * the project, including soft-deleted boards.
      */
     private function generateUniqueSlug(
         Project $project,
         string $name,
         ?Board $ignoredBoard = null
     ): string {
-        $baseSlug = Str::slug($name) ?: 'board';
+        $baseSlug =
+            Str::slug($name) ?: 'board';
+
         $slug = $baseSlug;
         $counter = 2;
 
@@ -236,7 +247,9 @@ class BoardController extends Controller
                 ->where('slug', $slug)
                 ->exists()
         ) {
-            $slug = "{$baseSlug}-{$counter}";
+            $slug =
+                "{$baseSlug}-{$counter}";
+
             $counter++;
         }
 
