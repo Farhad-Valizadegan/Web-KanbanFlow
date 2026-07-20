@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TaskCommentController;
 use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\WorkspaceAnalyticsController;
 use App\Http\Controllers\Api\WorkspaceController;
 use App\Http\Controllers\Api\WorkspaceMemberController;
 use Illuminate\Http\JsonResponse;
@@ -73,6 +74,14 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::apiResource(
         'workspaces',
         WorkspaceController::class
+    );
+
+    Route::get(
+        'workspaces/{workspace}/analytics',
+        [
+            WorkspaceAnalyticsController::class,
+            'index',
+        ]
     );
 
     Route::get(
