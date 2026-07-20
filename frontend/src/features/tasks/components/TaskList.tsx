@@ -22,11 +22,16 @@ import type {
 } from '../types';
 import DraggableTask from './DraggableTask';
 
+type BoardViewMode =
+    | 'detailed'
+    | 'overview';
+
 interface TaskListProps {
     workspaceId: number;
     projectId: number;
     boardId: number;
     columnId: number;
+    viewMode: BoardViewMode;
 }
 
 interface EditTaskFormState {
@@ -42,7 +47,9 @@ interface ApiErrorResponse {
     errors?: Record<string, string[]>;
 }
 
-function formatDate(value: string | null): string {
+function formatDate(
+    value: string | null,
+): string {
     if (!value) {
         return 'No due date';
     }
@@ -50,7 +57,9 @@ function formatDate(value: string | null): string {
     return value.slice(0, 10);
 }
 
-function dateInputValue(value: string | null): string {
+function dateInputValue(
+    value: string | null,
+): string {
     if (!value) {
         return '';
     }
@@ -63,8 +72,12 @@ function TaskList({
     projectId,
     boardId,
     columnId,
+    viewMode,
 }: TaskListProps) {
     const queryClient = useQueryClient();
+
+    const isOverview =
+        viewMode === 'overview';
 
     const {
         setNodeRef: setDroppableNodeRef,
@@ -225,7 +238,8 @@ function TaskList({
 
         setEditForm({
             title: task.title,
-            description: task.description ?? '',
+            description:
+                task.description ?? '',
             priority: task.priority,
             due_date: dateInputValue(
                 task.due_date,
@@ -243,7 +257,8 @@ function TaskList({
     function handleSave(task: Task) {
         setErrorMessage(null);
 
-        const title = editForm.title.trim();
+        const title =
+            editForm.title.trim();
 
         if (!title) {
             setErrorMessage(
@@ -259,9 +274,11 @@ function TaskList({
                 description:
                     editForm.description.trim() ||
                     null,
-                priority: editForm.priority,
+                priority:
+                    editForm.priority,
                 due_date:
-                    editForm.due_date || null,
+                    editForm.due_date ||
+                    null,
                 completed_at:
                     editForm.completed
                         ? task.completed_at ??
@@ -304,9 +321,19 @@ function TaskList({
         return (
             <div
                 ref={setDroppableNodeRef}
-                className="mt-4 min-h-24"
+                className={
+                    isOverview
+                        ? 'mt-3 min-h-16'
+                        : 'mt-4 min-h-24'
+                }
             >
-                <p className="text-sm text-slate-500">
+                <p
+                    className={
+                        isOverview
+                            ? 'text-xs text-slate-500'
+                            : 'text-sm text-slate-500'
+                    }
+                >
                     Loading tasks...
                 </p>
             </div>
@@ -317,9 +344,19 @@ function TaskList({
         return (
             <div
                 ref={setDroppableNodeRef}
-                className="mt-4 min-h-24"
+                className={
+                    isOverview
+                        ? 'mt-3 min-h-16'
+                        : 'mt-4 min-h-24'
+                }
             >
-                <p className="border border-red-900 bg-red-950/40 p-3 text-sm text-red-400">
+                <p
+                    className={
+                        isOverview
+                            ? 'border border-red-900 bg-red-950/40 p-2 text-xs text-red-400'
+                            : 'border border-red-900 bg-red-950/40 p-3 text-sm text-red-400'
+                    }
+                >
                     Unable to load tasks.
                 </p>
             </div>
@@ -328,9 +365,10 @@ function TaskList({
 
     const tasks = tasksQuery.data;
 
-    const sortableTaskIds = tasks.map(
-        task => `task-${task.id}`,
-    );
+    const sortableTaskIds =
+        tasks.map(
+            task => `task-${task.id}`,
+        );
 
     const dragDisabled =
         editingTaskId !== null ||
@@ -342,26 +380,52 @@ function TaskList({
             ref={setDroppableNodeRef}
             className={
                 isOver
-                    ? 'mt-4 min-h-24 border border-blue-500 bg-blue-950/20 p-2'
-                    : 'mt-4 min-h-24 border border-transparent p-2'
+                    ? isOverview
+                        ? 'mt-3 min-h-16 border border-blue-500 bg-blue-950/20 p-1'
+                        : 'mt-4 min-h-24 border border-blue-500 bg-blue-950/20 p-2'
+                    : isOverview
+                      ? 'mt-3 min-h-16 border border-transparent p-1'
+                      : 'mt-4 min-h-24 border border-transparent p-2'
             }
         >
             {errorMessage && (
-                <p className="mb-4 border border-red-900 bg-red-950/40 p-3 text-sm text-red-400">
+                <p
+                    className={
+                        isOverview
+                            ? 'mb-2 border border-red-900 bg-red-950/40 p-2 text-xs text-red-400'
+                            : 'mb-4 border border-red-900 bg-red-950/40 p-3 text-sm text-red-400'
+                    }
+                >
                     {errorMessage}
                 </p>
             )}
 
             <SortableContext
                 items={sortableTaskIds}
-                strategy={verticalListSortingStrategy}
+                strategy={
+                    verticalListSortingStrategy
+                }
             >
                 {tasks.length === 0 ? (
-                    <p className="border border-dashed border-slate-700 bg-slate-950 p-4 text-center text-sm text-slate-500">
-                        Drop a task here or create a new task.
+                    <p
+                        className={
+                            isOverview
+                                ? 'border border-dashed border-slate-700 bg-slate-950 p-2 text-center text-xs text-slate-500'
+                                : 'border border-dashed border-slate-700 bg-slate-950 p-4 text-center text-sm text-slate-500'
+                        }
+                    >
+                        {isOverview
+                            ? 'Drop task here'
+                            : 'Drop a task here or create a new task.'}
                     </p>
                 ) : (
-                    <div className="space-y-3">
+                    <div
+                        className={
+                            isOverview
+                                ? 'space-y-2'
+                                : 'space-y-3'
+                        }
+                    >
                         {tasks.map((task) => {
                             const isEditing =
                                 editingTaskId ===
@@ -370,7 +434,8 @@ function TaskList({
                             const isSaving =
                                 updateMutation.isPending &&
                                 updateMutation.variables
-                                    ?.taskId === task.id;
+                                    ?.taskId ===
+                                    task.id;
 
                             const isDeleting =
                                 deleteMutation.isPending &&
@@ -381,15 +446,29 @@ function TaskList({
                                 return (
                                     <DraggableTask
                                         key={task.id}
-                                        taskId={task.id}
+                                        taskId={
+                                            task.id
+                                        }
                                         columnId={
                                             columnId
                                         }
                                         disabled
                                     >
-                                        <article className="border border-blue-700 bg-slate-950 p-4">
+                                        <article
+                                            className={
+                                                isOverview
+                                                    ? 'border border-blue-700 bg-slate-950 p-3'
+                                                    : 'border border-blue-700 bg-slate-950 p-4'
+                                            }
+                                        >
                                             <label className="block">
-                                                <span className="text-sm font-medium text-slate-300">
+                                                <span
+                                                    className={
+                                                        isOverview
+                                                            ? 'text-xs font-medium text-slate-300'
+                                                            : 'text-sm font-medium text-slate-300'
+                                                    }
+                                                >
                                                     Task title
                                                 </span>
 
@@ -413,12 +492,18 @@ function TaskList({
                                                             }),
                                                         )
                                                     }
-                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
                                                 />
                                             </label>
 
-                                            <label className="mt-4 block">
-                                                <span className="text-sm font-medium text-slate-300">
+                                            <label className="mt-3 block">
+                                                <span
+                                                    className={
+                                                        isOverview
+                                                            ? 'text-xs font-medium text-slate-300'
+                                                            : 'text-sm font-medium text-slate-300'
+                                                    }
+                                                >
                                                     Priority
                                                 </span>
 
@@ -439,7 +524,7 @@ function TaskList({
                                                             }),
                                                         )
                                                     }
-                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
                                                 >
                                                     <option value="low">
                                                         Low
@@ -459,8 +544,14 @@ function TaskList({
                                                 </select>
                                             </label>
 
-                                            <label className="mt-4 block">
-                                                <span className="text-sm font-medium text-slate-300">
+                                            <label className="mt-3 block">
+                                                <span
+                                                    className={
+                                                        isOverview
+                                                            ? 'text-xs font-medium text-slate-300'
+                                                            : 'text-sm font-medium text-slate-300'
+                                                    }
+                                                >
                                                     Due date
                                                 </span>
 
@@ -482,17 +573,27 @@ function TaskList({
                                                             }),
                                                         )
                                                     }
-                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
                                                 />
                                             </label>
 
-                                            <label className="mt-4 block">
-                                                <span className="text-sm font-medium text-slate-300">
+                                            <label className="mt-3 block">
+                                                <span
+                                                    className={
+                                                        isOverview
+                                                            ? 'text-xs font-medium text-slate-300'
+                                                            : 'text-sm font-medium text-slate-300'
+                                                    }
+                                                >
                                                     Description
                                                 </span>
 
                                                 <textarea
-                                                    rows={3}
+                                                    rows={
+                                                        isOverview
+                                                            ? 2
+                                                            : 3
+                                                    }
                                                     value={
                                                         editForm.description
                                                     }
@@ -509,11 +610,11 @@ function TaskList({
                                                             }),
                                                         )
                                                     }
-                                                    className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                                    className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-blue-500"
                                                 />
                                             </label>
 
-                                            <label className="mt-4 flex items-center gap-3">
+                                            <label className="mt-3 flex items-center gap-3">
                                                 <input
                                                     type="checkbox"
                                                     checked={
@@ -535,12 +636,18 @@ function TaskList({
                                                     className="h-4 w-4"
                                                 />
 
-                                                <span className="text-sm text-slate-300">
+                                                <span
+                                                    className={
+                                                        isOverview
+                                                            ? 'text-xs text-slate-300'
+                                                            : 'text-sm text-slate-300'
+                                                    }
+                                                >
                                                     Completed
                                                 </span>
                                             </label>
 
-                                            <div className="mt-5 flex gap-3">
+                                            <div className="mt-4 flex flex-wrap gap-2">
                                                 <button
                                                     type="button"
                                                     onClick={() =>
@@ -551,7 +658,7 @@ function TaskList({
                                                     disabled={
                                                         updateMutation.isPending
                                                     }
-                                                    className="border border-blue-600 bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    className="border border-blue-600 bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
                                                 >
                                                     {isSaving
                                                         ? 'Saving...'
@@ -566,7 +673,7 @@ function TaskList({
                                                     disabled={
                                                         updateMutation.isPending
                                                     }
-                                                    className="border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                                    className="border border-slate-700 px-3 py-2 text-xs font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
                                                 >
                                                     Cancel
                                                 </button>
@@ -580,19 +687,34 @@ function TaskList({
                                 <DraggableTask
                                     key={task.id}
                                     taskId={task.id}
-                                    columnId={columnId}
+                                    columnId={
+                                        columnId
+                                    }
                                     disabled={
                                         dragDisabled
                                     }
                                 >
-                                    <article className="border border-slate-700 bg-slate-950 p-4 pr-16">
-                                        <div className="flex items-start justify-between gap-3">
-                                            <div>
+                                    <article
+                                        className={
+                                            isOverview
+                                                ? 'border border-slate-700 bg-slate-950 p-3 pr-12'
+                                                : 'border border-slate-700 bg-slate-950 p-4 pr-16'
+                                        }
+                                    >
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div className="min-w-0">
                                                 <h4
                                                     className={
                                                         task.completed_at
-                                                            ? 'font-semibold text-slate-500 line-through'
-                                                            : 'font-semibold text-slate-100'
+                                                            ? isOverview
+                                                                ? 'truncate text-sm font-semibold text-slate-500 line-through'
+                                                                : 'font-semibold text-slate-500 line-through'
+                                                            : isOverview
+                                                              ? 'truncate text-sm font-semibold text-slate-100'
+                                                              : 'font-semibold text-slate-100'
+                                                    }
+                                                    title={
+                                                        task.title
                                                     }
                                                 >
                                                     {
@@ -600,7 +722,13 @@ function TaskList({
                                                     }
                                                 </h4>
 
-                                                <p className="mt-1 text-xs text-slate-500">
+                                                <p
+                                                    className={
+                                                        isOverview
+                                                            ? 'mt-1 text-[10px] text-slate-500'
+                                                            : 'mt-1 text-xs text-slate-500'
+                                                    }
+                                                >
                                                     Position{' '}
                                                     {
                                                         task.position
@@ -608,58 +736,89 @@ function TaskList({
                                                 </p>
                                             </div>
 
-                                            <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">
+                                            <span
+                                                className={
+                                                    isOverview
+                                                        ? 'shrink-0 border border-slate-700 px-1.5 py-1 text-[9px] uppercase tracking-wide text-slate-300'
+                                                        : 'shrink-0 border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300'
+                                                }
+                                            >
                                                 {
                                                     task.priority
                                                 }
                                             </span>
                                         </div>
 
-                                        <p className="mt-3 text-sm leading-6 text-slate-400">
-                                            {task.description ||
-                                                'No description.'}
-                                        </p>
-
-                                        <dl className="mt-3 space-y-2 text-xs">
-                                            <div className="flex justify-between gap-3">
-                                                <dt className="text-slate-500">
-                                                    Due
-                                                </dt>
-
-                                                <dd className="text-slate-300">
-                                                    {formatDate(
-                                                        task.due_date,
-                                                    )}
-                                                </dd>
-                                            </div>
-
-                                            <div className="flex justify-between gap-3">
-                                                <dt className="text-slate-500">
-                                                    Assignee
-                                                </dt>
-
-                                                <dd className="text-slate-300">
+                                        {isOverview ? (
+                                            <div className="mt-2 flex items-center justify-between gap-2 text-[10px]">
+                                                <span className="truncate text-slate-500">
                                                     {task
                                                         .assignee
                                                         ?.name ??
                                                         'Unassigned'}
-                                                </dd>
+                                                </span>
+
+                                                <span className="shrink-0 text-slate-400">
+                                                    {formatDate(
+                                                        task.due_date,
+                                                    )}
+                                                </span>
                                             </div>
+                                        ) : (
+                                            <>
+                                                <p className="mt-3 text-sm leading-6 text-slate-400">
+                                                    {task.description ||
+                                                        'No description.'}
+                                                </p>
 
-                                            <div className="flex justify-between gap-3">
-                                                <dt className="text-slate-500">
-                                                    Status
-                                                </dt>
+                                                <dl className="mt-3 space-y-2 text-xs">
+                                                    <div className="flex justify-between gap-3">
+                                                        <dt className="text-slate-500">
+                                                            Due
+                                                        </dt>
 
-                                                <dd className="text-slate-300">
-                                                    {task.completed_at
-                                                        ? 'Completed'
-                                                        : 'Open'}
-                                                </dd>
-                                            </div>
-                                        </dl>
+                                                        <dd className="text-slate-300">
+                                                            {formatDate(
+                                                                task.due_date,
+                                                            )}
+                                                        </dd>
+                                                    </div>
 
-                                        <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-800 pt-3">
+                                                    <div className="flex justify-between gap-3">
+                                                        <dt className="text-slate-500">
+                                                            Assignee
+                                                        </dt>
+
+                                                        <dd className="text-slate-300">
+                                                            {task
+                                                                .assignee
+                                                                ?.name ??
+                                                                'Unassigned'}
+                                                        </dd>
+                                                    </div>
+
+                                                    <div className="flex justify-between gap-3">
+                                                        <dt className="text-slate-500">
+                                                            Status
+                                                        </dt>
+
+                                                        <dd className="text-slate-300">
+                                                            {task.completed_at
+                                                                ? 'Completed'
+                                                                : 'Open'}
+                                                        </dd>
+                                                    </div>
+                                                </dl>
+                                            </>
+                                        )}
+
+                                        <div
+                                            className={
+                                                isOverview
+                                                    ? 'mt-3 flex flex-wrap gap-1.5 border-t border-slate-800 pt-2'
+                                                    : 'mt-4 flex flex-wrap gap-2 border-t border-slate-800 pt-3'
+                                            }
+                                        >
                                             <button
                                                 type="button"
                                                 onClick={() =>
@@ -671,7 +830,11 @@ function TaskList({
                                                     updateMutation.isPending ||
                                                     deleteMutation.isPending
                                                 }
-                                                className="border border-emerald-800 px-3 py-2 text-xs font-medium text-emerald-400 hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                                className={
+                                                    isOverview
+                                                        ? 'border border-emerald-800 px-2 py-1 text-[10px] font-medium text-emerald-400 hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-50'
+                                                        : 'border border-emerald-800 px-3 py-2 text-xs font-medium text-emerald-400 hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-50'
+                                                }
                                             >
                                                 {isSaving
                                                     ? 'Updating...'
@@ -691,7 +854,11 @@ function TaskList({
                                                     updateMutation.isPending ||
                                                     deleteMutation.isPending
                                                 }
-                                                className="border border-blue-700 px-3 py-2 text-xs font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                                className={
+                                                    isOverview
+                                                        ? 'border border-blue-700 px-2 py-1 text-[10px] font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50'
+                                                        : 'border border-blue-700 px-3 py-2 text-xs font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50'
+                                                }
                                             >
                                                 Edit
                                             </button>
@@ -707,7 +874,11 @@ function TaskList({
                                                     updateMutation.isPending ||
                                                     deleteMutation.isPending
                                                 }
-                                                className="border border-red-800 px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                                className={
+                                                    isOverview
+                                                        ? 'border border-red-800 px-2 py-1 text-[10px] font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50'
+                                                        : 'border border-red-800 px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50'
+                                                }
                                             >
                                                 {isDeleting
                                                     ? 'Deleting...'

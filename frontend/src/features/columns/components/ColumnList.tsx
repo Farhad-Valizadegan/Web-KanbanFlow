@@ -36,10 +36,15 @@ import type {
     UpdateColumnInput,
 } from '../types';
 
+type BoardViewMode =
+    | 'detailed'
+    | 'overview';
+
 interface ColumnListProps {
     workspaceId: number;
     projectId: number;
     boardId: number;
+    viewMode: BoardViewMode;
 }
 
 interface EditColumnFormState {
@@ -69,6 +74,7 @@ interface SortableColumnCardProps {
     workspaceId: number;
     projectId: number;
     boardId: number;
+    viewMode: BoardViewMode;
     disabled: boolean;
     isDeleting: boolean;
     isTaskFormVisible: boolean;
@@ -84,6 +90,7 @@ function SortableColumnCard({
     workspaceId,
     projectId,
     boardId,
+    viewMode,
     disabled,
     isDeleting,
     isTaskFormVisible,
@@ -116,27 +123,53 @@ function SortableColumnCard({
         zIndex: isDragging ? 10 : undefined,
     };
 
+    const isOverview =
+        viewMode === 'overview';
+
     return (
         <article
             ref={setNodeRef}
             style={style}
-            className="w-96 shrink-0 border border-slate-800 bg-slate-900 p-5"
+            className={
+                isOverview
+                    ? 'w-64 shrink-0 border border-slate-800 bg-slate-900 p-3'
+                    : 'w-96 shrink-0 border border-slate-800 bg-slate-900 p-5'
+            }
         >
-            <div className="flex items-start justify-between gap-4">
-                <div>
-                    <h3 className="text-lg font-semibold text-slate-100">
+            <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                    <h3
+                        className={
+                            isOverview
+                                ? 'truncate text-sm font-semibold text-slate-100'
+                                : 'text-lg font-semibold text-slate-100'
+                        }
+                        title={column.name}
+                    >
                         {column.name}
                     </h3>
 
-                    <p className="mt-1 text-sm text-slate-500">
-                        Position:{' '}
+                    <p
+                        className={
+                            isOverview
+                                ? 'mt-1 text-xs text-slate-500'
+                                : 'mt-1 text-sm text-slate-500'
+                        }
+                    >
+                        Position{' '}
                         <span className="text-slate-300">
                             {column.position}
                         </span>
                     </p>
                 </div>
 
-                <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">
+                <span
+                    className={
+                        isOverview
+                            ? 'shrink-0 border border-slate-700 px-2 py-1 text-[10px] uppercase tracking-wide text-slate-300'
+                            : 'shrink-0 border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300'
+                    }
+                >
                     {column.wip_limit === null
                         ? 'No limit'
                         : `WIP ${column.wip_limit}`}
@@ -150,19 +183,33 @@ function SortableColumnCard({
                 disabled={disabled}
                 {...attributes}
                 {...listeners}
-                className="mt-4 w-full cursor-grab border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 hover:border-blue-500 hover:text-blue-300 active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50"
+                className={
+                    isOverview
+                        ? 'mt-3 w-full cursor-grab border border-slate-700 px-2 py-1.5 text-xs font-medium text-slate-300 hover:border-blue-500 hover:text-blue-300 active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50'
+                        : 'mt-4 w-full cursor-grab border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 hover:border-blue-500 hover:text-blue-300 active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50'
+                }
             >
                 Move column
             </button>
 
-            <div className="mt-5">
+            <div
+                className={
+                    isOverview
+                        ? 'mt-3'
+                        : 'mt-5'
+                }
+            >
                 <button
                     type="button"
                     onClick={() =>
                         onToggleTaskForm(column.id)
                     }
                     disabled={disabled}
-                    className="w-full border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+                    className={
+                        isOverview
+                            ? 'w-full border border-blue-700 px-2 py-1.5 text-xs font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50'
+                            : 'w-full border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50'
+                    }
                 >
                     {isTaskFormVisible
                         ? 'Close task form'
@@ -184,16 +231,27 @@ function SortableColumnCard({
                 projectId={projectId}
                 boardId={boardId}
                 columnId={column.id}
+                viewMode={viewMode}
             />
 
-            <div className="mt-5 flex gap-3 border-t border-slate-800 pt-4">
+            <div
+                className={
+                    isOverview
+                        ? 'mt-3 flex flex-wrap gap-2 border-t border-slate-800 pt-3'
+                        : 'mt-5 flex gap-3 border-t border-slate-800 pt-4'
+                }
+            >
                 <button
                     type="button"
                     onClick={() => onEdit(column)}
                     disabled={disabled}
-                    className="border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+                    className={
+                        isOverview
+                            ? 'border border-blue-700 px-2 py-1.5 text-xs font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50'
+                            : 'border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50'
+                    }
                 >
-                    Edit column
+                    Edit
                 </button>
 
                 <button
@@ -202,11 +260,15 @@ function SortableColumnCard({
                         onDelete(column)
                     }
                     disabled={disabled}
-                    className="border border-red-800 px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
+                    className={
+                        isOverview
+                            ? 'border border-red-800 px-2 py-1.5 text-xs font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50'
+                            : 'border border-red-800 px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50'
+                    }
                 >
                     {isDeleting
                         ? 'Deleting...'
-                        : 'Delete column'}
+                        : 'Delete'}
                 </button>
             </div>
         </article>
@@ -217,6 +279,7 @@ function ColumnList({
     workspaceId,
     projectId,
     boardId,
+    viewMode,
 }: ColumnListProps) {
     const queryClient = useQueryClient();
 
@@ -906,7 +969,13 @@ function ColumnList({
         moveColumnMutation.isPending;
 
     return (
-        <div className="mt-6">
+        <div
+            className={
+                viewMode === 'overview'
+                    ? 'mt-4'
+                    : 'mt-6'
+            }
+        >
             {errorMessage && (
                 <p className="mb-4 border border-red-900 bg-red-950/40 p-4 text-sm text-red-400">
                     {errorMessage}
@@ -940,7 +1009,13 @@ function ColumnList({
                         horizontalListSortingStrategy
                     }
                 >
-                    <div className="flex gap-4 overflow-x-auto pb-6">
+                    <div
+                        className={
+                            viewMode === 'overview'
+                                ? 'flex gap-2 overflow-x-auto pb-4'
+                                : 'flex gap-4 overflow-x-auto pb-6'
+                        }
+                    >
                         {columns.map((column) => {
                             const isEditing =
                                 editingColumnId ===
@@ -965,7 +1040,12 @@ function ColumnList({
                                 return (
                                     <article
                                         key={column.id}
-                                        className="w-96 shrink-0 border border-blue-700 bg-slate-900 p-5"
+                                        className={
+                                            viewMode ===
+                                            'overview'
+                                                ? 'w-64 shrink-0 border border-blue-700 bg-slate-900 p-3'
+                                                : 'w-96 shrink-0 border border-blue-700 bg-slate-900 p-5'
+                                        }
                                     >
                                         <label className="block">
                                             <span className="text-sm font-medium text-slate-300">
@@ -1073,6 +1153,9 @@ function ColumnList({
                                     }
                                     boardId={
                                         boardId
+                                    }
+                                    viewMode={
+                                        viewMode
                                     }
                                     disabled={
                                         interactionDisabled
