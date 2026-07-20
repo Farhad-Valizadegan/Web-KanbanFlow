@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BoardController;
 use App\Http\Controllers\Api\ColumnController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\TaskCommentController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\WorkspaceController;
 use App\Http\Controllers\Api\WorkspaceMemberController;
@@ -112,5 +113,10 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::apiResource(
         'workspaces.projects.boards.columns.tasks',
         TaskController::class
+    );
+
+    Route::apiResource(
+        'workspaces.projects.boards.columns.tasks.comments',
+        TaskCommentController::class
     );
 });
