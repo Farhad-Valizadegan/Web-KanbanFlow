@@ -1,12 +1,24 @@
 import {
+    closestCorners,
+    DndContext,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import {
     useMutation,
     useQuery,
     useQueryClient,
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useState } from 'react';
+import {
+    moveTask,
+} from '../../tasks/api';
 import CreateTaskForm from '../../tasks/components/CreateTaskForm';
 import TaskList from '../../tasks/components/TaskList';
+import type { Task } from '../../tasks/types';
 import {
     deleteColumn,
     getColumns,
@@ -29,6 +41,13 @@ interface EditColumnFormState {
     wip_limit: string;
 }
 
+interface MoveTaskVariables {
+    sourceColumnId: number;
+    destinationColumnId: number;
+    taskId: number;
+    position: number;
+}
+
 interface ApiErrorResponse {
     message?: string;
     errors?: Record<string, string[]>;
@@ -40,6 +59,14 @@ function ColumnList({
     boardId,
 }: ColumnListProps) {
     const queryClient = useQueryClient();
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8,
+            },
+        }),
+    );
 
     const [editingColumnId, setEditingColumnId] =
         useState<number | null>(null);
@@ -57,13 +84,25 @@ function ColumnList({
     const [errorMessage, setErrorMessage] =
         useState<string | null>(null);
 
-    const columnsQuery = useQuery({
-        queryKey: [
-            'columns',
+    const columnsQueryKey = [
+        'columns',
+        workspaceId,
+        projectId,
+        boardId,
+    ];
+
+    function taskQueryKey(columnId: number) {
+        return [
+            'tasks',
             workspaceId,
             projectId,
             boardId,
-        ],
+            columnId,
+        ];
+    }
+
+    const columnsQuery = useQuery({
+        queryKey: columnsQueryKey,
         queryFn: () =>
             getColumns(
                 workspaceId,
@@ -71,6 +110,78 @@ function ColumnList({
                 boardId,
             ),
         retry: false,
+    });
+
+    const moveTaskMutation = useMutation({
+        mutationFn: ({
+            sourceColumnId,
+            destinationColumnId,
+            taskId,
+            position,
+        }: MoveTaskVariables) =>
+            moveTask(
+                workspaceId,
+                projectId,
+                boardId,
+                sourceColumnId,
+                taskId,
+                {
+                    column_id:
+                        destinationColumnId,
+                    position,
+                },
+            ),
+
+        onSuccess: async () => {
+            setErrorMessage(null);
+
+            await queryClient.invalidateQueries({
+                queryKey: [
+                    'tasks',
+                    workspaceId,
+                    projectId,
+                    boardId,
+                ],
+            });
+        },
+
+        onError: (
+            error: AxiosError<ApiErrorResponse>,
+        ) => {
+            if (error.response?.status === 403) {
+                setErrorMessage(
+                    'You do not have permission to move this task.',
+                );
+                return;
+            }
+
+            if (error.response?.status === 401) {
+                setErrorMessage(
+                    'Your session has expired. Please sign in again.',
+                );
+                return;
+            }
+
+            const validationErrors =
+                error.response?.data.errors;
+
+            if (validationErrors) {
+                const firstError =
+                    Object.values(
+                        validationErrors,
+                    )[0]?.[0];
+
+                if (firstError) {
+                    setErrorMessage(firstError);
+                    return;
+                }
+            }
+
+            setErrorMessage(
+                error.response?.data.message ??
+                    'Unable to move the task.',
+            );
+        },
     });
 
     const updateMutation = useMutation({
@@ -94,12 +205,7 @@ function ColumnList({
             setErrorMessage(null);
 
             await queryClient.invalidateQueries({
-                queryKey: [
-                    'columns',
-                    workspaceId,
-                    projectId,
-                    boardId,
-                ],
+                queryKey: columnsQueryKey,
             });
         },
 
@@ -155,12 +261,7 @@ function ColumnList({
             setErrorMessage(null);
 
             await queryClient.invalidateQueries({
-                queryKey: [
-                    'columns',
-                    workspaceId,
-                    projectId,
-                    boardId,
-                ],
+                queryKey: columnsQueryKey,
             });
         },
 
@@ -285,6 +386,150 @@ function ColumnList({
         deleteMutation.mutate(column.id);
     }
 
+    function handleDragEnd(
+        event: DragEndEvent,
+    ) {
+        const { active, over } = event;
+
+        if (
+            !over ||
+            moveTaskMutation.isPending
+        ) {
+            return;
+        }
+
+        const activeData =
+            active.data.current;
+
+        const overData =
+            over.data.current;
+
+        if (
+            activeData?.type !== 'task'
+        ) {
+            return;
+        }
+
+        const taskId = Number(
+            activeData.taskId,
+        );
+
+        const sourceColumnId = Number(
+            activeData.columnId,
+        );
+
+        if (
+            !Number.isInteger(taskId) ||
+            !Number.isInteger(
+                sourceColumnId,
+            )
+        ) {
+            return;
+        }
+
+        let destinationColumnId:
+            | number
+            | null = null;
+
+        let destinationPosition:
+            | number
+            | null = null;
+
+        if (overData?.type === 'task') {
+            destinationColumnId = Number(
+                overData.columnId,
+            );
+
+            const destinationTasks =
+                queryClient.getQueryData<Task[]>(
+                    taskQueryKey(
+                        destinationColumnId,
+                    ),
+                ) ?? [];
+
+            const overTaskId = Number(
+                overData.taskId,
+            );
+
+            const overTaskIndex =
+                destinationTasks.findIndex(
+                    task =>
+                        task.id === overTaskId,
+                );
+
+            if (overTaskIndex === -1) {
+                return;
+            }
+
+            destinationPosition =
+                overTaskIndex + 1;
+        } else if (
+            overData?.type === 'column'
+        ) {
+            destinationColumnId = Number(
+                overData.columnId,
+            );
+
+            const destinationTasks =
+                queryClient.getQueryData<Task[]>(
+                    taskQueryKey(
+                        destinationColumnId,
+                    ),
+                ) ?? [];
+
+            destinationPosition =
+                destinationTasks.length + 1;
+        }
+
+        if (
+            destinationColumnId === null ||
+            destinationPosition === null ||
+            !Number.isInteger(
+                destinationColumnId,
+            ) ||
+            !Number.isInteger(
+                destinationPosition,
+            )
+        ) {
+            return;
+        }
+
+        const sourceTasks =
+            queryClient.getQueryData<Task[]>(
+                taskQueryKey(
+                    sourceColumnId,
+                ),
+            ) ?? [];
+
+        const activeTask =
+            sourceTasks.find(
+                task => task.id === taskId,
+            );
+
+        if (!activeTask) {
+            return;
+        }
+
+        if (
+            sourceColumnId ===
+                destinationColumnId &&
+            activeTask.position ===
+                destinationPosition
+        ) {
+            return;
+        }
+
+        setErrorMessage(null);
+
+        moveTaskMutation.mutate({
+            sourceColumnId,
+            destinationColumnId,
+            taskId,
+            position:
+                destinationPosition,
+        });
+    }
+
     if (columnsQuery.isPending) {
         return (
             <p className="mt-6 text-slate-400">
@@ -319,250 +564,293 @@ function ColumnList({
                 </p>
             )}
 
-            <div className="flex gap-4 overflow-x-auto pb-6">
-                {columns.map((column) => {
-                    const isEditing =
-                        editingColumnId === column.id;
+            {moveTaskMutation.isPending && (
+                <p className="mb-4 border border-blue-900 bg-blue-950/40 p-4 text-sm text-blue-300">
+                    Moving task...
+                </p>
+            )}
 
-                    const isSaving =
-                        updateMutation.isPending &&
-                        updateMutation.variables
-                            ?.columnId === column.id;
-
-                    const isDeleting =
-                        deleteMutation.isPending &&
-                        deleteMutation.variables ===
+            <DndContext
+                sensors={sensors}
+                collisionDetection={
+                    closestCorners
+                }
+                onDragEnd={handleDragEnd}
+            >
+                <div className="flex gap-4 overflow-x-auto pb-6">
+                    {columns.map((column) => {
+                        const isEditing =
+                            editingColumnId ===
                             column.id;
 
-                    const isTaskFormVisible =
-                        showTaskFormColumnId ===
-                        column.id;
+                        const isSaving =
+                            updateMutation.isPending &&
+                            updateMutation.variables
+                                ?.columnId ===
+                                column.id;
 
-                    if (isEditing) {
+                        const isDeleting =
+                            deleteMutation.isPending &&
+                            deleteMutation.variables ===
+                                column.id;
+
+                        const isTaskFormVisible =
+                            showTaskFormColumnId ===
+                            column.id;
+
+                        if (isEditing) {
+                            return (
+                                <article
+                                    key={column.id}
+                                    className="w-96 shrink-0 border border-blue-700 bg-slate-900 p-5"
+                                >
+                                    <label className="block">
+                                        <span className="text-sm font-medium text-slate-300">
+                                            Column name
+                                        </span>
+
+                                        <input
+                                            type="text"
+                                            value={
+                                                editForm.name
+                                            }
+                                            maxLength={
+                                                255
+                                            }
+                                            onChange={(
+                                                event,
+                                            ) =>
+                                                setEditForm(
+                                                    current => ({
+                                                        ...current,
+                                                        name: event
+                                                            .target
+                                                            .value,
+                                                    }),
+                                                )
+                                            }
+                                            className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                        />
+                                    </label>
+
+                                    <label className="mt-4 block">
+                                        <span className="text-sm font-medium text-slate-300">
+                                            Position
+                                        </span>
+
+                                        <input
+                                            type="number"
+                                            min="0"
+                                            step="1"
+                                            value={
+                                                editForm.position
+                                            }
+                                            onChange={(
+                                                event,
+                                            ) =>
+                                                setEditForm(
+                                                    current => ({
+                                                        ...current,
+                                                        position:
+                                                            event
+                                                                .target
+                                                                .value,
+                                                    }),
+                                                )
+                                            }
+                                            className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                        />
+                                    </label>
+
+                                    <label className="mt-4 block">
+                                        <span className="text-sm font-medium text-slate-300">
+                                            WIP limit
+                                        </span>
+
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            step="1"
+                                            value={
+                                                editForm.wip_limit
+                                            }
+                                            onChange={(
+                                                event,
+                                            ) =>
+                                                setEditForm(
+                                                    current => ({
+                                                        ...current,
+                                                        wip_limit:
+                                                            event
+                                                                .target
+                                                                .value,
+                                                    }),
+                                                )
+                                            }
+                                            placeholder="No limit"
+                                            className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                        />
+                                    </label>
+
+                                    <div className="mt-5 flex gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                handleSave(
+                                                    column,
+                                                )
+                                            }
+                                            disabled={
+                                                updateMutation.isPending
+                                            }
+                                            className="border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                        >
+                                            {isSaving
+                                                ? 'Saving...'
+                                                : 'Save'}
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            onClick={
+                                                cancelEditing
+                                            }
+                                            disabled={
+                                                updateMutation.isPending
+                                            }
+                                            className="border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </article>
+                            );
+                        }
+
                         return (
                             <article
                                 key={column.id}
-                                className="w-96 shrink-0 border border-blue-700 bg-slate-900 p-5"
+                                className="w-96 shrink-0 border border-slate-800 bg-slate-900 p-5"
                             >
-                                <label className="block">
-                                    <span className="text-sm font-medium text-slate-300">
-                                        Column name
+                                <div className="flex items-start justify-between gap-4">
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-slate-100">
+                                            {
+                                                column.name
+                                            }
+                                        </h3>
+
+                                        <p className="mt-1 text-sm text-slate-500">
+                                            Position:{' '}
+                                            <span className="text-slate-300">
+                                                {
+                                                    column.position
+                                                }
+                                            </span>
+                                        </p>
+                                    </div>
+
+                                    <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">
+                                        {column.wip_limit ===
+                                        null
+                                            ? 'No limit'
+                                            : `WIP ${column.wip_limit}`}
                                     </span>
+                                </div>
 
-                                    <input
-                                        type="text"
-                                        value={editForm.name}
-                                        maxLength={255}
-                                        onChange={(
-                                            event,
-                                        ) =>
-                                            setEditForm(
-                                                current => ({
-                                                    ...current,
-                                                    name: event
-                                                        .target
-                                                        .value,
-                                                }),
-                                            )
-                                        }
-                                        className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                    />
-                                </label>
-
-                                <label className="mt-4 block">
-                                    <span className="text-sm font-medium text-slate-300">
-                                        Position
-                                    </span>
-
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        value={
-                                            editForm.position
-                                        }
-                                        onChange={(
-                                            event,
-                                        ) =>
-                                            setEditForm(
-                                                current => ({
-                                                    ...current,
-                                                    position:
-                                                        event
-                                                            .target
-                                                            .value,
-                                                }),
-                                            )
-                                        }
-                                        className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                    />
-                                </label>
-
-                                <label className="mt-4 block">
-                                    <span className="text-sm font-medium text-slate-300">
-                                        WIP limit
-                                    </span>
-
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        step="1"
-                                        value={
-                                            editForm.wip_limit
-                                        }
-                                        onChange={(
-                                            event,
-                                        ) =>
-                                            setEditForm(
-                                                current => ({
-                                                    ...current,
-                                                    wip_limit:
-                                                        event
-                                                            .target
-                                                            .value,
-                                                }),
-                                            )
-                                        }
-                                        placeholder="No limit"
-                                        className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                    />
-                                </label>
-
-                                <div className="mt-5 flex gap-3">
+                                <div className="mt-5">
                                     <button
                                         type="button"
                                         onClick={() =>
-                                            handleSave(column)
+                                            toggleTaskForm(
+                                                column.id,
+                                            )
                                         }
                                         disabled={
-                                            updateMutation.isPending
+                                            moveTaskMutation.isPending
                                         }
-                                        className="border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                        className="w-full border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
                                     >
-                                        {isSaving
-                                            ? 'Saving...'
-                                            : 'Save'}
+                                        {isTaskFormVisible
+                                            ? 'Close task form'
+                                            : 'Add task'}
+                                    </button>
+
+                                    {isTaskFormVisible && (
+                                        <CreateTaskForm
+                                            workspaceId={
+                                                workspaceId
+                                            }
+                                            projectId={
+                                                projectId
+                                            }
+                                            boardId={
+                                                boardId
+                                            }
+                                            columnId={
+                                                column.id
+                                            }
+                                        />
+                                    )}
+                                </div>
+
+                                <TaskList
+                                    workspaceId={
+                                        workspaceId
+                                    }
+                                    projectId={
+                                        projectId
+                                    }
+                                    boardId={
+                                        boardId
+                                    }
+                                    columnId={
+                                        column.id
+                                    }
+                                />
+
+                                <div className="mt-5 flex gap-3 border-t border-slate-800 pt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            beginEditing(
+                                                column,
+                                            )
+                                        }
+                                        disabled={
+                                            updateMutation.isPending ||
+                                            deleteMutation.isPending ||
+                                            moveTaskMutation.isPending
+                                        }
+                                        className="border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                    >
+                                        Edit column
                                     </button>
 
                                     <button
                                         type="button"
-                                        onClick={
-                                            cancelEditing
+                                        onClick={() =>
+                                            handleDelete(
+                                                column,
+                                            )
                                         }
                                         disabled={
-                                            updateMutation.isPending
+                                            updateMutation.isPending ||
+                                            deleteMutation.isPending ||
+                                            moveTaskMutation.isPending
                                         }
-                                        className="border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                        className="border border-red-800 px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
                                     >
-                                        Cancel
+                                        {isDeleting
+                                            ? 'Deleting...'
+                                            : 'Delete column'}
                                     </button>
                                 </div>
                             </article>
                         );
-                    }
-
-                    return (
-                        <article
-                            key={column.id}
-                            className="w-96 shrink-0 border border-slate-800 bg-slate-900 p-5"
-                        >
-                            <div className="flex items-start justify-between gap-4">
-                                <div>
-                                    <h3 className="text-lg font-semibold text-slate-100">
-                                        {column.name}
-                                    </h3>
-
-                                    <p className="mt-1 text-sm text-slate-500">
-                                        Position:{' '}
-                                        <span className="text-slate-300">
-                                            {column.position}
-                                        </span>
-                                    </p>
-                                </div>
-
-                                <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">
-                                    {column.wip_limit ===
-                                    null
-                                        ? 'No limit'
-                                        : `WIP ${column.wip_limit}`}
-                                </span>
-                            </div>
-
-                            <div className="mt-5">
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        toggleTaskForm(
-                                            column.id,
-                                        )
-                                    }
-                                    className="w-full border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950"
-                                >
-                                    {isTaskFormVisible
-                                        ? 'Close task form'
-                                        : 'Add task'}
-                                </button>
-
-                                {isTaskFormVisible && (
-                                    <CreateTaskForm
-                                        workspaceId={
-                                            workspaceId
-                                        }
-                                        projectId={
-                                            projectId
-                                        }
-                                        boardId={boardId}
-                                        columnId={
-                                            column.id
-                                        }
-                                    />
-                                )}
-                            </div>
-
-                            <TaskList
-                                workspaceId={
-                                    workspaceId
-                                }
-                                projectId={projectId}
-                                boardId={boardId}
-                                columnId={column.id}
-                            />
-
-                            <div className="mt-5 flex gap-3 border-t border-slate-800 pt-4">
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        beginEditing(column)
-                                    }
-                                    disabled={
-                                        updateMutation.isPending ||
-                                        deleteMutation.isPending
-                                    }
-                                    className="border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                    Edit column
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        handleDelete(column)
-                                    }
-                                    disabled={
-                                        updateMutation.isPending ||
-                                        deleteMutation.isPending
-                                    }
-                                    className="border border-red-800 px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                    {isDeleting
-                                        ? 'Deleting...'
-                                        : 'Delete column'}
-                                </button>
-                            </div>
-                        </article>
-                    );
-                })}
-            </div>
+                    })}
+                </div>
+            </DndContext>
         </div>
     );
 }

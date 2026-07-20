@@ -1,3 +1,8 @@
+import { useDroppable } from '@dnd-kit/core';
+import {
+    SortableContext,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import {
     useMutation,
     useQuery,
@@ -15,6 +20,7 @@ import type {
     TaskPriority,
     UpdateTaskInput,
 } from '../types';
+import DraggableTask from './DraggableTask';
 
 interface TaskListProps {
     workspaceId: number;
@@ -60,6 +66,17 @@ function TaskList({
     columnId,
 }: TaskListProps) {
     const queryClient = useQueryClient();
+
+    const {
+        setNodeRef: setDroppableNodeRef,
+        isOver,
+    } = useDroppable({
+        id: `column-${columnId}`,
+        data: {
+            type: 'column',
+            columnId,
+        },
+    });
 
     const [editingTaskId, setEditingTaskId] =
         useState<number | null>(null);
@@ -210,8 +227,7 @@ function TaskList({
 
         setEditForm({
             title: task.title,
-            description:
-                task.description ?? '',
+            description: task.description ?? '',
             priority: task.priority,
             position: String(task.position),
             due_date: dateInputValue(
@@ -303,409 +319,454 @@ function TaskList({
 
     if (tasksQuery.isPending) {
         return (
-            <p className="mt-4 text-sm text-slate-500">
-                Loading tasks...
-            </p>
+            <div
+                ref={setDroppableNodeRef}
+                className="mt-4 min-h-24"
+            >
+                <p className="text-sm text-slate-500">
+                    Loading tasks...
+                </p>
+            </div>
         );
     }
 
     if (tasksQuery.isError) {
         return (
-            <p className="mt-4 border border-red-900 bg-red-950/40 p-3 text-sm text-red-400">
-                Unable to load tasks.
-            </p>
+            <div
+                ref={setDroppableNodeRef}
+                className="mt-4 min-h-24"
+            >
+                <p className="border border-red-900 bg-red-950/40 p-3 text-sm text-red-400">
+                    Unable to load tasks.
+                </p>
+            </div>
         );
     }
 
     const tasks = tasksQuery.data;
 
-    if (tasks.length === 0) {
-        return (
-            <p className="mt-4 border border-dashed border-slate-700 bg-slate-950 p-4 text-center text-sm text-slate-500">
-                No tasks in this column.
-            </p>
-        );
-    }
+    const sortableTaskIds = tasks.map(
+        task => `task-${task.id}`,
+    );
+
+    const dragDisabled =
+        editingTaskId !== null ||
+        updateMutation.isPending ||
+        deleteMutation.isPending;
 
     return (
-        <div className="mt-4">
+        <div
+            ref={setDroppableNodeRef}
+            className={
+                isOver
+                    ? 'mt-4 min-h-24 border border-blue-500 bg-blue-950/20 p-2'
+                    : 'mt-4 min-h-24 border border-transparent p-2'
+            }
+        >
             {errorMessage && (
                 <p className="mb-4 border border-red-900 bg-red-950/40 p-3 text-sm text-red-400">
                     {errorMessage}
                 </p>
             )}
 
-            <div className="space-y-3">
-                {tasks.map((task) => {
-                    const isEditing =
-                        editingTaskId === task.id;
+            <SortableContext
+                items={sortableTaskIds}
+                strategy={verticalListSortingStrategy}
+            >
+                {tasks.length === 0 ? (
+                    <p className="border border-dashed border-slate-700 bg-slate-950 p-4 text-center text-sm text-slate-500">
+                        Drop a task here or create a new task.
+                    </p>
+                ) : (
+                    <div className="space-y-3">
+                        {tasks.map((task) => {
+                            const isEditing =
+                                editingTaskId ===
+                                task.id;
 
-                    const isSaving =
-                        updateMutation.isPending &&
-                        updateMutation.variables
-                            ?.taskId === task.id;
+                            const isSaving =
+                                updateMutation.isPending &&
+                                updateMutation.variables
+                                    ?.taskId === task.id;
 
-                    const isDeleting =
-                        deleteMutation.isPending &&
-                        deleteMutation.variables ===
-                            task.id;
+                            const isDeleting =
+                                deleteMutation.isPending &&
+                                deleteMutation.variables ===
+                                    task.id;
 
-                    if (isEditing) {
-                        return (
-                            <article
-                                key={task.id}
-                                className="border border-blue-700 bg-slate-950 p-4"
-                            >
-                                <label className="block">
-                                    <span className="text-sm font-medium text-slate-300">
-                                        Task title
-                                    </span>
-
-                                    <input
-                                        type="text"
-                                        value={
-                                            editForm.title
+                            if (isEditing) {
+                                return (
+                                    <DraggableTask
+                                        key={task.id}
+                                        taskId={task.id}
+                                        columnId={
+                                            columnId
                                         }
-                                        maxLength={255}
-                                        onChange={(
-                                            event,
-                                        ) =>
-                                            setEditForm(
-                                                (
-                                                    current,
-                                                ) => ({
-                                                    ...current,
-                                                    title: event
-                                                        .target
-                                                        .value,
-                                                }),
-                                            )
-                                        }
-                                        className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                    />
-                                </label>
-
-                                <label className="mt-4 block">
-                                    <span className="text-sm font-medium text-slate-300">
-                                        Priority
-                                    </span>
-
-                                    <select
-                                        value={
-                                            editForm.priority
-                                        }
-                                        onChange={(
-                                            event,
-                                        ) =>
-                                            setEditForm(
-                                                (
-                                                    current,
-                                                ) => ({
-                                                    ...current,
-                                                    priority:
-                                                        event
-                                                            .target
-                                                            .value as TaskPriority,
-                                                }),
-                                            )
-                                        }
-                                        className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                        disabled
                                     >
-                                        <option value="low">
-                                            Low
-                                        </option>
+                                        <article className="border border-blue-700 bg-slate-950 p-4">
+                                            <label className="block">
+                                                <span className="text-sm font-medium text-slate-300">
+                                                    Task title
+                                                </span>
 
-                                        <option value="medium">
-                                            Medium
-                                        </option>
+                                                <input
+                                                    type="text"
+                                                    value={
+                                                        editForm.title
+                                                    }
+                                                    maxLength={
+                                                        255
+                                                    }
+                                                    onChange={(
+                                                        event,
+                                                    ) =>
+                                                        setEditForm(
+                                                            current => ({
+                                                                ...current,
+                                                                title: event
+                                                                    .target
+                                                                    .value,
+                                                            }),
+                                                        )
+                                                    }
+                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                                />
+                                            </label>
 
-                                        <option value="high">
-                                            High
-                                        </option>
+                                            <label className="mt-4 block">
+                                                <span className="text-sm font-medium text-slate-300">
+                                                    Priority
+                                                </span>
 
-                                        <option value="urgent">
-                                            Urgent
-                                        </option>
-                                    </select>
-                                </label>
+                                                <select
+                                                    value={
+                                                        editForm.priority
+                                                    }
+                                                    onChange={(
+                                                        event,
+                                                    ) =>
+                                                        setEditForm(
+                                                            current => ({
+                                                                ...current,
+                                                                priority:
+                                                                    event
+                                                                        .target
+                                                                        .value as TaskPriority,
+                                                            }),
+                                                        )
+                                                    }
+                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                                >
+                                                    <option value="low">
+                                                        Low
+                                                    </option>
 
-                                <label className="mt-4 block">
-                                    <span className="text-sm font-medium text-slate-300">
-                                        Position
-                                    </span>
+                                                    <option value="medium">
+                                                        Medium
+                                                    </option>
 
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        step="1"
-                                        value={
-                                            editForm.position
-                                        }
-                                        onChange={(
-                                            event,
-                                        ) =>
-                                            setEditForm(
-                                                (
-                                                    current,
-                                                ) => ({
-                                                    ...current,
-                                                    position:
-                                                        event
-                                                            .target
-                                                            .value,
-                                                }),
-                                            )
-                                        }
-                                        className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                    />
-                                </label>
+                                                    <option value="high">
+                                                        High
+                                                    </option>
 
-                                <label className="mt-4 block">
-                                    <span className="text-sm font-medium text-slate-300">
-                                        Due date
-                                    </span>
+                                                    <option value="urgent">
+                                                        Urgent
+                                                    </option>
+                                                </select>
+                                            </label>
 
-                                    <input
-                                        type="date"
-                                        value={
-                                            editForm.due_date
-                                        }
-                                        onChange={(
-                                            event,
-                                        ) =>
-                                            setEditForm(
-                                                (
-                                                    current,
-                                                ) => ({
-                                                    ...current,
-                                                    due_date:
-                                                        event
-                                                            .target
-                                                            .value,
-                                                }),
-                                            )
-                                        }
-                                        className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                    />
-                                </label>
+                                            <label className="mt-4 block">
+                                                <span className="text-sm font-medium text-slate-300">
+                                                    Position
+                                                </span>
 
-                                <label className="mt-4 block">
-                                    <span className="text-sm font-medium text-slate-300">
-                                        Description
-                                    </span>
+                                                <input
+                                                    type="number"
+                                                    min="0"
+                                                    step="1"
+                                                    value={
+                                                        editForm.position
+                                                    }
+                                                    onChange={(
+                                                        event,
+                                                    ) =>
+                                                        setEditForm(
+                                                            current => ({
+                                                                ...current,
+                                                                position:
+                                                                    event
+                                                                        .target
+                                                                        .value,
+                                                            }),
+                                                        )
+                                                    }
+                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                                />
+                                            </label>
 
-                                    <textarea
-                                        rows={3}
-                                        value={
-                                            editForm.description
-                                        }
-                                        onChange={(
-                                            event,
-                                        ) =>
-                                            setEditForm(
-                                                (
-                                                    current,
-                                                ) => ({
-                                                    ...current,
-                                                    description:
-                                                        event
-                                                            .target
-                                                            .value,
-                                                }),
-                                            )
-                                        }
-                                        className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                    />
-                                </label>
+                                            <label className="mt-4 block">
+                                                <span className="text-sm font-medium text-slate-300">
+                                                    Due date
+                                                </span>
 
-                                <label className="mt-4 flex items-center gap-3">
-                                    <input
-                                        type="checkbox"
-                                        checked={
-                                            editForm.completed
-                                        }
-                                        onChange={(
-                                            event,
-                                        ) =>
-                                            setEditForm(
-                                                (
-                                                    current,
-                                                ) => ({
-                                                    ...current,
-                                                    completed:
-                                                        event
-                                                            .target
-                                                            .checked,
-                                                }),
-                                            )
-                                        }
-                                        className="h-4 w-4"
-                                    />
+                                                <input
+                                                    type="date"
+                                                    value={
+                                                        editForm.due_date
+                                                    }
+                                                    onChange={(
+                                                        event,
+                                                    ) =>
+                                                        setEditForm(
+                                                            current => ({
+                                                                ...current,
+                                                                due_date:
+                                                                    event
+                                                                        .target
+                                                                        .value,
+                                                            }),
+                                                        )
+                                                    }
+                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                                />
+                                            </label>
 
-                                    <span className="text-sm text-slate-300">
-                                        Completed
-                                    </span>
-                                </label>
+                                            <label className="mt-4 block">
+                                                <span className="text-sm font-medium text-slate-300">
+                                                    Description
+                                                </span>
 
-                                <div className="mt-5 flex gap-3">
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            handleSave(task)
-                                        }
-                                        disabled={
-                                            updateMutation.isPending
-                                        }
-                                        className="border border-blue-600 bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
-                                    >
-                                        {isSaving
-                                            ? 'Saving...'
-                                            : 'Save'}
-                                    </button>
+                                                <textarea
+                                                    rows={3}
+                                                    value={
+                                                        editForm.description
+                                                    }
+                                                    onChange={(
+                                                        event,
+                                                    ) =>
+                                                        setEditForm(
+                                                            current => ({
+                                                                ...current,
+                                                                description:
+                                                                    event
+                                                                        .target
+                                                                        .value,
+                                                            }),
+                                                        )
+                                                    }
+                                                    className="mt-2 w-full resize-y border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                                />
+                                            </label>
 
-                                    <button
-                                        type="button"
-                                        onClick={
-                                            cancelEditing
-                                        }
-                                        disabled={
-                                            updateMutation.isPending
-                                        }
-                                        className="border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-                            </article>
-                        );
-                    }
+                                            <label className="mt-4 flex items-center gap-3">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={
+                                                        editForm.completed
+                                                    }
+                                                    onChange={(
+                                                        event,
+                                                    ) =>
+                                                        setEditForm(
+                                                            current => ({
+                                                                ...current,
+                                                                completed:
+                                                                    event
+                                                                        .target
+                                                                        .checked,
+                                                            }),
+                                                        )
+                                                    }
+                                                    className="h-4 w-4"
+                                                />
 
-                    return (
-                        <article
-                            key={task.id}
-                            className="border border-slate-700 bg-slate-950 p-4"
-                        >
-                            <div className="flex items-start justify-between gap-3">
-                                <div>
-                                    <h4
-                                        className={
-                                            task.completed_at
-                                                ? 'font-semibold text-slate-500 line-through'
-                                                : 'font-semibold text-slate-100'
-                                        }
-                                    >
-                                        {task.title}
-                                    </h4>
+                                                <span className="text-sm text-slate-300">
+                                                    Completed
+                                                </span>
+                                            </label>
 
-                                    <p className="mt-1 text-xs text-slate-500">
-                                        Position{' '}
-                                        {task.position}
-                                    </p>
-                                </div>
+                                            <div className="mt-5 flex gap-3">
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        handleSave(
+                                                            task,
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        updateMutation.isPending
+                                                    }
+                                                    className="border border-blue-600 bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                                >
+                                                    {isSaving
+                                                        ? 'Saving...'
+                                                        : 'Save'}
+                                                </button>
 
-                                <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">
-                                    {task.priority}
-                                </span>
-                            </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={
+                                                        cancelEditing
+                                                    }
+                                                    disabled={
+                                                        updateMutation.isPending
+                                                    }
+                                                    className="border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </article>
+                                    </DraggableTask>
+                                );
+                            }
 
-                            <p className="mt-3 text-sm leading-6 text-slate-400">
-                                {task.description ||
-                                    'No description.'}
-                            </p>
-
-                            <dl className="mt-3 space-y-2 text-xs">
-                                <div className="flex justify-between gap-3">
-                                    <dt className="text-slate-500">
-                                        Due
-                                    </dt>
-
-                                    <dd className="text-slate-300">
-                                        {formatDate(
-                                            task.due_date,
-                                        )}
-                                    </dd>
-                                </div>
-
-                                <div className="flex justify-between gap-3">
-                                    <dt className="text-slate-500">
-                                        Assignee
-                                    </dt>
-
-                                    <dd className="text-slate-300">
-                                        {task.assignee
-                                            ?.name ??
-                                            'Unassigned'}
-                                    </dd>
-                                </div>
-
-                                <div className="flex justify-between gap-3">
-                                    <dt className="text-slate-500">
-                                        Status
-                                    </dt>
-
-                                    <dd className="text-slate-300">
-                                        {task.completed_at
-                                            ? 'Completed'
-                                            : 'Open'}
-                                    </dd>
-                                </div>
-                            </dl>
-
-                            <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-800 pt-3">
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        handleToggleCompletion(
-                                            task,
-                                        )
-                                    }
+                            return (
+                                <DraggableTask
+                                    key={task.id}
+                                    taskId={task.id}
+                                    columnId={columnId}
                                     disabled={
-                                        updateMutation.isPending ||
-                                        deleteMutation.isPending
+                                        dragDisabled
                                     }
-                                    className="border border-emerald-800 px-3 py-2 text-xs font-medium text-emerald-400 hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-50"
                                 >
-                                    {isSaving
-                                        ? 'Updating...'
-                                        : task.completed_at
-                                          ? 'Reopen'
-                                          : 'Complete'}
-                                </button>
+                                    <article className="border border-slate-700 bg-slate-950 p-4 pr-16">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div>
+                                                <h4
+                                                    className={
+                                                        task.completed_at
+                                                            ? 'font-semibold text-slate-500 line-through'
+                                                            : 'font-semibold text-slate-100'
+                                                    }
+                                                >
+                                                    {
+                                                        task.title
+                                                    }
+                                                </h4>
 
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        beginEditing(task)
-                                    }
-                                    disabled={
-                                        updateMutation.isPending ||
-                                        deleteMutation.isPending
-                                    }
-                                    className="border border-blue-700 px-3 py-2 text-xs font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                    Edit
-                                </button>
+                                                <p className="mt-1 text-xs text-slate-500">
+                                                    Position{' '}
+                                                    {
+                                                        task.position
+                                                    }
+                                                </p>
+                                            </div>
 
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        handleDelete(task)
-                                    }
-                                    disabled={
-                                        updateMutation.isPending ||
-                                        deleteMutation.isPending
-                                    }
-                                    className="border border-red-800 px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                    {isDeleting
-                                        ? 'Deleting...'
-                                        : 'Delete'}
-                                </button>
-                            </div>
-                        </article>
-                    );
-                })}
-            </div>
+                                            <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">
+                                                {
+                                                    task.priority
+                                                }
+                                            </span>
+                                        </div>
+
+                                        <p className="mt-3 text-sm leading-6 text-slate-400">
+                                            {task.description ||
+                                                'No description.'}
+                                        </p>
+
+                                        <dl className="mt-3 space-y-2 text-xs">
+                                            <div className="flex justify-between gap-3">
+                                                <dt className="text-slate-500">
+                                                    Due
+                                                </dt>
+
+                                                <dd className="text-slate-300">
+                                                    {formatDate(
+                                                        task.due_date,
+                                                    )}
+                                                </dd>
+                                            </div>
+
+                                            <div className="flex justify-between gap-3">
+                                                <dt className="text-slate-500">
+                                                    Assignee
+                                                </dt>
+
+                                                <dd className="text-slate-300">
+                                                    {task
+                                                        .assignee
+                                                        ?.name ??
+                                                        'Unassigned'}
+                                                </dd>
+                                            </div>
+
+                                            <div className="flex justify-between gap-3">
+                                                <dt className="text-slate-500">
+                                                    Status
+                                                </dt>
+
+                                                <dd className="text-slate-300">
+                                                    {task.completed_at
+                                                        ? 'Completed'
+                                                        : 'Open'}
+                                                </dd>
+                                            </div>
+                                        </dl>
+
+                                        <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-800 pt-3">
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleToggleCompletion(
+                                                        task,
+                                                    )
+                                                }
+                                                disabled={
+                                                    updateMutation.isPending ||
+                                                    deleteMutation.isPending
+                                                }
+                                                className="border border-emerald-800 px-3 py-2 text-xs font-medium text-emerald-400 hover:bg-emerald-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                            >
+                                                {isSaving
+                                                    ? 'Updating...'
+                                                    : task.completed_at
+                                                      ? 'Reopen'
+                                                      : 'Complete'}
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    beginEditing(
+                                                        task,
+                                                    )
+                                                }
+                                                disabled={
+                                                    updateMutation.isPending ||
+                                                    deleteMutation.isPending
+                                                }
+                                                className="border border-blue-700 px-3 py-2 text-xs font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                            >
+                                                Edit
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleDelete(
+                                                        task,
+                                                    )
+                                                }
+                                                disabled={
+                                                    updateMutation.isPending ||
+                                                    deleteMutation.isPending
+                                                }
+                                                className="border border-red-800 px-3 py-2 text-xs font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
+                                            >
+                                                {isDeleting
+                                                    ? 'Deleting...'
+                                                    : 'Delete'}
+                                            </button>
+                                        </div>
+                                    </article>
+                                </DraggableTask>
+                            );
+                        })}
+                    </div>
+                )}
+            </SortableContext>
         </div>
     );
 }

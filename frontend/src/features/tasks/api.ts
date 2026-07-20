@@ -14,6 +14,11 @@ interface TaskListResponse {
     data: Task[];
 }
 
+export interface MoveTaskInput {
+    column_id: number;
+    position: number;
+}
+
 export async function getTasks(
     workspaceId: number,
     projectId: number,
@@ -70,6 +75,23 @@ export async function updateTask(
     const response =
         await apiClient.patch<TaskResponse>(
             `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
+            input,
+        );
+
+    return response.data.data;
+}
+
+export async function moveTask(
+    workspaceId: number,
+    projectId: number,
+    boardId: number,
+    sourceColumnId: number,
+    taskId: number,
+    input: MoveTaskInput,
+): Promise<Task> {
+    const response =
+        await apiClient.patch<TaskResponse>(
+            `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${sourceColumnId}/tasks/${taskId}/move`,
             input,
         );
 
