@@ -62,6 +62,11 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ColumnController::class
     );
 
+    Route::patch(
+        'workspaces/{workspace}/projects/{project}/boards/{board}/columns/{column}/tasks/{task}/move',
+        [TaskController::class, 'move']
+    );
+
     Route::apiResource(
         'workspaces.projects.boards.columns.tasks',
         TaskController::class

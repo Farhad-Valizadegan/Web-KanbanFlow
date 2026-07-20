@@ -511,6 +511,325 @@ class TaskApiTest extends TestCase
         )->assertUnprocessable();
     }
 
+    public function test_owner_can_move_task_to_another_column(): void
+    {
+        $owner = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+
+        $sourceColumn = $this->createColumnFor($board);
+        $destinationColumn = $this->createColumnFor($board);
+
+        $task = Task::factory()->create([
+            'column_id' => $sourceColumn->id,
+            'created_by' => $owner->id,
+            'position' => 1,
+        ]);
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->moveTaskUrl(
+                $workspace,
+                $project,
+                $board,
+                $sourceColumn,
+                $task
+            ),
+            [
+                'column_id' => $destinationColumn->id,
+                'position' => 1,
+            ]
+        )
+            ->assertOk()
+            ->assertJsonPath(
+                'data.column_id',
+                $destinationColumn->id
+            )
+            ->assertJsonPath(
+                'data.position',
+                1
+            );
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'column_id' => $destinationColumn->id,
+            'position' => 1,
+        ]);
+    }
+
+    public function test_manager_can_move_task(): void
+    {
+        $owner = User::factory()->create();
+        $manager = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+
+        $sourceColumn = $this->createColumnFor($board);
+        $destinationColumn = $this->createColumnFor($board);
+
+        $task = $this->createTaskFor(
+            $sourceColumn,
+            $owner
+        );
+
+        $this->addMember(
+            $workspace,
+            $manager,
+            'manager'
+        );
+
+        Sanctum::actingAs($manager);
+
+        $this->patchJson(
+            $this->moveTaskUrl(
+                $workspace,
+                $project,
+                $board,
+                $sourceColumn,
+                $task
+            ),
+            [
+                'column_id' => $destinationColumn->id,
+                'position' => 1,
+            ]
+        )->assertOk();
+    }
+
+    public function test_regular_member_cannot_move_task(): void
+    {
+        $owner = User::factory()->create();
+        $member = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+
+        $sourceColumn = $this->createColumnFor($board);
+        $destinationColumn = $this->createColumnFor($board);
+
+        $task = $this->createTaskFor(
+            $sourceColumn,
+            $owner
+        );
+
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
+
+        Sanctum::actingAs($member);
+
+        $this->patchJson(
+            $this->moveTaskUrl(
+                $workspace,
+                $project,
+                $board,
+                $sourceColumn,
+                $task
+            ),
+            [
+                'column_id' => $destinationColumn->id,
+                'position' => 1,
+            ]
+        )->assertForbidden();
+    }
+
+    public function test_task_cannot_move_to_column_on_another_board(): void
+    {
+        $owner = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+
+        $sourceBoard = $this->createBoardFor(
+            $project,
+            $owner
+        );
+
+        $otherBoard = $this->createBoardFor(
+            $project,
+            $owner
+        );
+
+        $sourceColumn = $this->createColumnFor(
+            $sourceBoard
+        );
+
+        $otherColumn = $this->createColumnFor(
+            $otherBoard
+        );
+
+        $task = $this->createTaskFor(
+            $sourceColumn,
+            $owner
+        );
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->moveTaskUrl(
+                $workspace,
+                $project,
+                $sourceBoard,
+                $sourceColumn,
+                $task
+            ),
+            [
+                'column_id' => $otherColumn->id,
+                'position' => 1,
+            ]
+        )->assertUnprocessable();
+    }
+
+    public function test_task_move_respects_destination_wip_limit(): void
+    {
+        $owner = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+
+        $sourceColumn = $this->createColumnFor($board);
+
+        $destinationColumn = Column::factory()->create([
+            'board_id' => $board->id,
+            'wip_limit' => 1,
+        ]);
+
+        Task::factory()->create([
+            'column_id' => $destinationColumn->id,
+            'created_by' => $owner->id,
+            'completed_at' => null,
+        ]);
+
+        $task = Task::factory()->create([
+            'column_id' => $sourceColumn->id,
+            'created_by' => $owner->id,
+            'completed_at' => null,
+        ]);
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->moveTaskUrl(
+                $workspace,
+                $project,
+                $board,
+                $sourceColumn,
+                $task
+            ),
+            [
+                'column_id' => $destinationColumn->id,
+                'position' => 1,
+            ]
+        )
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('column_id');
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'column_id' => $sourceColumn->id,
+        ]);
+    }
+
+    public function test_completed_task_does_not_exceed_wip_limit(): void
+    {
+        $owner = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+
+        $sourceColumn = $this->createColumnFor($board);
+
+        $destinationColumn = Column::factory()->create([
+            'board_id' => $board->id,
+            'wip_limit' => 1,
+        ]);
+
+        Task::factory()->create([
+            'column_id' => $destinationColumn->id,
+            'created_by' => $owner->id,
+            'completed_at' => null,
+        ]);
+
+        $task = Task::factory()->create([
+            'column_id' => $sourceColumn->id,
+            'created_by' => $owner->id,
+            'completed_at' => now(),
+        ]);
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->moveTaskUrl(
+                $workspace,
+                $project,
+                $board,
+                $sourceColumn,
+                $task
+            ),
+            [
+                'column_id' => $destinationColumn->id,
+                'position' => 2,
+            ]
+        )->assertOk();
+    }
+
+    public function test_task_can_be_reordered_inside_same_column(): void
+    {
+        $owner = User::factory()->create();
+
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor($workspace, $owner);
+        $board = $this->createBoardFor($project, $owner);
+        $column = $this->createColumnFor($board);
+
+        $firstTask = Task::factory()->create([
+            'column_id' => $column->id,
+            'created_by' => $owner->id,
+            'position' => 1,
+        ]);
+
+        $secondTask = Task::factory()->create([
+            'column_id' => $column->id,
+            'created_by' => $owner->id,
+            'position' => 2,
+        ]);
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->moveTaskUrl(
+                $workspace,
+                $project,
+                $board,
+                $column,
+                $secondTask
+            ),
+            [
+                'column_id' => $column->id,
+                'position' => 1,
+            ]
+        )->assertOk();
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $secondTask->id,
+            'position' => 1,
+        ]);
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $firstTask->id,
+            'position' => 2,
+        ]);
+    }
+
     private function createWorkspaceFor(
         User $owner
     ): Workspace {
@@ -598,5 +917,21 @@ class TaskApiTest extends TestCase
             $board,
             $column
         ) . "/{$task->id}";
+    }
+
+    private function moveTaskUrl(
+        Workspace $workspace,
+        Project $project,
+        Board $board,
+        Column $column,
+        Task $task
+    ): string {
+        return $this->taskUrl(
+            $workspace,
+            $project,
+            $board,
+            $column,
+            $task
+        ) . '/move';
     }
 }
