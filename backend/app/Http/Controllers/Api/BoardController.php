@@ -209,6 +209,10 @@ class BoardController extends Controller
         );
     }
 
+    /**
+     * Generate a unique board slug within the project,
+     * including soft-deleted boards.
+     */
     private function generateUniqueSlug(
         Project $project,
         string $name,
@@ -221,8 +225,9 @@ class BoardController extends Controller
         while (
             $project
                 ->boards()
+                ->withTrashed()
                 ->when(
-                    $ignoredBoard,
+                    $ignoredBoard !== null,
                     fn ($query) =>
                         $query->whereKeyNot(
                             $ignoredBoard->id

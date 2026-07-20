@@ -19,9 +19,16 @@ class BoardApiTest extends TestCase
         $owner = User::factory()->create();
         $member = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
-        $this->addMember($workspace, $member, 'member');
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
 
         Board::factory()->count(2)->create([
             'project_id' => $project->id,
@@ -31,7 +38,10 @@ class BoardApiTest extends TestCase
         Sanctum::actingAs($member);
 
         $response = $this->getJson(
-            $this->boardsUrl($workspace, $project)
+            $this->boardsUrl(
+                $workspace,
+                $project
+            )
         );
 
         $response
@@ -43,7 +53,10 @@ class BoardApiTest extends TestCase
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
         Board::factory()->create([
             'project_id' => $project->id,
@@ -62,11 +75,20 @@ class BoardApiTest extends TestCase
         Sanctum::actingAs($owner);
 
         $this->getJson(
-            $this->boardsUrl($workspace, $project)
+            $this->boardsUrl(
+                $workspace,
+                $project
+            )
         )
             ->assertOk()
-            ->assertJsonPath('data.0.name', 'First Board')
-            ->assertJsonPath('data.1.name', 'Second Board');
+            ->assertJsonPath(
+                'data.0.name',
+                'First Board'
+            )
+            ->assertJsonPath(
+                'data.1.name',
+                'Second Board'
+            );
     }
 
     public function test_outsider_cannot_list_project_boards(): void
@@ -74,12 +96,18 @@ class BoardApiTest extends TestCase
         $owner = User::factory()->create();
         $outsider = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
         Sanctum::actingAs($outsider);
 
         $this->getJson(
-            $this->boardsUrl($workspace, $project)
+            $this->boardsUrl(
+                $workspace,
+                $project
+            )
         )->assertForbidden();
     }
 
@@ -87,15 +115,22 @@ class BoardApiTest extends TestCase
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
         Sanctum::actingAs($owner);
 
         $response = $this->postJson(
-            $this->boardsUrl($workspace, $project),
+            $this->boardsUrl(
+                $workspace,
+                $project
+            ),
             [
                 'name' => 'Development Board',
-                'description' => 'Main software delivery board.',
+                'description' =>
+                    'Main software delivery board.',
                 'visibility' => 'workspace',
             ]
         );
@@ -142,14 +177,24 @@ class BoardApiTest extends TestCase
         $owner = User::factory()->create();
         $manager = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
-        $this->addMember($workspace, $manager, 'manager');
+        $this->addMember(
+            $workspace,
+            $manager,
+            'manager'
+        );
 
         Sanctum::actingAs($manager);
 
         $this->postJson(
-            $this->boardsUrl($workspace, $project),
+            $this->boardsUrl(
+                $workspace,
+                $project
+            ),
             [
                 'name' => 'Manager Board',
                 'visibility' => 'workspace',
@@ -162,14 +207,24 @@ class BoardApiTest extends TestCase
         $owner = User::factory()->create();
         $member = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
-        $this->addMember($workspace, $member, 'member');
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
 
         Sanctum::actingAs($member);
 
         $this->postJson(
-            $this->boardsUrl($workspace, $project),
+            $this->boardsUrl(
+                $workspace,
+                $project
+            ),
             [
                 'name' => 'Unauthorized Board',
                 'visibility' => 'workspace',
@@ -181,12 +236,18 @@ class BoardApiTest extends TestCase
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
         Sanctum::actingAs($owner);
 
         $firstResponse = $this->postJson(
-            $this->boardsUrl($workspace, $project),
+            $this->boardsUrl(
+                $workspace,
+                $project
+            ),
             [
                 'name' => 'Product Board',
                 'visibility' => 'workspace',
@@ -194,7 +255,10 @@ class BoardApiTest extends TestCase
         );
 
         $secondResponse = $this->postJson(
-            $this->boardsUrl($workspace, $project),
+            $this->boardsUrl(
+                $workspace,
+                $project
+            ),
             [
                 'name' => 'Product Board',
                 'visibility' => 'workspace',
@@ -220,7 +284,10 @@ class BoardApiTest extends TestCase
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
         Board::factory()->create([
             'project_id' => $project->id,
@@ -231,14 +298,20 @@ class BoardApiTest extends TestCase
         Sanctum::actingAs($owner);
 
         $this->postJson(
-            $this->boardsUrl($workspace, $project),
+            $this->boardsUrl(
+                $workspace,
+                $project
+            ),
             [
                 'name' => 'Next Board',
                 'visibility' => 'workspace',
             ]
         )
             ->assertCreated()
-            ->assertJsonPath('data.position', 5);
+            ->assertJsonPath(
+                'data.position',
+                5
+            );
     }
 
     public function test_workspace_member_can_view_board(): void
@@ -246,19 +319,39 @@ class BoardApiTest extends TestCase
         $owner = User::factory()->create();
         $member = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
-        $this->addMember($workspace, $member, 'member');
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
 
         Sanctum::actingAs($member);
 
         $this->getJson(
-            $this->boardUrl($workspace, $project, $board)
+            $this->boardUrl(
+                $workspace,
+                $project,
+                $board
+            )
         )
             ->assertOk()
-            ->assertJsonPath('data.id', $board->id)
-            ->assertJsonPath('data.name', $board->name);
+            ->assertJsonPath(
+                'data.id',
+                $board->id
+            )
+            ->assertJsonPath(
+                'data.name',
+                $board->name
+            );
     }
 
     public function test_board_from_another_project_returns_not_found(): void
@@ -296,8 +389,11 @@ class BoardApiTest extends TestCase
     {
         $owner = User::factory()->create();
 
-        $firstWorkspace = $this->createWorkspaceFor($owner);
-        $secondWorkspace = $this->createWorkspaceFor($owner);
+        $firstWorkspace =
+            $this->createWorkspaceFor($owner);
+
+        $secondWorkspace =
+            $this->createWorkspaceFor($owner);
 
         $project = $this->createProjectFor(
             $secondWorkspace,
@@ -307,7 +403,10 @@ class BoardApiTest extends TestCase
         Sanctum::actingAs($owner);
 
         $this->getJson(
-            $this->boardsUrl($firstWorkspace, $project)
+            $this->boardsUrl(
+                $firstWorkspace,
+                $project
+            )
         )->assertNotFound();
     }
 
@@ -316,15 +415,29 @@ class BoardApiTest extends TestCase
         $owner = User::factory()->create();
         $manager = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
-        $this->addMember($workspace, $manager, 'manager');
+        $this->addMember(
+            $workspace,
+            $manager,
+            'manager'
+        );
 
         Sanctum::actingAs($manager);
 
         $response = $this->patchJson(
-            $this->boardUrl($workspace, $project, $board),
+            $this->boardUrl(
+                $workspace,
+                $project,
+                $board
+            ),
             [
                 'name' => 'Updated Board',
                 'visibility' => 'private',
@@ -357,15 +470,29 @@ class BoardApiTest extends TestCase
         $owner = User::factory()->create();
         $member = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
-        $this->addMember($workspace, $member, 'member');
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
 
         Sanctum::actingAs($member);
 
         $this->patchJson(
-            $this->boardUrl($workspace, $project, $board),
+            $this->boardUrl(
+                $workspace,
+                $project,
+                $board
+            ),
             [
                 'name' => 'Unauthorized Update',
             ]
@@ -377,15 +504,29 @@ class BoardApiTest extends TestCase
         $owner = User::factory()->create();
         $manager = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
-        $this->addMember($workspace, $manager, 'manager');
+        $this->addMember(
+            $workspace,
+            $manager,
+            'manager'
+        );
 
         Sanctum::actingAs($manager);
 
         $this->deleteJson(
-            $this->boardUrl($workspace, $project, $board)
+            $this->boardUrl(
+                $workspace,
+                $project,
+                $board
+            )
         )->assertOk();
 
         $this->assertSoftDeleted('boards', [
@@ -397,19 +538,64 @@ class BoardApiTest extends TestCase
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
         Sanctum::actingAs($owner);
 
         $this->postJson(
-            $this->boardsUrl($workspace, $project),
+            $this->boardsUrl(
+                $workspace,
+                $project
+            ),
             [
                 'name' => 'Invalid Board',
                 'visibility' => 'public',
             ]
         )
             ->assertUnprocessable()
-            ->assertJsonValidationErrors('visibility');
+            ->assertJsonValidationErrors(
+                'visibility'
+            );
+    }
+
+    public function test_board_slug_remains_unique_after_soft_delete(): void
+    {
+        $owner = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+
+        $deletedBoard = Board::factory()->create([
+            'project_id' => $project->id,
+            'created_by' => $owner->id,
+            'name' => 'Product Board',
+            'slug' => 'product-board',
+        ]);
+
+        $deletedBoard->delete();
+
+        Sanctum::actingAs($owner);
+
+        $this->postJson(
+            $this->boardsUrl(
+                $workspace,
+                $project
+            ),
+            [
+                'name' => 'Product Board',
+                'visibility' => 'workspace',
+            ]
+        )
+            ->assertCreated()
+            ->assertJsonPath(
+                'data.slug',
+                'product-board-2'
+            );
     }
 
     private function createWorkspaceFor(
@@ -419,9 +605,12 @@ class BoardApiTest extends TestCase
             'owner_id' => $owner->id,
         ]);
 
-        $workspace->members()->attach($owner->id, [
-            'role' => 'owner',
-        ]);
+        $workspace->members()->attach(
+            $owner->id,
+            [
+                'role' => 'owner',
+            ]
+        );
 
         return $workspace;
     }
@@ -431,9 +620,12 @@ class BoardApiTest extends TestCase
         User $user,
         string $role
     ): void {
-        $workspace->members()->attach($user->id, [
-            'role' => $role,
-        ]);
+        $workspace->members()->attach(
+            $user->id,
+            [
+                'role' => $role,
+            ]
+        );
     }
 
     private function createProjectFor(
@@ -469,7 +661,9 @@ class BoardApiTest extends TestCase
         Project $project,
         Board $board
     ): string {
-        return $this->boardsUrl($workspace, $project)
-            . "/{$board->id}";
+        return $this->boardsUrl(
+            $workspace,
+            $project
+        ) . "/{$board->id}";
     }
 }

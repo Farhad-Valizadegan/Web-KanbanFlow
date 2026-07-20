@@ -37,23 +37,46 @@ class WorkspaceController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'description' => [
+                'nullable',
+                'string',
+            ],
             'visibility' => [
                 'nullable',
-                Rule::in(['private', 'public']),
+                Rule::in([
+                    'private',
+                    'public',
+                ]),
             ],
         ]);
 
         $workspace = DB::transaction(
-            function () use ($request, $validated): Workspace {
-                $workspace = Workspace::create([
-                    'owner_id' => $request->user()->id,
-                    'name' => $validated['name'],
-                    'slug' => $this->generateUniqueSlug($validated['name']),
-                    'description' => $validated['description'] ?? null,
-                    'visibility' => $validated['visibility'] ?? 'private',
-                ]);
+            function () use (
+                $request,
+                $validated
+            ): Workspace {
+                $workspace =
+                    Workspace::query()->create([
+                        'owner_id' =>
+                            $request->user()->id,
+                        'name' =>
+                            $validated['name'],
+                        'slug' =>
+                            $this->generateUniqueSlug(
+                                $validated['name']
+                            ),
+                        'description' =>
+                            $validated['description']
+                                ?? null,
+                        'visibility' =>
+                            $validated['visibility']
+                                ?? 'private',
+                    ]);
 
                 $workspace->members()->attach(
                     $request->user()->id,
@@ -66,10 +89,13 @@ class WorkspaceController extends Controller
             }
         );
 
-        $workspace->load('owner:id,name,email');
+        $workspace->load(
+            'owner:id,name,email'
+        );
 
         return response()->json([
-            'message' => 'Workspace created successfully.',
+            'message' =>
+                'Workspace created successfully.',
             'data' => $workspace,
         ], 201);
     }
@@ -81,7 +107,10 @@ class WorkspaceController extends Controller
         Request $request,
         Workspace $workspace
     ): JsonResponse {
-        $this->authorize('view', $workspace);
+        $this->authorize(
+            'view',
+            $workspace
+        );
 
         $workspace->load([
             'owner:id,name,email',
@@ -100,7 +129,10 @@ class WorkspaceController extends Controller
         Request $request,
         Workspace $workspace
     ): JsonResponse {
-        $this->authorize('update', $workspace);
+        $this->authorize(
+            'update',
+            $workspace
+        );
 
         $validated = $request->validate([
             'name' => [
@@ -115,25 +147,37 @@ class WorkspaceController extends Controller
             ],
             'visibility' => [
                 'sometimes',
-                Rule::in(['private', 'public']),
+                Rule::in([
+                    'private',
+                    'public',
+                ]),
             ],
         ]);
 
         if (
-            array_key_exists('name', $validated)
-            && $validated['name'] !== $workspace->name
+            array_key_exists(
+                'name',
+                $validated
+            ) &&
+            $validated['name'] !==
+                $workspace->name
         ) {
-            $validated['slug'] = $this->generateUniqueSlug(
-                $validated['name'],
-                $workspace->id
-            );
+            $validated['slug'] =
+                $this->generateUniqueSlug(
+                    $validated['name'],
+                    $workspace->id
+                );
         }
 
         $workspace->update($validated);
-        $workspace->load('owner:id,name,email');
+
+        $workspace->load(
+            'owner:id,name,email'
+        );
 
         return response()->json([
-            'message' => 'Workspace updated successfully.',
+            'message' =>
+                'Workspace updated successfully.',
             'data' => $workspace,
         ]);
     }
@@ -145,17 +189,22 @@ class WorkspaceController extends Controller
         Request $request,
         Workspace $workspace
     ): JsonResponse {
-        $this->authorize('delete', $workspace);
+        $this->authorize(
+            'delete',
+            $workspace
+        );
 
         $workspace->delete();
 
         return response()->json([
-            'message' => 'Workspace deleted successfully.',
+            'message' =>
+                'Workspace deleted successfully.',
         ]);
     }
 
     /**
-     * Generate a unique workspace slug.
+     * Generate a unique workspace slug,
+     * including soft-deleted workspaces.
      */
     private function generateUniqueSlug(
         string $name,
@@ -171,17 +220,23 @@ class WorkspaceController extends Controller
         $counter = 2;
 
         while (
-            Workspace::query()
+            Workspace::withTrashed()
                 ->when(
                     $ignoreWorkspaceId !== null,
-                    fn ($query) => $query->whereKeyNot(
-                        $ignoreWorkspaceId
-                    )
+                    fn ($query) =>
+                        $query->whereKeyNot(
+                            $ignoreWorkspaceId
+                        )
                 )
-                ->where('slug', $slug)
+                ->where(
+                    'slug',
+                    $slug
+                )
                 ->exists()
         ) {
-            $slug = "{$baseSlug}-{$counter}";
+            $slug =
+                "{$baseSlug}-{$counter}";
+
             $counter++;
         }
 
