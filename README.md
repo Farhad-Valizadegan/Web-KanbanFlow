@@ -1,6 +1,8 @@
 # Web Kanban Project Management System
 
-A full-stack project management application built with Laravel, React, TypeScript, MySQL, and Tailwind CSS.
+A full-stack project management application built with Laravel, React, TypeScript, MySQL, Tailwind CSS, and dnd-kit.
+
+The application supports authenticated workspace collaboration, project management, Kanban boards, workflow columns, task management, drag-and-drop ordering, WIP limits, role-based authorization, and compact board overview mode.
 
 ## Technology Stack
 
@@ -139,6 +141,7 @@ Status: Completed
 - Project empty state
 - Project date formatting
 - Automatic query refresh after creation and deletion
+- Soft-delete slug collision protection
 
 Dependencies used for this milestone:
 
@@ -152,12 +155,146 @@ Dependencies used for this milestone:
 #### Frontend
 
 - `axios` for workspace, member, and project API requests
-- `@tanstack/react-query` for queries, mutations, and cache invalidation
+- `@tanstack/react-query` for queries, mutations, cache invalidation, and optimistic updates
 - `react-router-dom` for dashboard and workspace navigation
 - `react-hook-form` for structured forms
 - `zod` for frontend validation
 - `@hookform/resolvers` for form-schema integration
 - `tailwindcss` for the dashboard, workspace, member, and project interfaces
+
+### Milestone 4 - Kanban Boards and Tasks
+
+Status: Completed
+
+#### Board features
+
+- Board creation, listing, viewing, updating, and deletion
+- Boards scoped to projects
+- Workspace and private visibility
+- Project-scoped board slug generation
+- Soft deletion
+- Soft-delete slug collision protection
+- Board position ordering
+- Dedicated board move endpoint
+- Drag-and-drop board reordering
+- Optimistic frontend board updates
+- Board authorization policies
+- Owner and manager board management permissions
+- Board API tests
+
+#### Column features
+
+- Column creation, listing, viewing, updating, and deletion
+- Columns scoped to boards
+- Column position ordering
+- Dedicated column move endpoint
+- Drag-and-drop column reordering
+- Optimistic frontend column updates
+- Optional WIP limits
+- Column authorization policies
+- Owner and manager column management permissions
+- Column API tests
+
+#### Task features
+
+- Task creation, listing, viewing, updating, and deletion
+- Tasks scoped to columns
+- Low, medium, high, and urgent priorities
+- Optional descriptions
+- Optional due dates
+- Optional assignees
+- Open and completed states
+- Task position ordering
+- Dedicated task move endpoint
+- Drag-and-drop task reordering inside a column
+- Drag-and-drop movement between columns
+- Destination-column validation
+- WIP-limit enforcement
+- Completed-task WIP handling
+- Task authorization policies
+- Owner and manager task management permissions
+- Task API tests
+
+#### Board interface features
+
+- Detailed board mode
+- Compact overview mode
+- Per-board view preference stored in local storage
+- Wider board layout in overview mode
+- Compact columns in overview mode
+- Compact task cards in overview mode
+- Full task details in detailed mode
+- Board drag-and-drop
+- Column drag-and-drop
+- Task drag-and-drop
+- Loading, validation, authorization, and error messages
+- Optimistic ordering updates
+- Cache rollback when movement fails
+
+Dependencies used for this milestone:
+
+#### Backend
+
+- `laravel/framework` for Kanban models, controllers, policies, validation, transactions, ordering, and soft deletion
+- `laravel/sanctum` for authenticated Kanban API access
+- `phpunit/phpunit` for board, column, task, movement, authorization, and WIP-limit feature tests
+- `fakerphp/faker` for Kanban test data
+
+#### Frontend
+
+- `@dnd-kit/core` for drag-and-drop sensors and contexts
+- `@dnd-kit/sortable` for sortable board, column, and task lists
+- `@dnd-kit/utilities` for drag transform styling
+- `axios` for Kanban API requests
+- `@tanstack/react-query` for queries, mutations, invalidation, optimistic updates, and rollback
+- `react-router-dom` for board navigation
+- `tailwindcss` for detailed and overview Kanban interfaces
+
+## Authorization Model
+
+Workspace access is controlled through the following roles:
+
+- `owner`
+- `manager`
+- `member`
+- `viewer`
+
+General permissions:
+
+- Owners can fully manage the workspace, members, projects, boards, columns, and tasks.
+- Managers can manage projects, boards, columns, tasks, and workspace members within policy restrictions.
+- Members and viewers can access permitted workspace data but cannot perform protected management operations.
+- Resource nesting is validated so records from another workspace, project, board, or column cannot be accessed through mismatched routes.
+
+## Ordering Model
+
+Boards, columns, and tasks use dedicated move endpoints.
+
+Standard update endpoints do not accept position changes.
+
+Ordering behavior includes:
+
+- One-based positions
+- Position clamping to valid ranges
+- Sequential position normalization
+- Database transactions
+- Row locking during reorder operations
+- Protection against duplicate or inconsistent positions
+- Optimistic frontend updates
+- Automatic query invalidation after successful movement
+- Cache restoration after failed movement
+
+## WIP Limits
+
+Columns can optionally define a Work in Progress limit.
+
+The backend enforces these rules:
+
+- Active tasks cannot be created when the column is full.
+- Active tasks cannot be moved into a full column.
+- Completed tasks do not count toward the active WIP total.
+- A completed task cannot be reopened when doing so would exceed the WIP limit.
+- WIP limits must be positive whole numbers.
 
 ## Installed Dependency Inventory
 
@@ -211,155 +348,8 @@ Dependencies used for this milestone:
 
 ## Verification Status
 
-Backend:
+### Backend
 
 ```text
-33 tests passed
-81 assertions passed
-```
-
-Frontend:
-
-```text
-TypeScript build passed
-Vite production build passed
-```
-
-## Next Milestone
-
-### Milestone 4 - Kanban Boards and Tasks
-
-Planned features:
-
-- Boards inside projects
-- Columns inside boards
-- Tasks inside columns
-- Task ordering
-- Drag-and-drop task movement
-- Task priorities
-- Task due dates
-- Task assignment
-- Board, column, and task authorization
-- Kanban backend API
-- Kanban frontend interface
-- Backend feature tests
-- Frontend verification
-
-Dependencies already installed for this milestone:
-
-- `@dnd-kit/core`
-- `@dnd-kit/sortable`
-- `@dnd-kit/utilities`
-
-## Installation
-
-### Requirements
-
-- PHP 8.4 or newer
-- Composer
-- Node.js
-- npm
-- MySQL
-- XAMPP or another local PHP environment
-
-### Clone the repository
-
-```bash
-git clone https://github.com/Farhad-Valizadegan/Web-Kanban-Project-Management-System.git
-cd Web-Kanban-Project-Management-System
-```
-
-## Backend Setup
-
-```bash
-cd backend
-composer install
-copy .env.example .env
-php artisan key:generate
-```
-
-Configure the database in `backend/.env`:
-
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=kanbanflow
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-Run migrations and start Laravel:
-
-```bash
-php artisan migrate
-php artisan serve
-```
-
-Backend URL:
-
-```text
-http://127.0.0.1:8000
-```
-
-## Frontend Setup
-
-Open another terminal:
-
-```bash
-cd frontend
-npm install
-```
-
-Create `frontend/.env`:
-
-```env
-VITE_API_URL=http://127.0.0.1:8000
-```
-
-Start the frontend:
-
-```powershell
-npm.cmd run dev
-```
-
-Frontend URL:
-
-```text
-http://localhost:5173
-```
-
-## Testing
-
-Run backend tests from the backend directory:
-
-```powershell
-cd backend
-php artisan test
-```
-
-Run the frontend production build from the repository root:
-
-```powershell
-npm.cmd --prefix frontend run build
-```
-
-## Git Workflow
-
-The project uses feature branches and pull requests.
-
-Examples:
-
-```text
-feature/authentication
-feature/workspaces-backend
-feature/workspaces-frontend
-feature/project-boards-backend
-feature/project-boards-frontend
-feature/kanban-boards-backend
-feature/kanban-boards-frontend
-```
-
-## License
-
-This project is intended for educational and portfolio purposes.
+105 tests passed
+268 assertions passed
