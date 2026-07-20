@@ -1,7 +1,10 @@
 import { apiClient } from '../../api/client';
 import type {
+    CreateTaskCommentInput,
     CreateTaskInput,
     Task,
+    TaskComment,
+    UpdateTaskCommentInput,
     UpdateTaskInput,
 } from './types';
 
@@ -14,9 +17,39 @@ interface TaskListResponse {
     data: Task[];
 }
 
+interface TaskCommentResponse {
+    message?: string;
+    data: TaskComment;
+}
+
+interface TaskCommentListResponse {
+    data: TaskComment[];
+}
+
 export interface MoveTaskInput {
     column_id: number;
     position: number;
+}
+
+function taskBaseUrl(
+    workspaceId: number,
+    projectId: number,
+    boardId: number,
+    columnId: number,
+    taskId?: number,
+): string {
+    const base =
+        `/api/workspaces/${workspaceId}` +
+        `/projects/${projectId}` +
+        `/boards/${boardId}` +
+        `/columns/${columnId}` +
+        '/tasks';
+
+    if (taskId === undefined) {
+        return base;
+    }
+
+    return `${base}/${taskId}`;
 }
 
 export async function getTasks(
@@ -27,7 +60,12 @@ export async function getTasks(
 ): Promise<Task[]> {
     const response =
         await apiClient.get<TaskListResponse>(
-            `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${columnId}/tasks`,
+            taskBaseUrl(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+            ),
         );
 
     return response.data.data;
@@ -42,7 +80,13 @@ export async function getTask(
 ): Promise<Task> {
     const response =
         await apiClient.get<TaskResponse>(
-            `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
+            taskBaseUrl(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+                taskId,
+            ),
         );
 
     return response.data.data;
@@ -57,7 +101,12 @@ export async function createTask(
 ): Promise<Task> {
     const response =
         await apiClient.post<TaskResponse>(
-            `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${columnId}/tasks`,
+            taskBaseUrl(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+            ),
             input,
         );
 
@@ -74,7 +123,13 @@ export async function updateTask(
 ): Promise<Task> {
     const response =
         await apiClient.patch<TaskResponse>(
-            `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
+            taskBaseUrl(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+                taskId,
+            ),
             input,
         );
 
@@ -91,7 +146,13 @@ export async function moveTask(
 ): Promise<Task> {
     const response =
         await apiClient.patch<TaskResponse>(
-            `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${sourceColumnId}/tasks/${taskId}/move`,
+            `${taskBaseUrl(
+                workspaceId,
+                projectId,
+                boardId,
+                sourceColumnId,
+                taskId,
+            )}/move`,
             input,
         );
 
@@ -106,6 +167,99 @@ export async function deleteTask(
     taskId: number,
 ): Promise<void> {
     await apiClient.delete(
-        `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
+        taskBaseUrl(
+            workspaceId,
+            projectId,
+            boardId,
+            columnId,
+            taskId,
+        ),
+    );
+}
+
+export async function getTaskComments(
+    workspaceId: number,
+    projectId: number,
+    boardId: number,
+    columnId: number,
+    taskId: number,
+): Promise<TaskComment[]> {
+    const response =
+        await apiClient.get<TaskCommentListResponse>(
+            `${taskBaseUrl(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+                taskId,
+            )}/comments`,
+        );
+
+    return response.data.data;
+}
+
+export async function createTaskComment(
+    workspaceId: number,
+    projectId: number,
+    boardId: number,
+    columnId: number,
+    taskId: number,
+    input: CreateTaskCommentInput,
+): Promise<TaskComment> {
+    const response =
+        await apiClient.post<TaskCommentResponse>(
+            `${taskBaseUrl(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+                taskId,
+            )}/comments`,
+            input,
+        );
+
+    return response.data.data;
+}
+
+export async function updateTaskComment(
+    workspaceId: number,
+    projectId: number,
+    boardId: number,
+    columnId: number,
+    taskId: number,
+    commentId: number,
+    input: UpdateTaskCommentInput,
+): Promise<TaskComment> {
+    const response =
+        await apiClient.patch<TaskCommentResponse>(
+            `${taskBaseUrl(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+                taskId,
+            )}/comments/${commentId}`,
+            input,
+        );
+
+    return response.data.data;
+}
+
+export async function deleteTaskComment(
+    workspaceId: number,
+    projectId: number,
+    boardId: number,
+    columnId: number,
+    taskId: number,
+    commentId: number,
+): Promise<void> {
+    await apiClient.delete(
+        `${taskBaseUrl(
+            workspaceId,
+            projectId,
+            boardId,
+            columnId,
+            taskId,
+        )}/comments/${commentId}`,
     );
 }

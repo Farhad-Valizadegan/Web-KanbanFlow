@@ -21,6 +21,7 @@ import type {
     UpdateTaskInput,
 } from '../types';
 import DraggableTask from './DraggableTask';
+import TaskComments from './TaskComments';
 
 type BoardViewMode =
     | 'detailed'
@@ -811,6 +812,27 @@ function TaskList({
                                                 </dl>
                                             </>
                                         )}
+
+                                        <TaskComments
+                                            workspaceId={
+                                                workspaceId
+                                            }
+                                            projectId={
+                                                projectId
+                                            }
+                                            boardId={
+                                                boardId
+                                            }
+                                            columnId={
+                                                columnId
+                                            }
+                                            taskId={
+                                                task.id
+                                            }
+                                            viewMode={
+                                                viewMode
+                                            }
+                                        />
 
                                         <div
                                             className={

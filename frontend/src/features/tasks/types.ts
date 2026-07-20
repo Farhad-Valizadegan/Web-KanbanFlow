@@ -26,6 +26,17 @@ export interface Task {
     assignee?: User | null;
 }
 
+export interface TaskComment {
+    id: number;
+    task_id: number;
+    user_id: number;
+    body: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+    user?: User;
+}
+
 export interface CreateTaskInput {
     title: string;
     description?: string | null;
@@ -40,7 +51,14 @@ export interface UpdateTaskInput {
     description?: string | null;
     priority?: TaskPriority;
     assigned_to?: number | null;
-    position?: number;
     due_date?: string | null;
     completed_at?: string | null;
+}
+
+export interface CreateTaskCommentInput {
+    body: string;
+}
+
+export interface UpdateTaskCommentInput {
+    body: string;
 }
