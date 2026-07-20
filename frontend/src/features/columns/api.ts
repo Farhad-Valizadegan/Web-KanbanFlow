@@ -2,6 +2,7 @@ import { apiClient } from '../../api/client';
 import type {
     Column,
     CreateColumnInput,
+    MoveColumnInput,
     UpdateColumnInput,
 } from './types';
 
@@ -66,6 +67,22 @@ export async function updateColumn(
     const response =
         await apiClient.patch<ColumnResponse>(
             `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${columnId}`,
+            input,
+        );
+
+    return response.data.data;
+}
+
+export async function moveColumn(
+    workspaceId: number,
+    projectId: number,
+    boardId: number,
+    columnId: number,
+    input: MoveColumnInput,
+): Promise<Column> {
+    const response =
+        await apiClient.patch<ColumnResponse>(
+            `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/columns/${columnId}/move`,
             input,
         );
 

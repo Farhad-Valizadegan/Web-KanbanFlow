@@ -31,5 +31,8 @@ export interface UpdateBoardInput {
     name?: string;
     description?: string | null;
     visibility?: BoardVisibility;
-    position?: number;
+}
+
+export interface MoveBoardInput {
+    position: number;
 }

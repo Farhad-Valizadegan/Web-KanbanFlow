@@ -7,21 +7,28 @@ import {
 } from '@dnd-kit/core';
 import type { DragEndEvent } from '@dnd-kit/core';
 import {
+    arrayMove,
+    horizontalListSortingStrategy,
+    SortableContext,
+    useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import {
     useMutation,
     useQuery,
     useQueryClient,
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
+import type { CSSProperties } from 'react';
 import { useState } from 'react';
-import {
-    moveTask,
-} from '../../tasks/api';
+import { moveTask } from '../../tasks/api';
 import CreateTaskForm from '../../tasks/components/CreateTaskForm';
 import TaskList from '../../tasks/components/TaskList';
 import type { Task } from '../../tasks/types';
 import {
     deleteColumn,
     getColumns,
+    moveColumn,
     updateColumn,
 } from '../api';
 import type {
@@ -37,7 +44,6 @@ interface ColumnListProps {
 
 interface EditColumnFormState {
     name: string;
-    position: string;
     wip_limit: string;
 }
 
@@ -48,9 +54,163 @@ interface MoveTaskVariables {
     position: number;
 }
 
+interface MoveColumnVariables {
+    columnId: number;
+    position: number;
+}
+
 interface ApiErrorResponse {
     message?: string;
     errors?: Record<string, string[]>;
+}
+
+interface SortableColumnCardProps {
+    column: Column;
+    workspaceId: number;
+    projectId: number;
+    boardId: number;
+    disabled: boolean;
+    isDeleting: boolean;
+    isTaskFormVisible: boolean;
+    onToggleTaskForm: (
+        columnId: number,
+    ) => void;
+    onEdit: (column: Column) => void;
+    onDelete: (column: Column) => void;
+}
+
+function SortableColumnCard({
+    column,
+    workspaceId,
+    projectId,
+    boardId,
+    disabled,
+    isDeleting,
+    isTaskFormVisible,
+    onToggleTaskForm,
+    onEdit,
+    onDelete,
+}: SortableColumnCardProps) {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({
+        id: column.id,
+        data: {
+            type: 'column',
+            columnId: column.id,
+        },
+        disabled,
+    });
+
+    const style: CSSProperties = {
+        transform: CSS.Transform.toString(
+            transform,
+        ),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+        zIndex: isDragging ? 10 : undefined,
+    };
+
+    return (
+        <article
+            ref={setNodeRef}
+            style={style}
+            className="w-96 shrink-0 border border-slate-800 bg-slate-900 p-5"
+        >
+            <div className="flex items-start justify-between gap-4">
+                <div>
+                    <h3 className="text-lg font-semibold text-slate-100">
+                        {column.name}
+                    </h3>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                        Position:{' '}
+                        <span className="text-slate-300">
+                            {column.position}
+                        </span>
+                    </p>
+                </div>
+
+                <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">
+                    {column.wip_limit === null
+                        ? 'No limit'
+                        : `WIP ${column.wip_limit}`}
+                </span>
+            </div>
+
+            <button
+                type="button"
+                aria-label={`Move ${column.name} column`}
+                title="Drag to reorder column"
+                disabled={disabled}
+                {...attributes}
+                {...listeners}
+                className="mt-4 w-full cursor-grab border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 hover:border-blue-500 hover:text-blue-300 active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-50"
+            >
+                Move column
+            </button>
+
+            <div className="mt-5">
+                <button
+                    type="button"
+                    onClick={() =>
+                        onToggleTaskForm(column.id)
+                    }
+                    disabled={disabled}
+                    className="w-full border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                    {isTaskFormVisible
+                        ? 'Close task form'
+                        : 'Add task'}
+                </button>
+
+                {isTaskFormVisible && (
+                    <CreateTaskForm
+                        workspaceId={workspaceId}
+                        projectId={projectId}
+                        boardId={boardId}
+                        columnId={column.id}
+                    />
+                )}
+            </div>
+
+            <TaskList
+                workspaceId={workspaceId}
+                projectId={projectId}
+                boardId={boardId}
+                columnId={column.id}
+            />
+
+            <div className="mt-5 flex gap-3 border-t border-slate-800 pt-4">
+                <button
+                    type="button"
+                    onClick={() => onEdit(column)}
+                    disabled={disabled}
+                    className="border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                    Edit column
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() =>
+                        onDelete(column)
+                    }
+                    disabled={disabled}
+                    className="border border-red-800 px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                    {isDeleting
+                        ? 'Deleting...'
+                        : 'Delete column'}
+                </button>
+            </div>
+        </article>
+    );
 }
 
 function ColumnList({
@@ -71,13 +231,14 @@ function ColumnList({
     const [editingColumnId, setEditingColumnId] =
         useState<number | null>(null);
 
-    const [showTaskFormColumnId, setShowTaskFormColumnId] =
-        useState<number | null>(null);
+    const [
+        showTaskFormColumnId,
+        setShowTaskFormColumnId,
+    ] = useState<number | null>(null);
 
     const [editForm, setEditForm] =
         useState<EditColumnFormState>({
             name: '',
-            position: '0',
             wip_limit: '',
         });
 
@@ -110,6 +271,123 @@ function ColumnList({
                 boardId,
             ),
         retry: false,
+    });
+
+    const moveColumnMutation = useMutation({
+        mutationFn: ({
+            columnId,
+            position,
+        }: MoveColumnVariables) =>
+            moveColumn(
+                workspaceId,
+                projectId,
+                boardId,
+                columnId,
+                {
+                    position,
+                },
+            ),
+
+        onMutate: async ({
+            columnId,
+            position,
+        }) => {
+            await queryClient.cancelQueries({
+                queryKey: columnsQueryKey,
+            });
+
+            const previousColumns =
+                queryClient.getQueryData<Column[]>(
+                    columnsQueryKey,
+                );
+
+            if (previousColumns) {
+                const oldIndex =
+                    previousColumns.findIndex(
+                        column =>
+                            column.id === columnId,
+                    );
+
+                const newIndex = position - 1;
+
+                if (oldIndex !== -1) {
+                    const reordered = arrayMove(
+                        previousColumns,
+                        oldIndex,
+                        newIndex,
+                    ).map(
+                        (column, index) => ({
+                            ...column,
+                            position: index + 1,
+                        }),
+                    );
+
+                    queryClient.setQueryData(
+                        columnsQueryKey,
+                        reordered,
+                    );
+                }
+            }
+
+            return {
+                previousColumns,
+            };
+        },
+
+        onSuccess: async () => {
+            setErrorMessage(null);
+
+            await queryClient.invalidateQueries({
+                queryKey: columnsQueryKey,
+            });
+        },
+
+        onError: (
+            error: AxiosError<ApiErrorResponse>,
+            _variables,
+            context,
+        ) => {
+            if (context?.previousColumns) {
+                queryClient.setQueryData(
+                    columnsQueryKey,
+                    context.previousColumns,
+                );
+            }
+
+            if (error.response?.status === 403) {
+                setErrorMessage(
+                    'You do not have permission to move this column.',
+                );
+                return;
+            }
+
+            if (error.response?.status === 401) {
+                setErrorMessage(
+                    'Your session has expired. Please sign in again.',
+                );
+                return;
+            }
+
+            const validationErrors =
+                error.response?.data.errors;
+
+            if (validationErrors) {
+                const firstError =
+                    Object.values(
+                        validationErrors,
+                    )[0]?.[0];
+
+                if (firstError) {
+                    setErrorMessage(firstError);
+                    return;
+                }
+            }
+
+            setErrorMessage(
+                error.response?.data.message ??
+                    'Unable to move the column.',
+            );
+        },
     });
 
     const moveTaskMutation = useMutation({
@@ -296,7 +574,6 @@ function ColumnList({
 
         setEditForm({
             name: column.name,
-            position: String(column.position),
             wip_limit:
                 column.wip_limit === null
                     ? ''
@@ -322,23 +599,10 @@ function ColumnList({
         setErrorMessage(null);
 
         const name = editForm.name.trim();
-        const position = Number(
-            editForm.position,
-        );
 
         if (!name) {
             setErrorMessage(
                 'Column name is required.',
-            );
-            return;
-        }
-
-        if (
-            !Number.isInteger(position) ||
-            position < 0
-        ) {
-            setErrorMessage(
-                'Position must be a non-negative whole number.',
             );
             return;
         }
@@ -367,7 +631,6 @@ function ColumnList({
             columnId: column.id,
             input: {
                 name,
-                position,
                 wip_limit: parsedWipLimit,
             },
         });
@@ -386,7 +649,77 @@ function ColumnList({
         deleteMutation.mutate(column.id);
     }
 
-    function handleDragEnd(
+    function handleColumnDragEnd(
+        event: DragEndEvent,
+    ) {
+        const { active, over } = event;
+
+        if (
+            !over ||
+            moveColumnMutation.isPending
+        ) {
+            return;
+        }
+
+        const columns =
+            queryClient.getQueryData<Column[]>(
+                columnsQueryKey,
+            ) ?? [];
+
+        const activeColumnId = Number(
+            active.data.current?.columnId ??
+                active.id,
+        );
+
+        let overColumnId: number;
+
+        if (
+            over.data.current?.type === 'task'
+        ) {
+            overColumnId = Number(
+                over.data.current.columnId,
+            );
+        } else {
+            overColumnId = Number(
+                over.data.current?.columnId ??
+                    over.id,
+            );
+        }
+
+        if (
+            !Number.isInteger(activeColumnId) ||
+            !Number.isInteger(overColumnId) ||
+            activeColumnId === overColumnId
+        ) {
+            return;
+        }
+
+        const oldIndex = columns.findIndex(
+            column =>
+                column.id === activeColumnId,
+        );
+
+        const newIndex = columns.findIndex(
+            column =>
+                column.id === overColumnId,
+        );
+
+        if (
+            oldIndex === -1 ||
+            newIndex === -1
+        ) {
+            return;
+        }
+
+        setErrorMessage(null);
+
+        moveColumnMutation.mutate({
+            columnId: activeColumnId,
+            position: newIndex + 1,
+        });
+    }
+
+    function handleTaskDragEnd(
         event: DragEndEvent,
     ) {
         const { active, over } = event;
@@ -404,18 +737,12 @@ function ColumnList({
         const overData =
             over.data.current;
 
-        if (
-            activeData?.type !== 'task'
-        ) {
-            return;
-        }
-
         const taskId = Number(
-            activeData.taskId,
+            activeData?.taskId,
         );
 
         const sourceColumnId = Number(
-            activeData.columnId,
+            activeData?.columnId,
         );
 
         if (
@@ -530,6 +857,22 @@ function ColumnList({
         });
     }
 
+    function handleDragEnd(
+        event: DragEndEvent,
+    ) {
+        const activeType =
+            event.active.data.current?.type;
+
+        if (activeType === 'column') {
+            handleColumnDragEnd(event);
+            return;
+        }
+
+        if (activeType === 'task') {
+            handleTaskDragEnd(event);
+        }
+    }
+
     if (columnsQuery.isPending) {
         return (
             <p className="mt-6 text-slate-400">
@@ -556,11 +899,23 @@ function ColumnList({
         );
     }
 
+    const interactionDisabled =
+        updateMutation.isPending ||
+        deleteMutation.isPending ||
+        moveTaskMutation.isPending ||
+        moveColumnMutation.isPending;
+
     return (
         <div className="mt-6">
             {errorMessage && (
                 <p className="mb-4 border border-red-900 bg-red-950/40 p-4 text-sm text-red-400">
                     {errorMessage}
+                </p>
+            )}
+
+            {moveColumnMutation.isPending && (
+                <p className="mb-4 border border-blue-900 bg-blue-950/40 p-4 text-sm text-blue-300">
+                    Moving column...
                 </p>
             )}
 
@@ -577,224 +932,139 @@ function ColumnList({
                 }
                 onDragEnd={handleDragEnd}
             >
-                <div className="flex gap-4 overflow-x-auto pb-6">
-                    {columns.map((column) => {
-                        const isEditing =
-                            editingColumnId ===
-                            column.id;
-
-                        const isSaving =
-                            updateMutation.isPending &&
-                            updateMutation.variables
-                                ?.columnId ===
+                <SortableContext
+                    items={columns.map(
+                        column => column.id,
+                    )}
+                    strategy={
+                        horizontalListSortingStrategy
+                    }
+                >
+                    <div className="flex gap-4 overflow-x-auto pb-6">
+                        {columns.map((column) => {
+                            const isEditing =
+                                editingColumnId ===
                                 column.id;
 
-                        const isDeleting =
-                            deleteMutation.isPending &&
-                            deleteMutation.variables ===
+                            const isSaving =
+                                updateMutation.isPending &&
+                                updateMutation.variables
+                                    ?.columnId ===
+                                    column.id;
+
+                            const isDeleting =
+                                deleteMutation.isPending &&
+                                deleteMutation.variables ===
+                                    column.id;
+
+                            const isTaskFormVisible =
+                                showTaskFormColumnId ===
                                 column.id;
 
-                        const isTaskFormVisible =
-                            showTaskFormColumnId ===
-                            column.id;
-
-                        if (isEditing) {
-                            return (
-                                <article
-                                    key={column.id}
-                                    className="w-96 shrink-0 border border-blue-700 bg-slate-900 p-5"
-                                >
-                                    <label className="block">
-                                        <span className="text-sm font-medium text-slate-300">
-                                            Column name
-                                        </span>
-
-                                        <input
-                                            type="text"
-                                            value={
-                                                editForm.name
-                                            }
-                                            maxLength={
-                                                255
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                setEditForm(
-                                                    current => ({
-                                                        ...current,
-                                                        name: event
-                                                            .target
-                                                            .value,
-                                                    }),
-                                                )
-                                            }
-                                            className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                        />
-                                    </label>
-
-                                    <label className="mt-4 block">
-                                        <span className="text-sm font-medium text-slate-300">
-                                            Position
-                                        </span>
-
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            step="1"
-                                            value={
-                                                editForm.position
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                setEditForm(
-                                                    current => ({
-                                                        ...current,
-                                                        position:
-                                                            event
-                                                                .target
-                                                                .value,
-                                                    }),
-                                                )
-                                            }
-                                            className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                        />
-                                    </label>
-
-                                    <label className="mt-4 block">
-                                        <span className="text-sm font-medium text-slate-300">
-                                            WIP limit
-                                        </span>
-
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            step="1"
-                                            value={
-                                                editForm.wip_limit
-                                            }
-                                            onChange={(
-                                                event,
-                                            ) =>
-                                                setEditForm(
-                                                    current => ({
-                                                        ...current,
-                                                        wip_limit:
-                                                            event
-                                                                .target
-                                                                .value,
-                                                    }),
-                                                )
-                                            }
-                                            placeholder="No limit"
-                                            className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
-                                        />
-                                    </label>
-
-                                    <div className="mt-5 flex gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={() =>
-                                                handleSave(
-                                                    column,
-                                                )
-                                            }
-                                            disabled={
-                                                updateMutation.isPending
-                                            }
-                                            className="border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
-                                        >
-                                            {isSaving
-                                                ? 'Saving...'
-                                                : 'Save'}
-                                        </button>
-
-                                        <button
-                                            type="button"
-                                            onClick={
-                                                cancelEditing
-                                            }
-                                            disabled={
-                                                updateMutation.isPending
-                                            }
-                                            className="border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </article>
-                            );
-                        }
-
-                        return (
-                            <article
-                                key={column.id}
-                                className="w-96 shrink-0 border border-slate-800 bg-slate-900 p-5"
-                            >
-                                <div className="flex items-start justify-between gap-4">
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-slate-100">
-                                            {
-                                                column.name
-                                            }
-                                        </h3>
-
-                                        <p className="mt-1 text-sm text-slate-500">
-                                            Position:{' '}
-                                            <span className="text-slate-300">
-                                                {
-                                                    column.position
-                                                }
-                                            </span>
-                                        </p>
-                                    </div>
-
-                                    <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">
-                                        {column.wip_limit ===
-                                        null
-                                            ? 'No limit'
-                                            : `WIP ${column.wip_limit}`}
-                                    </span>
-                                </div>
-
-                                <div className="mt-5">
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            toggleTaskForm(
-                                                column.id,
-                                            )
-                                        }
-                                        disabled={
-                                            moveTaskMutation.isPending
-                                        }
-                                        className="w-full border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
+                            if (isEditing) {
+                                return (
+                                    <article
+                                        key={column.id}
+                                        className="w-96 shrink-0 border border-blue-700 bg-slate-900 p-5"
                                     >
-                                        {isTaskFormVisible
-                                            ? 'Close task form'
-                                            : 'Add task'}
-                                    </button>
+                                        <label className="block">
+                                            <span className="text-sm font-medium text-slate-300">
+                                                Column name
+                                            </span>
 
-                                    {isTaskFormVisible && (
-                                        <CreateTaskForm
-                                            workspaceId={
-                                                workspaceId
-                                            }
-                                            projectId={
-                                                projectId
-                                            }
-                                            boardId={
-                                                boardId
-                                            }
-                                            columnId={
-                                                column.id
-                                            }
-                                        />
-                                    )}
-                                </div>
+                                            <input
+                                                type="text"
+                                                value={
+                                                    editForm.name
+                                                }
+                                                maxLength={
+                                                    255
+                                                }
+                                                onChange={(
+                                                    event,
+                                                ) =>
+                                                    setEditForm(
+                                                        current => ({
+                                                            ...current,
+                                                            name: event
+                                                                .target
+                                                                .value,
+                                                        }),
+                                                    )
+                                                }
+                                                className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                            />
+                                        </label>
 
-                                <TaskList
+                                        <label className="mt-4 block">
+                                            <span className="text-sm font-medium text-slate-300">
+                                                WIP limit
+                                            </span>
+
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                step="1"
+                                                value={
+                                                    editForm.wip_limit
+                                                }
+                                                onChange={(
+                                                    event,
+                                                ) =>
+                                                    setEditForm(
+                                                        current => ({
+                                                            ...current,
+                                                            wip_limit:
+                                                                event
+                                                                    .target
+                                                                    .value,
+                                                        }),
+                                                    )
+                                                }
+                                                placeholder="No limit"
+                                                className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
+                                            />
+                                        </label>
+
+                                        <div className="mt-5 flex gap-3">
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    handleSave(
+                                                        column,
+                                                    )
+                                                }
+                                                disabled={
+                                                    updateMutation.isPending
+                                                }
+                                                className="border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                            >
+                                                {isSaving
+                                                    ? 'Saving...'
+                                                    : 'Save'}
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                onClick={
+                                                    cancelEditing
+                                                }
+                                                disabled={
+                                                    updateMutation.isPending
+                                                }
+                                                className="border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </article>
+                                );
+                            }
+
+                            return (
+                                <SortableColumnCard
+                                    key={column.id}
+                                    column={column}
                                     workspaceId={
                                         workspaceId
                                     }
@@ -804,52 +1074,29 @@ function ColumnList({
                                     boardId={
                                         boardId
                                     }
-                                    columnId={
-                                        column.id
+                                    disabled={
+                                        interactionDisabled
+                                    }
+                                    isDeleting={
+                                        isDeleting
+                                    }
+                                    isTaskFormVisible={
+                                        isTaskFormVisible
+                                    }
+                                    onToggleTaskForm={
+                                        toggleTaskForm
+                                    }
+                                    onEdit={
+                                        beginEditing
+                                    }
+                                    onDelete={
+                                        handleDelete
                                     }
                                 />
-
-                                <div className="mt-5 flex gap-3 border-t border-slate-800 pt-4">
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            beginEditing(
-                                                column,
-                                            )
-                                        }
-                                        disabled={
-                                            updateMutation.isPending ||
-                                            deleteMutation.isPending ||
-                                            moveTaskMutation.isPending
-                                        }
-                                        className="border border-blue-700 px-3 py-2 text-sm font-medium text-blue-400 hover:bg-blue-950 disabled:cursor-not-allowed disabled:opacity-50"
-                                    >
-                                        Edit column
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            handleDelete(
-                                                column,
-                                            )
-                                        }
-                                        disabled={
-                                            updateMutation.isPending ||
-                                            deleteMutation.isPending ||
-                                            moveTaskMutation.isPending
-                                        }
-                                        className="border border-red-800 px-3 py-2 text-sm font-medium text-red-400 hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
-                                    >
-                                        {isDeleting
-                                            ? 'Deleting...'
-                                            : 'Delete column'}
-                                    </button>
-                                </div>
-                            </article>
-                        );
-                    })}
-                </div>
+                            );
+                        })}
+                    </div>
+                </SortableContext>
             </DndContext>
         </div>
     );
