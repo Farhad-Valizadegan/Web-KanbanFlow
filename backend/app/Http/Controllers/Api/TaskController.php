@@ -8,6 +8,7 @@ use App\Models\Column;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Workspace;
+use App\Services\ActivityLogger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,11 @@ use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
+    public function __construct(
+        private readonly ActivityLogger $activityLogger
+    ) {
+    }
+
     public function index(
         Workspace $workspace,
         Project $project,
@@ -97,6 +103,7 @@ class TaskController extends Controller
 
         $task = DB::transaction(function () use (
             $request,
+            $workspace,
             $column,
             $validated
         ): Task {
@@ -107,7 +114,7 @@ class TaskController extends Controller
                 $validated['completed_at'] ?? null
             );
 
-            return $column->tasks()->create([
+            $task = $column->tasks()->create([
                 'created_by' => $request->user()->id,
                 'assigned_to' =>
                     $validated['assigned_to'] ?? null,
@@ -124,6 +131,23 @@ class TaskController extends Controller
                 'completed_at' =>
                     $validated['completed_at'] ?? null,
             ]);
+
+            $this->activityLogger->log(
+                $workspace,
+                $request->user(),
+                'created',
+                'task',
+                $task,
+                $task->title,
+                [
+                    'task' =>
+                        $this->taskActivityState(
+                            $task
+                        ),
+                ]
+            );
+
+            return $task;
         });
 
         $task->load([
@@ -233,12 +257,19 @@ class TaskController extends Controller
         }
 
         DB::transaction(function () use (
+            $request,
+            $workspace,
             $task,
             $column,
             $validated
         ): void {
             $task->refresh();
             $column->refresh();
+
+            $before =
+                $this->taskActivityState(
+                    $task
+                );
 
             $isReopeningTask =
                 array_key_exists(
@@ -256,6 +287,23 @@ class TaskController extends Controller
             }
 
             $task->update($validated);
+            $task->refresh();
+
+            $this->activityLogger->log(
+                $workspace,
+                $request->user(),
+                'updated',
+                'task',
+                $task,
+                $task->title,
+                [
+                    'before' => $before,
+                    'after' =>
+                        $this->taskActivityState(
+                            $task
+                        ),
+                ]
+            );
         });
 
         $task->refresh();
@@ -316,12 +364,21 @@ class TaskController extends Controller
         }
 
         DB::transaction(function () use (
+            $request,
+            $workspace,
             $task,
             $column,
             $destinationColumn,
             $validated
         ): void {
             $task->refresh();
+
+            $before = [
+                'column_id' =>
+                    $task->column_id,
+                'position' =>
+                    $task->position,
+            ];
 
             if (
                 $task->column_id ===
@@ -332,20 +389,38 @@ class TaskController extends Controller
                     $destinationColumn,
                     $validated['position']
                 );
+            } else {
+                $this->ensureDestinationWipLimit(
+                    $task,
+                    $destinationColumn
+                );
 
-                return;
+                $this->moveTaskBetweenColumns(
+                    $task,
+                    $column,
+                    $destinationColumn,
+                    $validated['position']
+                );
             }
 
-            $this->ensureDestinationWipLimit(
-                $task,
-                $destinationColumn
-            );
+            $task->refresh();
 
-            $this->moveTaskBetweenColumns(
+            $this->activityLogger->log(
+                $workspace,
+                $request->user(),
+                'moved',
+                'task',
                 $task,
-                $column,
-                $destinationColumn,
-                $validated['position']
+                $task->title,
+                [
+                    'before' => $before,
+                    'after' => [
+                        'column_id' =>
+                            $task->column_id,
+                        'position' =>
+                            $task->position,
+                    ],
+                ]
             );
         });
 
@@ -362,6 +437,7 @@ class TaskController extends Controller
     }
 
     public function destroy(
+        Request $request,
         Workspace $workspace,
         Project $project,
         Board $board,
@@ -378,7 +454,32 @@ class TaskController extends Controller
 
         $this->authorize('delete', $board);
 
-        $task->delete();
+        DB::transaction(function () use (
+            $request,
+            $workspace,
+            $task
+        ): void {
+            $taskState =
+                $this->taskActivityState(
+                    $task
+                );
+
+            $taskName = $task->title;
+
+            $task->delete();
+
+            $this->activityLogger->log(
+                $workspace,
+                $request->user(),
+                'deleted',
+                'task',
+                $task,
+                $taskName,
+                [
+                    'task' => $taskState,
+                ]
+            );
+        });
 
         return response()->json([
             'message' => 'Task deleted successfully.',
@@ -574,5 +675,30 @@ class TaskController extends Controller
             $belongsToWorkspace,
             422
         );
+    }
+
+    private function taskActivityState(
+        Task $task
+    ): array {
+        return [
+            'column_id' =>
+                $task->column_id,
+            'created_by' =>
+                $task->created_by,
+            'assigned_to' =>
+                $task->assigned_to,
+            'title' =>
+                $task->title,
+            'description' =>
+                $task->description,
+            'priority' =>
+                $task->priority,
+            'position' =>
+                $task->position,
+            'due_date' =>
+                $task->due_date,
+            'completed_at' =>
+                $task->completed_at,
+        ];
     }
 }
