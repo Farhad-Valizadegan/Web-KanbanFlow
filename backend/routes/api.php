@@ -18,9 +18,14 @@ Route::get('/health', function (): JsonResponse {
 });
 
 Route::middleware('auth:sanctum')->group(function (): void {
-    Route::get('/user', function (Request $request): JsonResponse {
-        return response()->json($request->user());
-    });
+    Route::get(
+        '/user',
+        function (Request $request): JsonResponse {
+            return response()->json(
+                $request->user()
+            );
+        }
+    );
 
     Route::apiResource(
         'workspaces',
@@ -29,22 +34,34 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::get(
         'workspaces/{workspace}/members',
-        [WorkspaceMemberController::class, 'index']
+        [
+            WorkspaceMemberController::class,
+            'index',
+        ]
     );
 
     Route::post(
         'workspaces/{workspace}/members',
-        [WorkspaceMemberController::class, 'store']
+        [
+            WorkspaceMemberController::class,
+            'store',
+        ]
     );
 
     Route::patch(
         'workspaces/{workspace}/members/{user}',
-        [WorkspaceMemberController::class, 'update']
+        [
+            WorkspaceMemberController::class,
+            'update',
+        ]
     );
 
     Route::delete(
         'workspaces/{workspace}/members/{user}',
-        [WorkspaceMemberController::class, 'destroy']
+        [
+            WorkspaceMemberController::class,
+            'destroy',
+        ]
     );
 
     Route::apiResource(
@@ -52,9 +69,28 @@ Route::middleware('auth:sanctum')->group(function (): void {
         ProjectController::class
     );
 
+    Route::patch(
+        'workspaces/{workspace}/projects/{project}'
+            . '/boards/{board}/move',
+        [
+            BoardController::class,
+            'move',
+        ]
+    );
+
     Route::apiResource(
         'workspaces.projects.boards',
         BoardController::class
+    );
+
+    Route::patch(
+        'workspaces/{workspace}/projects/{project}'
+            . '/boards/{board}'
+            . '/columns/{column}/move',
+        [
+            ColumnController::class,
+            'move',
+        ]
     );
 
     Route::apiResource(
@@ -63,8 +99,14 @@ Route::middleware('auth:sanctum')->group(function (): void {
     );
 
     Route::patch(
-        'workspaces/{workspace}/projects/{project}/boards/{board}/columns/{column}/tasks/{task}/move',
-        [TaskController::class, 'move']
+        'workspaces/{workspace}/projects/{project}'
+            . '/boards/{board}'
+            . '/columns/{column}'
+            . '/tasks/{task}/move',
+        [
+            TaskController::class,
+            'move',
+        ]
     );
 
     Route::apiResource(

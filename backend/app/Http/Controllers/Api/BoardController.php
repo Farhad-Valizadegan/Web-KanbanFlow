@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Workspace;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class BoardController extends Controller
@@ -170,6 +171,72 @@ class BoardController extends Controller
         ]);
     }
 
+    public function move(
+        Request $request,
+        Workspace $workspace,
+        Project $project,
+        Board $board
+    ): JsonResponse {
+        $this->ensureNestedResources(
+            $workspace,
+            $project,
+            $board
+        );
+
+        $this->authorize('update', $project);
+
+        $validated = $request->validate([
+            'position' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
+        ]);
+
+        DB::transaction(function () use (
+            $project,
+            $board,
+            $validated
+        ): void {
+            $board->refresh();
+
+            $boardIds = $project
+                ->boards()
+                ->whereKeyNot($board->id)
+                ->orderBy('position')
+                ->orderBy('id')
+                ->lockForUpdate()
+                ->pluck('id')
+                ->all();
+
+            $position = min(
+                max($validated['position'], 1),
+                count($boardIds) + 1
+            );
+
+            array_splice(
+                $boardIds,
+                $position - 1,
+                0,
+                [$board->id]
+            );
+
+            $this->applyBoardPositions(
+                $boardIds,
+                $project->id
+            );
+        });
+
+        $board->refresh();
+        $board->load('creator');
+
+        return response()->json([
+            'message' =>
+                'Board moved successfully.',
+            'data' => $board,
+        ]);
+    }
+
     public function destroy(
         Workspace $workspace,
         Project $project,
@@ -189,6 +256,23 @@ class BoardController extends Controller
             'message' =>
                 'Board deleted successfully.',
         ]);
+    }
+
+    private function applyBoardPositions(
+        array $boardIds,
+        int $projectId
+    ): void {
+        foreach (
+            array_values($boardIds)
+            as $index => $boardId
+        ) {
+            Board::query()
+                ->whereKey($boardId)
+                ->update([
+                    'project_id' => $projectId,
+                    'position' => $index + 1,
+                ]);
+        }
     }
 
     private function ensureProjectBelongsToWorkspace(

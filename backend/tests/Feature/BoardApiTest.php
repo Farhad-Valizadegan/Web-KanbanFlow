@@ -512,6 +512,298 @@ class BoardApiTest extends TestCase
         ]);
     }
 
+    public function test_owner_can_move_board(): void
+    {
+        $owner = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+
+        $firstBoard = $this->createBoardFor(
+            $project,
+            $owner,
+            [
+                'name' => 'First Board',
+                'position' => 1,
+            ]
+        );
+
+        $secondBoard = $this->createBoardFor(
+            $project,
+            $owner,
+            [
+                'name' => 'Second Board',
+                'position' => 2,
+            ]
+        );
+
+        $thirdBoard = $this->createBoardFor(
+            $project,
+            $owner,
+            [
+                'name' => 'Third Board',
+                'position' => 3,
+            ]
+        );
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->boardMoveUrl(
+                $workspace,
+                $project,
+                $thirdBoard
+            ),
+            [
+                'position' => 1,
+            ]
+        )
+            ->assertOk()
+            ->assertJsonPath(
+                'message',
+                'Board moved successfully.'
+            )
+            ->assertJsonPath(
+                'data.id',
+                $thirdBoard->id
+            )
+            ->assertJsonPath(
+                'data.position',
+                1
+            );
+
+        $this->assertDatabaseHas('boards', [
+            'id' => $thirdBoard->id,
+            'position' => 1,
+        ]);
+
+        $this->assertDatabaseHas('boards', [
+            'id' => $firstBoard->id,
+            'position' => 2,
+        ]);
+
+        $this->assertDatabaseHas('boards', [
+            'id' => $secondBoard->id,
+            'position' => 3,
+        ]);
+    }
+
+    public function test_manager_can_move_board(): void
+    {
+        $owner = User::factory()->create();
+        $manager = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+
+        $firstBoard = $this->createBoardFor(
+            $project,
+            $owner,
+            [
+                'position' => 1,
+            ]
+        );
+
+        $secondBoard = $this->createBoardFor(
+            $project,
+            $owner,
+            [
+                'position' => 2,
+            ]
+        );
+
+        $this->addMember(
+            $workspace,
+            $manager,
+            'manager'
+        );
+
+        Sanctum::actingAs($manager);
+
+        $this->patchJson(
+            $this->boardMoveUrl(
+                $workspace,
+                $project,
+                $secondBoard
+            ),
+            [
+                'position' => 1,
+            ]
+        )
+            ->assertOk()
+            ->assertJsonPath(
+                'data.position',
+                1
+            );
+
+        $this->assertDatabaseHas('boards', [
+            'id' => $secondBoard->id,
+            'position' => 1,
+        ]);
+
+        $this->assertDatabaseHas('boards', [
+            'id' => $firstBoard->id,
+            'position' => 2,
+        ]);
+    }
+
+    public function test_regular_member_cannot_move_board(): void
+    {
+        $owner = User::factory()->create();
+        $member = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
+
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
+
+        Sanctum::actingAs($member);
+
+        $this->patchJson(
+            $this->boardMoveUrl(
+                $workspace,
+                $project,
+                $board
+            ),
+            [
+                'position' => 1,
+            ]
+        )->assertForbidden();
+    }
+
+    public function test_board_move_position_is_clamped_to_valid_range(): void
+    {
+        $owner = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+
+        $firstBoard = $this->createBoardFor(
+            $project,
+            $owner,
+            [
+                'position' => 1,
+            ]
+        );
+
+        $secondBoard = $this->createBoardFor(
+            $project,
+            $owner,
+            [
+                'position' => 2,
+            ]
+        );
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->boardMoveUrl(
+                $workspace,
+                $project,
+                $firstBoard
+            ),
+            [
+                'position' => 999,
+            ]
+        )
+            ->assertOk()
+            ->assertJsonPath(
+                'data.position',
+                2
+            );
+
+        $this->assertDatabaseHas('boards', [
+            'id' => $secondBoard->id,
+            'position' => 1,
+        ]);
+
+        $this->assertDatabaseHas('boards', [
+            'id' => $firstBoard->id,
+            'position' => 2,
+        ]);
+    }
+
+    public function test_board_move_position_must_be_at_least_one(): void
+    {
+        $owner = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->boardMoveUrl(
+                $workspace,
+                $project,
+                $board
+            ),
+            [
+                'position' => 0,
+            ]
+        )
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(
+                'position'
+            );
+    }
+
+    public function test_board_from_another_project_cannot_be_moved(): void
+    {
+        $owner = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+
+        $firstProject = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+
+        $secondProject = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+
+        $board = $this->createBoardFor(
+            $secondProject,
+            $owner
+        );
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->boardMoveUrl(
+                $workspace,
+                $firstProject,
+                $board
+            ),
+            [
+                'position' => 1,
+            ]
+        )->assertNotFound();
+    }
+
     public function test_regular_member_cannot_update_board(): void
     {
         $owner = User::factory()->create();
@@ -687,12 +979,18 @@ class BoardApiTest extends TestCase
 
     private function createBoardFor(
         Project $project,
-        User $creator
+        User $creator,
+        array $attributes = []
     ): Board {
-        return Board::factory()->create([
-            'project_id' => $project->id,
-            'created_by' => $creator->id,
-        ]);
+        return Board::factory()->create(
+            array_merge(
+                [
+                    'project_id' => $project->id,
+                    'created_by' => $creator->id,
+                ],
+                $attributes
+            )
+        );
     }
 
     private function boardsUrl(
@@ -712,5 +1010,17 @@ class BoardApiTest extends TestCase
             $workspace,
             $project
         ) . "/{$board->id}";
+    }
+
+    private function boardMoveUrl(
+        Workspace $workspace,
+        Project $project,
+        Board $board
+    ): string {
+        return $this->boardUrl(
+            $workspace,
+            $project,
+            $board
+        ) . '/move';
     }
 }
