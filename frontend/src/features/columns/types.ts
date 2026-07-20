@@ -19,6 +19,9 @@ export interface CreateColumnInput {
 
 export interface UpdateColumnInput {
     name?: string;
-    position?: number;
     wip_limit?: number | null;
+}
+
+export interface MoveColumnInput {
+    position: number;
 }

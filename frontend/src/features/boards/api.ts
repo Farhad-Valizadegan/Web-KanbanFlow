@@ -2,6 +2,7 @@ import { apiClient } from '../../api/client';
 import type {
     Board,
     CreateBoardInput,
+    MoveBoardInput,
     UpdateBoardInput,
 } from './types';
 
@@ -62,6 +63,21 @@ export async function updateBoard(
     const response =
         await apiClient.patch<BoardResponse>(
             `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}`,
+            input,
+        );
+
+    return response.data.data;
+}
+
+export async function moveBoard(
+    workspaceId: number,
+    projectId: number,
+    boardId: number,
+    input: MoveBoardInput,
+): Promise<Board> {
+    const response =
+        await apiClient.patch<BoardResponse>(
+            `/api/workspaces/${workspaceId}/projects/${projectId}/boards/${boardId}/move`,
             input,
         );
 
