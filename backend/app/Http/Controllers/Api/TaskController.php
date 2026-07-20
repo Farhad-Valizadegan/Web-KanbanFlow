@@ -7,10 +7,11 @@ use App\Models\Board;
 use App\Models\Column;
 use App\Models\Project;
 use App\Models\Task;
-use App\Models\User;
 use App\Models\Workspace;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
@@ -96,14 +97,20 @@ class TaskController extends Controller
 
         $task = $column->tasks()->create([
             'created_by' => $request->user()->id,
-            'assigned_to' => $validated['assigned_to'] ?? null,
+            'assigned_to' =>
+                $validated['assigned_to'] ?? null,
             'title' => $validated['title'],
-            'description' => $validated['description'] ?? null,
+            'description' =>
+                $validated['description'] ?? null,
             'priority' => $validated['priority'],
             'position' =>
-                (int) $column->tasks()->max('position') + 1,
-            'due_date' => $validated['due_date'] ?? null,
-            'completed_at' => $validated['completed_at'] ?? null,
+                (int) $column
+                    ->tasks()
+                    ->max('position') + 1,
+            'due_date' =>
+                $validated['due_date'] ?? null,
+            'completed_at' =>
+                $validated['completed_at'] ?? null,
         ]);
 
         $task->load([
@@ -203,7 +210,12 @@ class TaskController extends Controller
             ],
         ]);
 
-        if (array_key_exists('assigned_to', $validated)) {
+        if (
+            array_key_exists(
+                'assigned_to',
+                $validated
+            )
+        ) {
             $this->ensureAssigneeBelongsToWorkspace(
                 $workspace,
                 $validated['assigned_to']
@@ -219,6 +231,97 @@ class TaskController extends Controller
 
         return response()->json([
             'message' => 'Task updated successfully.',
+            'data' => $task,
+        ]);
+    }
+
+    public function move(
+        Request $request,
+        Workspace $workspace,
+        Project $project,
+        Board $board,
+        Column $column,
+        Task $task
+    ): JsonResponse {
+        $this->ensureNestedResources(
+            $workspace,
+            $project,
+            $board,
+            $column,
+            $task
+        );
+
+        $this->authorize('update', $board);
+
+        $validated = $request->validate([
+            'column_id' => [
+                'required',
+                'integer',
+                'exists:columns,id',
+            ],
+            'position' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
+        ]);
+
+        $destinationColumn = Column::query()
+            ->findOrFail($validated['column_id']);
+
+        if (
+            $destinationColumn->board_id !==
+            $board->id
+        ) {
+            throw ValidationException::withMessages([
+                'column_id' => [
+                    'The destination column must belong to the same board.',
+                ],
+            ]);
+        }
+
+        DB::transaction(function () use (
+            $task,
+            $column,
+            $destinationColumn,
+            $validated
+        ): void {
+            $task->refresh();
+
+            if (
+                $task->column_id ===
+                $destinationColumn->id
+            ) {
+                $this->reorderTaskWithinColumn(
+                    $task,
+                    $destinationColumn,
+                    $validated['position']
+                );
+
+                return;
+            }
+
+            $this->ensureDestinationWipLimit(
+                $task,
+                $destinationColumn
+            );
+
+            $this->moveTaskBetweenColumns(
+                $task,
+                $column,
+                $destinationColumn,
+                $validated['position']
+            );
+        });
+
+        $task->refresh();
+        $task->load([
+            'creator',
+            'assignee',
+        ]);
+
+        return response()->json([
+            'message' => 'Task moved successfully.',
             'data' => $task,
         ]);
     }
@@ -247,6 +350,134 @@ class TaskController extends Controller
         ]);
     }
 
+    private function reorderTaskWithinColumn(
+        Task $task,
+        Column $column,
+        int $requestedPosition
+    ): void {
+        $otherTaskIds = $column
+            ->tasks()
+            ->whereKeyNot($task->id)
+            ->orderBy('position')
+            ->orderBy('id')
+            ->lockForUpdate()
+            ->pluck('id')
+            ->all();
+
+        $position = min(
+            max($requestedPosition, 1),
+            count($otherTaskIds) + 1
+        );
+
+        array_splice(
+            $otherTaskIds,
+            $position - 1,
+            0,
+            [$task->id]
+        );
+
+        $this->applyTaskPositions(
+            $otherTaskIds,
+            $column->id
+        );
+    }
+
+    private function moveTaskBetweenColumns(
+        Task $task,
+        Column $sourceColumn,
+        Column $destinationColumn,
+        int $requestedPosition
+    ): void {
+        $sourceTaskIds = $sourceColumn
+            ->tasks()
+            ->whereKeyNot($task->id)
+            ->orderBy('position')
+            ->orderBy('id')
+            ->lockForUpdate()
+            ->pluck('id')
+            ->all();
+
+        $destinationTaskIds = $destinationColumn
+            ->tasks()
+            ->orderBy('position')
+            ->orderBy('id')
+            ->lockForUpdate()
+            ->pluck('id')
+            ->all();
+
+        $position = min(
+            max($requestedPosition, 1),
+            count($destinationTaskIds) + 1
+        );
+
+        array_splice(
+            $destinationTaskIds,
+            $position - 1,
+            0,
+            [$task->id]
+        );
+
+        $this->applyTaskPositions(
+            $sourceTaskIds,
+            $sourceColumn->id
+        );
+
+        $this->applyTaskPositions(
+            $destinationTaskIds,
+            $destinationColumn->id
+        );
+    }
+
+    private function applyTaskPositions(
+        array $taskIds,
+        int $columnId
+    ): void {
+        foreach (
+            array_values($taskIds)
+            as $index => $taskId
+        ) {
+            Task::query()
+                ->whereKey($taskId)
+                ->update([
+                    'column_id' => $columnId,
+                    'position' => $index + 1,
+                ]);
+        }
+    }
+
+    private function ensureDestinationWipLimit(
+        Task $task,
+        Column $destinationColumn
+    ): void {
+        if (
+            $destinationColumn->wip_limit ===
+            null
+        ) {
+            return;
+        }
+
+        if ($task->completed_at !== null) {
+            return;
+        }
+
+        $activeTaskCount = $destinationColumn
+            ->tasks()
+            ->whereNull('completed_at')
+            ->lockForUpdate()
+            ->count();
+
+        if (
+            $activeTaskCount >=
+            $destinationColumn->wip_limit
+        ) {
+            throw ValidationException::withMessages([
+                'column_id' => [
+                    'The destination column has reached its WIP limit.',
+                ],
+            ]);
+        }
+    }
+
     private function ensureNestedResources(
         Workspace $workspace,
         Project $project,
@@ -255,23 +486,27 @@ class TaskController extends Controller
         ?Task $task = null
     ): void {
         abort_unless(
-            $project->workspace_id === $workspace->id,
+            $project->workspace_id ===
+                $workspace->id,
             404
         );
 
         abort_unless(
-            $board->project_id === $project->id,
+            $board->project_id ===
+                $project->id,
             404
         );
 
         abort_unless(
-            $column->board_id === $board->id,
+            $column->board_id ===
+                $board->id,
             404
         );
 
         if ($task !== null) {
             abort_unless(
-                $task->column_id === $column->id,
+                $task->column_id ===
+                    $column->id,
                 404
             );
         }
@@ -287,9 +522,15 @@ class TaskController extends Controller
 
         $belongsToWorkspace = $workspace
             ->members()
-            ->where('users.id', $userId)
+            ->where(
+                'users.id',
+                $userId
+            )
             ->exists();
 
-        abort_unless($belongsToWorkspace, 422);
+        abort_unless(
+            $belongsToWorkspace,
+            422
+        );
     }
 }
