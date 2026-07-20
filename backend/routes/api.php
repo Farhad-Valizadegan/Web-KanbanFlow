@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ActivityLogController;
 use App\Http\Controllers\Api\BoardController;
 use App\Http\Controllers\Api\ColumnController;
 use App\Http\Controllers\Api\ProjectController;
@@ -31,6 +32,14 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::apiResource(
         'workspaces',
         WorkspaceController::class
+    );
+
+    Route::get(
+        'workspaces/{workspace}/activities',
+        [
+            ActivityLogController::class,
+            'index',
+        ]
     );
 
     Route::get(
