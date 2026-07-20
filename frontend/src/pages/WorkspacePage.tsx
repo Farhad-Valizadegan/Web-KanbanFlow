@@ -3,21 +3,35 @@ import { Link, useParams } from 'react-router-dom';
 import CreateProjectForm from '../features/projects/components/CreateProjectForm';
 import ProjectList from '../features/projects/components/ProjectList';
 import { getWorkspace } from '../features/workspaces/api';
+import WorkspaceActivityFeed from '../features/workspaces/components/WorkspaceActivityFeed';
 import WorkspaceMembers from '../features/workspaces/components/WorkspaceMembers';
 
 function WorkspacePage() {
     const { workspaceId } = useParams();
 
-    const numericWorkspaceId = Number(workspaceId);
+    const numericWorkspaceId =
+        Number(workspaceId);
 
     const workspaceQuery = useQuery({
-        queryKey: ['workspace', numericWorkspaceId],
-        queryFn: () => getWorkspace(numericWorkspaceId),
-        enabled: Number.isInteger(numericWorkspaceId),
+        queryKey: [
+            'workspace',
+            numericWorkspaceId,
+        ],
+        queryFn: () =>
+            getWorkspace(
+                numericWorkspaceId,
+            ),
+        enabled: Number.isInteger(
+            numericWorkspaceId,
+        ),
         retry: false,
     });
 
-    if (!Number.isInteger(numericWorkspaceId)) {
+    if (
+        !Number.isInteger(
+            numericWorkspaceId,
+        )
+    ) {
         return (
             <main className="min-h-screen bg-slate-950 p-8 text-red-400">
                 Invalid workspace identifier.
@@ -41,7 +55,8 @@ function WorkspacePage() {
         );
     }
 
-    const workspace = workspaceQuery.data;
+    const workspace =
+        workspaceQuery.data;
 
     return (
         <main className="min-h-screen bg-slate-950 px-6 py-12 text-slate-100">
@@ -61,16 +76,22 @@ function WorkspacePage() {
                             </p>
 
                             <h1 className="mt-3 text-3xl font-bold">
-                                {workspace.name}
+                                {
+                                    workspace.name
+                                }
                             </h1>
 
                             <p className="mt-2 text-slate-500">
-                                {workspace.slug}
+                                {
+                                    workspace.slug
+                                }
                             </p>
                         </div>
 
                         <span className="border border-slate-700 px-3 py-2 text-xs uppercase tracking-wide text-slate-300">
-                            {workspace.visibility}
+                            {
+                                workspace.visibility
+                            }
                         </span>
                     </div>
 
@@ -96,15 +117,29 @@ function WorkspacePage() {
                     </div>
 
                     <CreateProjectForm
-                        workspaceId={numericWorkspaceId}
+                        workspaceId={
+                            numericWorkspaceId
+                        }
                     />
 
                     <ProjectList
-                        workspaceId={numericWorkspaceId}
+                        workspaceId={
+                            numericWorkspaceId
+                        }
                     />
                 </section>
 
-                <WorkspaceMembers workspace={workspace} />
+                <WorkspaceActivityFeed
+                    workspaceId={
+                        numericWorkspaceId
+                    }
+                />
+
+                <WorkspaceMembers
+                    workspace={
+                        workspace
+                    }
+                />
             </section>
         </main>
     );
