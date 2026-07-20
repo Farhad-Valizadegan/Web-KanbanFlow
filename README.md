@@ -2,7 +2,7 @@
 
 A full-stack project management application built with Laravel, React, TypeScript, MySQL, Tailwind CSS, and dnd-kit.
 
-The application supports authenticated workspace collaboration, project management, Kanban boards, workflow columns, task management, drag-and-drop ordering, WIP limits, role-based authorization, and compact board overview mode.
+The application supports authenticated workspace collaboration, project management, Kanban boards, workflow columns, task management, drag-and-drop ordering, WIP limits, role-based authorization, task comments, activity tracking, notifications, and compact board overview mode.
 
 ## Technology Stack
 
@@ -250,6 +250,72 @@ Dependencies used for this milestone:
 - `react-router-dom` for board navigation
 - `tailwindcss` for detailed and overview Kanban interfaces
 
+### Milestone 5 - Collaboration and Activity Tracking
+
+Status: Completed
+
+Detailed documentation:
+
+- [docs/MILESTONE_5.md](docs/MILESTONE_5.md)
+
+Completed features:
+
+- Task comment creation, listing, updating, and deletion
+- Comment authorship and timestamps
+- Comment authorization and moderation
+- Comment soft deletion
+- Nested comment route validation
+- Task comments frontend interface
+- Inline comment editing
+- Workspace activity logging
+- Task creation, update, movement, and deletion activity
+- Structured activity metadata
+- Activity filtering by action and subject type
+- Workspace activity feed frontend
+- Loading, empty, validation, and error states
+
+Verification:
+
+- Task comments backend: 14 tests and 36 assertions
+- Activity logging backend: 7 tests and 30 assertions
+- Full backend suite after Milestone 5: 126 tests and 334 assertions
+- Frontend production builds passed
+
+### Milestone 6 - Notifications
+
+Status: Completed
+
+Detailed documentation:
+
+- [docs/MILESTONE_6.md](docs/MILESTONE_6.md)
+
+Completed features:
+
+- Laravel database notifications
+- Task assignment notifications
+- Task reassignment notifications
+- Self-assignment notification prevention
+- Duplicate notification prevention
+- Notification listing
+- Unread-only filtering
+- Unread count endpoint
+- Mark one notification as read
+- Mark all notifications as read
+- Notification deletion
+- Authenticated-user notification isolation
+- Dashboard notification panel
+- Unread count badge
+- Automatic polling every 30 seconds
+- Loading, empty, error, and session-expiration states
+
+Verification:
+
+- Notification API: 20 tests and 59 assertions
+- Full backend suite after Milestone 6: 146 tests and 393 assertions
+- TypeScript build passed
+- Vite production build passed
+- 241 modules transformed
+
 ## Authorization Model
 
 Workspace access is controlled through the following roles:
@@ -264,7 +330,7 @@ General permissions:
 - Owners can fully manage the workspace, members, projects, boards, columns, and tasks.
 - Managers can manage projects, boards, columns, tasks, and workspace members within policy restrictions.
 - Members and viewers can access permitted workspace data but cannot perform protected management operations.
-- Resource nesting is validated so records from another workspace, project, board, or column cannot be accessed through mismatched routes.
+- Comment authors can modify their own comments according to policy rules.\n- Workspace owners and managers can moderate comments.\n- Notifications are private to the authenticated recipient.\n- Resource nesting is validated so records from another workspace, project, board, column, task, or comment cannot be accessed through mismatched routes.
 
 ## Ordering Model
 
@@ -350,6 +416,54 @@ The backend enforces these rules:
 
 ### Backend
 
+`	ext
+146 tests passed
+393 assertions passed
+`
+
+Verified areas include:
+
+- Authentication
+- Workspace management
+- Workspace membership
+- Project management
+- Board management
+- Column management
+- Task management
+- Board, column, and task movement
+- WIP-limit enforcement
+- Soft-delete slug protection
+- Position normalization
+- Task comments
+- Activity logging
+- Task assignment notifications
+- Notification API authorization
+- Notification ownership isolation
+
+### Frontend
+
 ```text
-105 tests passed
-268 assertions passed
+TypeScript build passed
+Vite production build passed
+241 modules transformed
+```
+
+The latest production build completed successfully.
+
+Vite reported a non-blocking warning because the main JavaScript chunk exceeded 500 kB after minification.
+
+## Documentation
+
+- [docs/MILESTONE_5.md](docs/MILESTONE_5.md)
+- [docs/MILESTONE_6.md](docs/MILESTONE_6.md)
+
+## Current Completion State
+
+Completed milestones:
+
+- Milestone 1 - Project Foundation
+- Milestone 2 - Authentication
+- Milestone 3 - Workspace and Project Management
+- Milestone 4 - Kanban Boards and Tasks
+- Milestone 5 - Collaboration and Activity Tracking
+- Milestone 6 - Notifications
