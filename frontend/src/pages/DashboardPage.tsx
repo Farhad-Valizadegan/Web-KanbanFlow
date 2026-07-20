@@ -9,6 +9,7 @@ import {
     getCurrentUser,
     logoutUser,
 } from '../features/auth/api';
+import NotificationPanel from '../features/notifications/components/NotificationPanel';
 import { getWorkspaces } from '../features/workspaces/api';
 import CreateWorkspaceForm from '../features/workspaces/components/CreateWorkspaceForm';
 import WorkspaceList from '../features/workspaces/components/WorkspaceList';
@@ -34,6 +35,7 @@ function DashboardPage() {
 
     const logoutMutation = useMutation({
         mutationFn: logoutUser,
+
         onSuccess: () => {
             queryClient.clear();
             navigate('/login');
@@ -72,22 +74,33 @@ function DashboardPage() {
                                 </h1>
 
                                 <p className="mt-2 text-slate-400">
-                                    Welcome, {userQuery.data.name}.
+                                    Welcome,{' '}
+                                    {
+                                        userQuery.data
+                                            .name
+                                    }
+                                    .
                                 </p>
                             </div>
 
-                            <button
-                                type="button"
-                                disabled={logoutMutation.isPending}
-                                onClick={() =>
-                                    logoutMutation.mutate()
-                                }
-                                className="border border-slate-700 bg-slate-950 px-4 py-2 font-medium hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-60"
-                            >
-                                {logoutMutation.isPending
-                                    ? 'Signing out...'
-                                    : 'Sign out'}
-                            </button>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <NotificationPanel />
+
+                                <button
+                                    type="button"
+                                    disabled={
+                                        logoutMutation.isPending
+                                    }
+                                    onClick={() =>
+                                        logoutMutation.mutate()
+                                    }
+                                    className="border border-slate-700 bg-slate-950 px-4 py-2 font-medium hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-60"
+                                >
+                                    {logoutMutation.isPending
+                                        ? 'Signing out...'
+                                        : 'Sign out'}
+                                </button>
+                            </div>
                         </div>
 
                         {logoutMutation.isError && (
@@ -112,7 +125,9 @@ function DashboardPage() {
                             <button
                                 type="button"
                                 onClick={() =>
-                                    setIsCreateFormOpen(true)
+                                    setIsCreateFormOpen(
+                                        true,
+                                    )
                                 }
                                 className="border border-blue-500 bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500"
                             >
@@ -134,7 +149,9 @@ function DashboardPage() {
 
                         {workspacesQuery.isSuccess && (
                             <WorkspaceList
-                                workspaces={workspacesQuery.data}
+                                workspaces={
+                                    workspacesQuery.data
+                                }
                             />
                         )}
                     </section>
@@ -144,7 +161,9 @@ function DashboardPage() {
             {isCreateFormOpen && (
                 <CreateWorkspaceForm
                     onClose={() =>
-                        setIsCreateFormOpen(false)
+                        setIsCreateFormOpen(
+                            false,
+                        )
                     }
                 />
             )}
