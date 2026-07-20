@@ -20,10 +20,20 @@ class ColumnApiTest extends TestCase
         $owner = User::factory()->create();
         $member = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
-        $this->addMember($workspace, $member, 'member');
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
 
         Column::factory()->count(2)->create([
             'board_id' => $board->id,
@@ -32,7 +42,11 @@ class ColumnApiTest extends TestCase
         Sanctum::actingAs($member);
 
         $this->getJson(
-            $this->columnsUrl($workspace, $project, $board)
+            $this->columnsUrl(
+                $workspace,
+                $project,
+                $board
+            )
         )
             ->assertOk()
             ->assertJsonCount(2, 'data');
@@ -42,8 +56,14 @@ class ColumnApiTest extends TestCase
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
         Column::factory()->create([
             'board_id' => $board->id,
@@ -60,11 +80,21 @@ class ColumnApiTest extends TestCase
         Sanctum::actingAs($owner);
 
         $this->getJson(
-            $this->columnsUrl($workspace, $project, $board)
+            $this->columnsUrl(
+                $workspace,
+                $project,
+                $board
+            )
         )
             ->assertOk()
-            ->assertJsonPath('data.0.name', 'To Do')
-            ->assertJsonPath('data.1.name', 'Done');
+            ->assertJsonPath(
+                'data.0.name',
+                'To Do'
+            )
+            ->assertJsonPath(
+                'data.1.name',
+                'Done'
+            );
     }
 
     public function test_outsider_cannot_list_columns(): void
@@ -72,13 +102,23 @@ class ColumnApiTest extends TestCase
         $owner = User::factory()->create();
         $outsider = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
         Sanctum::actingAs($outsider);
 
         $this->getJson(
-            $this->columnsUrl($workspace, $project, $board)
+            $this->columnsUrl(
+                $workspace,
+                $project,
+                $board
+            )
         )->assertForbidden();
     }
 
@@ -86,13 +126,23 @@ class ColumnApiTest extends TestCase
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
         Sanctum::actingAs($owner);
 
         $response = $this->postJson(
-            $this->columnsUrl($workspace, $project, $board),
+            $this->columnsUrl(
+                $workspace,
+                $project,
+                $board
+            ),
             [
                 'name' => 'In Progress',
                 'wip_limit' => 5,
@@ -101,10 +151,22 @@ class ColumnApiTest extends TestCase
 
         $response
             ->assertCreated()
-            ->assertJsonPath('data.name', 'In Progress')
-            ->assertJsonPath('data.position', 1)
-            ->assertJsonPath('data.wip_limit', 5)
-            ->assertJsonPath('data.board_id', $board->id);
+            ->assertJsonPath(
+                'data.name',
+                'In Progress'
+            )
+            ->assertJsonPath(
+                'data.position',
+                1
+            )
+            ->assertJsonPath(
+                'data.wip_limit',
+                5
+            )
+            ->assertJsonPath(
+                'data.board_id',
+                $board->id
+            );
 
         $this->assertDatabaseHas('columns', [
             'board_id' => $board->id,
@@ -119,15 +181,29 @@ class ColumnApiTest extends TestCase
         $owner = User::factory()->create();
         $manager = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
-        $this->addMember($workspace, $manager, 'manager');
+        $this->addMember(
+            $workspace,
+            $manager,
+            'manager'
+        );
 
         Sanctum::actingAs($manager);
 
         $this->postJson(
-            $this->columnsUrl($workspace, $project, $board),
+            $this->columnsUrl(
+                $workspace,
+                $project,
+                $board
+            ),
             [
                 'name' => 'Review',
                 'wip_limit' => 3,
@@ -140,15 +216,29 @@ class ColumnApiTest extends TestCase
         $owner = User::factory()->create();
         $member = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
-        $this->addMember($workspace, $member, 'member');
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
 
         Sanctum::actingAs($member);
 
         $this->postJson(
-            $this->columnsUrl($workspace, $project, $board),
+            $this->columnsUrl(
+                $workspace,
+                $project,
+                $board
+            ),
             [
                 'name' => 'Unauthorized Column',
             ]
@@ -159,8 +249,14 @@ class ColumnApiTest extends TestCase
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
         Column::factory()->create([
             'board_id' => $board->id,
@@ -170,13 +266,20 @@ class ColumnApiTest extends TestCase
         Sanctum::actingAs($owner);
 
         $this->postJson(
-            $this->columnsUrl($workspace, $project, $board),
+            $this->columnsUrl(
+                $workspace,
+                $project,
+                $board
+            ),
             [
                 'name' => 'Next Column',
             ]
         )
             ->assertCreated()
-            ->assertJsonPath('data.position', 5);
+            ->assertJsonPath(
+                'data.position',
+                5
+            );
     }
 
     public function test_workspace_member_can_view_column(): void
@@ -184,11 +287,23 @@ class ColumnApiTest extends TestCase
         $owner = User::factory()->create();
         $member = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
-        $column = $this->createColumnFor($board);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
+        $column = $this->createColumnFor(
+            $board
+        );
 
-        $this->addMember($workspace, $member, 'member');
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
 
         Sanctum::actingAs($member);
 
@@ -201,20 +316,38 @@ class ColumnApiTest extends TestCase
             )
         )
             ->assertOk()
-            ->assertJsonPath('data.id', $column->id)
-            ->assertJsonPath('data.name', $column->name);
+            ->assertJsonPath(
+                'data.id',
+                $column->id
+            )
+            ->assertJsonPath(
+                'data.name',
+                $column->name
+            );
     }
 
     public function test_column_from_another_board_returns_not_found(): void
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
 
-        $firstBoard = $this->createBoardFor($project, $owner);
-        $secondBoard = $this->createBoardFor($project, $owner);
+        $firstBoard = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
-        $column = $this->createColumnFor($secondBoard);
+        $secondBoard = $this->createBoardFor(
+            $project,
+            $owner
+        );
+
+        $column = $this->createColumnFor(
+            $secondBoard
+        );
 
         Sanctum::actingAs($owner);
 
@@ -263,15 +396,21 @@ class ColumnApiTest extends TestCase
     {
         $owner = User::factory()->create();
 
-        $firstWorkspace = $this->createWorkspaceFor($owner);
-        $secondWorkspace = $this->createWorkspaceFor($owner);
+        $firstWorkspace =
+            $this->createWorkspaceFor($owner);
+
+        $secondWorkspace =
+            $this->createWorkspaceFor($owner);
 
         $project = $this->createProjectFor(
             $secondWorkspace,
             $owner
         );
 
-        $board = $this->createBoardFor($project, $owner);
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
         Sanctum::actingAs($owner);
 
@@ -289,11 +428,25 @@ class ColumnApiTest extends TestCase
         $owner = User::factory()->create();
         $manager = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
-        $column = $this->createColumnFor($board);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
+        $column = $this->createColumnFor(
+            $board
+        );
 
-        $this->addMember($workspace, $manager, 'manager');
+        $originalPosition = $column->position;
+
+        $this->addMember(
+            $workspace,
+            $manager,
+            'manager'
+        );
 
         Sanctum::actingAs($manager);
 
@@ -306,16 +459,73 @@ class ColumnApiTest extends TestCase
             ),
             [
                 'name' => 'Updated Column',
-                'position' => 3,
                 'wip_limit' => 8,
             ]
         );
 
         $response
             ->assertOk()
-            ->assertJsonPath('data.name', 'Updated Column')
-            ->assertJsonPath('data.position', 3)
-            ->assertJsonPath('data.wip_limit', 8);
+            ->assertJsonPath(
+                'data.name',
+                'Updated Column'
+            )
+            ->assertJsonPath(
+                'data.position',
+                $originalPosition
+            )
+            ->assertJsonPath(
+                'data.wip_limit',
+                8
+            );
+
+        $this->assertDatabaseHas('columns', [
+            'id' => $column->id,
+            'name' => 'Updated Column',
+            'position' => $originalPosition,
+            'wip_limit' => 8,
+        ]);
+    }
+
+    public function test_column_position_cannot_be_changed_through_standard_update(): void
+    {
+        $owner = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
+        $column = $this->createColumnFor(
+            $board
+        );
+
+        $originalPosition = $column->position;
+
+        Sanctum::actingAs($owner);
+
+        $this->patchJson(
+            $this->columnUrl(
+                $workspace,
+                $project,
+                $board,
+                $column
+            ),
+            [
+                'position' => 5,
+            ]
+        )
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(
+                'position'
+            );
+
+        $this->assertDatabaseHas('columns', [
+            'id' => $column->id,
+            'position' => $originalPosition,
+        ]);
     }
 
     public function test_regular_member_cannot_update_column(): void
@@ -323,11 +533,23 @@ class ColumnApiTest extends TestCase
         $owner = User::factory()->create();
         $member = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
-        $column = $this->createColumnFor($board);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
+        $column = $this->createColumnFor(
+            $board
+        );
 
-        $this->addMember($workspace, $member, 'member');
+        $this->addMember(
+            $workspace,
+            $member,
+            'member'
+        );
 
         Sanctum::actingAs($member);
 
@@ -349,11 +571,23 @@ class ColumnApiTest extends TestCase
         $owner = User::factory()->create();
         $manager = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
-        $column = $this->createColumnFor($board);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
+        $column = $this->createColumnFor(
+            $board
+        );
 
-        $this->addMember($workspace, $manager, 'manager');
+        $this->addMember(
+            $workspace,
+            $manager,
+            'manager'
+        );
 
         Sanctum::actingAs($manager);
 
@@ -375,20 +609,32 @@ class ColumnApiTest extends TestCase
     {
         $owner = User::factory()->create();
         $workspace = $this->createWorkspaceFor($owner);
-        $project = $this->createProjectFor($workspace, $owner);
-        $board = $this->createBoardFor($project, $owner);
+        $project = $this->createProjectFor(
+            $workspace,
+            $owner
+        );
+        $board = $this->createBoardFor(
+            $project,
+            $owner
+        );
 
         Sanctum::actingAs($owner);
 
         $this->postJson(
-            $this->columnsUrl($workspace, $project, $board),
+            $this->columnsUrl(
+                $workspace,
+                $project,
+                $board
+            ),
             [
                 'name' => 'Invalid WIP Column',
                 'wip_limit' => 0,
             ]
         )
             ->assertUnprocessable()
-            ->assertJsonValidationErrors('wip_limit');
+            ->assertJsonValidationErrors(
+                'wip_limit'
+            );
     }
 
     private function createWorkspaceFor(
@@ -398,9 +644,12 @@ class ColumnApiTest extends TestCase
             'owner_id' => $owner->id,
         ]);
 
-        $workspace->members()->attach($owner->id, [
-            'role' => 'owner',
-        ]);
+        $workspace->members()->attach(
+            $owner->id,
+            [
+                'role' => 'owner',
+            ]
+        );
 
         return $workspace;
     }
@@ -410,9 +659,12 @@ class ColumnApiTest extends TestCase
         User $user,
         string $role
     ): void {
-        $workspace->members()->attach($user->id, [
-            'role' => $role,
-        ]);
+        $workspace->members()->attach(
+            $user->id,
+            [
+                'role' => $role,
+            ]
+        );
     }
 
     private function createProjectFor(

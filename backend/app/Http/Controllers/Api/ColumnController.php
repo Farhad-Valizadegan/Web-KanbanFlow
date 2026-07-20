@@ -67,11 +67,13 @@ class ColumnController extends Controller
             'name' => $validated['name'],
             'position' =>
                 (int) $board->columns()->max('position') + 1,
-            'wip_limit' => $validated['wip_limit'] ?? null,
+            'wip_limit' =>
+                $validated['wip_limit'] ?? null,
         ]);
 
         return response()->json([
-            'message' => 'Column created successfully.',
+            'message' =>
+                'Column created successfully.',
             'data' => $column,
         ], 201);
     }
@@ -120,10 +122,7 @@ class ColumnController extends Controller
                 'max:255',
             ],
             'position' => [
-                'sometimes',
-                'required',
-                'integer',
-                'min:0',
+                'prohibited',
             ],
             'wip_limit' => [
                 'sometimes',
@@ -136,7 +135,8 @@ class ColumnController extends Controller
         $column->update($validated);
 
         return response()->json([
-            'message' => 'Column updated successfully.',
+            'message' =>
+                'Column updated successfully.',
             'data' => $column,
         ]);
     }
@@ -159,7 +159,8 @@ class ColumnController extends Controller
         $column->delete();
 
         return response()->json([
-            'message' => 'Column deleted successfully.',
+            'message' =>
+                'Column deleted successfully.',
         ]);
     }
 
