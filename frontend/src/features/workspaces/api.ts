@@ -7,6 +7,8 @@ import type {
     UpdateWorkspaceInput,
     UpdateWorkspaceMemberRoleInput,
     Workspace,
+    WorkspaceAnalytics,
+    WorkspaceAnalyticsFilters,
     WorkspaceMember,
 } from './types';
 
@@ -25,6 +27,10 @@ interface WorkspaceMembersResponse {
 
 interface ActivityLogListResponse {
     data: ActivityLog[];
+}
+
+interface WorkspaceAnalyticsResponse {
+    data: WorkspaceAnalytics;
 }
 
 export async function getWorkspaces(): Promise<Workspace[]> {
@@ -128,6 +134,21 @@ export async function getWorkspaceActivities(
     const response =
         await apiClient.get<ActivityLogListResponse>(
             `/api/workspaces/${workspaceId}/activities`,
+            {
+                params: filters,
+            },
+        );
+
+    return response.data.data;
+}
+
+export async function getWorkspaceAnalytics(
+    workspaceId: number,
+    filters: WorkspaceAnalyticsFilters = {},
+): Promise<WorkspaceAnalytics> {
+    const response =
+        await apiClient.get<WorkspaceAnalyticsResponse>(
+            `/api/workspaces/${workspaceId}/analytics`,
             {
                 params: filters,
             },

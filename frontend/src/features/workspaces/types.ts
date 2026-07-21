@@ -1,3 +1,4 @@
+import type { Task } from '../tasks/types';
 import type { User } from '../auth/types';
 
 export type WorkspaceVisibility =
@@ -72,6 +73,51 @@ export interface ActivityLogFilters {
     limit?: number;
     action?: ActivityAction;
     subject_type?: ActivitySubjectType;
+}
+
+export interface WorkspaceAnalyticsSummary {
+    members: number;
+    projects: number;
+    boards: number;
+    tasks: number;
+    open_tasks: number;
+    completed_tasks: number;
+    overdue_tasks: number;
+    due_today_tasks: number;
+}
+
+export interface WorkspaceProjectStatusCounts {
+    active: number;
+    completed: number;
+    archived: number;
+}
+
+export interface WorkspaceTaskStatusCounts {
+    open: number;
+    completed: number;
+    overdue: number;
+    due_today: number;
+}
+
+export interface WorkspaceTaskPriorityCounts {
+    low: number;
+    medium: number;
+    high: number;
+    urgent: number;
+}
+
+export interface WorkspaceAnalytics {
+    summary: WorkspaceAnalyticsSummary;
+    projects_by_status: WorkspaceProjectStatusCounts;
+    tasks_by_status: WorkspaceTaskStatusCounts;
+    tasks_by_priority: WorkspaceTaskPriorityCounts;
+    upcoming_tasks: Task[];
+    assigned_to_me: Task[];
+}
+
+export interface WorkspaceAnalyticsFilters {
+    upcoming_limit?: number;
+    assigned_limit?: number;
 }
 
 export interface CreateWorkspaceInput {
