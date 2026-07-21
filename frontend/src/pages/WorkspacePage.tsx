@@ -4,6 +4,7 @@ import CreateProjectForm from '../features/projects/components/CreateProjectForm
 import ProjectList from '../features/projects/components/ProjectList';
 import { getWorkspace } from '../features/workspaces/api';
 import WorkspaceActivityFeed from '../features/workspaces/components/WorkspaceActivityFeed';
+import WorkspaceAnalyticsDashboard from '../features/workspaces/components/WorkspaceAnalyticsDashboard';
 import WorkspaceMembers from '../features/workspaces/components/WorkspaceMembers';
 
 function WorkspacePage() {
@@ -100,6 +101,12 @@ function WorkspacePage() {
                             'No description has been added.'}
                     </p>
                 </header>
+
+                <WorkspaceAnalyticsDashboard
+                    workspaceId={
+                        numericWorkspaceId
+                    }
+                />
 
                 <section className="mt-10">
                     <div>
