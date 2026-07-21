@@ -10,6 +10,7 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useState } from 'react';
+import { getWorkspaceMembers } from '../../workspaces/api';
 import {
     deleteTask,
     getTasks,
@@ -39,6 +40,7 @@ interface EditTaskFormState {
     title: string;
     description: string;
     priority: TaskPriority;
+    assigned_to: string;
     due_date: string;
     completed: boolean;
 }
@@ -99,6 +101,7 @@ function TaskList({
             title: '',
             description: '',
             priority: 'medium',
+            assigned_to: '',
             due_date: '',
             completed: false,
         });
@@ -126,6 +129,17 @@ function TaskList({
         retry: false,
     });
 
+    const membersQuery = useQuery({
+        queryKey: [
+            'workspace-members',
+            workspaceId,
+        ],
+        queryFn: () =>
+            getWorkspaceMembers(workspaceId),
+        enabled: Number.isInteger(workspaceId),
+        retry: false,
+    });
+
     const updateMutation = useMutation({
         mutationFn: ({
             taskId,
@@ -147,9 +161,27 @@ function TaskList({
             setEditingTaskId(null);
             setErrorMessage(null);
 
-            await queryClient.invalidateQueries({
-                queryKey,
-            });
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey,
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        'workspace-analytics',
+                        workspaceId,
+                    ],
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        'notifications',
+                    ],
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        'notification-unread-count',
+                    ],
+                }),
+            ]);
         },
 
         onError: (
@@ -204,9 +236,17 @@ function TaskList({
         onSuccess: async () => {
             setErrorMessage(null);
 
-            await queryClient.invalidateQueries({
-                queryKey,
-            });
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey,
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        'workspace-analytics',
+                        workspaceId,
+                    ],
+                }),
+            ]);
         },
 
         onError: (
@@ -242,6 +282,10 @@ function TaskList({
             description:
                 task.description ?? '',
             priority: task.priority,
+            assigned_to:
+                task.assigned_to === null
+                    ? ''
+                    : String(task.assigned_to),
             due_date: dateInputValue(
                 task.due_date,
             ),
@@ -277,6 +321,12 @@ function TaskList({
                     null,
                 priority:
                     editForm.priority,
+                assigned_to:
+                    editForm.assigned_to === ''
+                        ? null
+                        : Number(
+                              editForm.assigned_to,
+                          ),
                 due_date:
                     editForm.due_date ||
                     null,
@@ -553,6 +603,81 @@ function TaskList({
                                                             : 'text-sm font-medium text-slate-300'
                                                     }
                                                 >
+                                                    Assignee
+                                                </span>
+
+                                                <select
+                                                    value={
+                                                        editForm.assigned_to
+                                                    }
+                                                    onChange={(
+                                                        event,
+                                                    ) =>
+                                                        setEditForm(
+                                                            current => ({
+                                                                ...current,
+                                                                assigned_to:
+                                                                    event
+                                                                        .target
+                                                                        .value,
+                                                            }),
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        membersQuery.isPending ||
+                                                        membersQuery.isError
+                                                    }
+                                                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 outline-none focus:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                                                >
+                                                    <option value="">
+                                                        Unassigned
+                                                    </option>
+
+                                                    {membersQuery.data?.map(
+                                                        (
+                                                            member,
+                                                        ) => (
+                                                            <option
+                                                                key={
+                                                                    member.id
+                                                                }
+                                                                value={
+                                                                    member.id
+                                                                }
+                                                            >
+                                                                {
+                                                                    member.name
+                                                                }{' '}
+                                                                —{' '}
+                                                                {
+                                                                    member.email
+                                                                }
+                                                            </option>
+                                                        ),
+                                                    )}
+                                                </select>
+
+                                                {membersQuery.isPending && (
+                                                    <span className="mt-2 block text-xs text-slate-500">
+                                                        Loading workspace members...
+                                                    </span>
+                                                )}
+
+                                                {membersQuery.isError && (
+                                                    <span className="mt-2 block text-xs text-red-400">
+                                                        Unable to load workspace members.
+                                                    </span>
+                                                )}
+                                            </label>
+
+                                            <label className="mt-3 block">
+                                                <span
+                                                    className={
+                                                        isOverview
+                                                            ? 'text-xs font-medium text-slate-300'
+                                                            : 'text-sm font-medium text-slate-300'
+                                                    }
+                                                >
                                                     Due date
                                                 </span>
 
@@ -657,7 +782,8 @@ function TaskList({
                                                         )
                                                     }
                                                     disabled={
-                                                        updateMutation.isPending
+                                                        updateMutation.isPending ||
+                                                        membersQuery.isPending
                                                     }
                                                     className="border border-blue-600 bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
                                                 >

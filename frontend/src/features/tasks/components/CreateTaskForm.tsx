@@ -1,9 +1,11 @@
 import {
     useMutation,
+    useQuery,
     useQueryClient,
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import { useState } from 'react';
+import { getWorkspaceMembers } from '../../workspaces/api';
 import { createTask } from '../api';
 import type {
     CreateTaskInput,
@@ -35,11 +37,24 @@ function CreateTaskForm({
         useState('');
     const [priority, setPriority] =
         useState<TaskPriority>('medium');
+    const [assignedTo, setAssignedTo] =
+        useState('');
     const [dueDate, setDueDate] = useState('');
     const [isCompleted, setIsCompleted] =
         useState(false);
     const [errorMessage, setErrorMessage] =
         useState<string | null>(null);
+
+    const membersQuery = useQuery({
+        queryKey: [
+            'workspace-members',
+            workspaceId,
+        ],
+        queryFn: () =>
+            getWorkspaceMembers(workspaceId),
+        enabled: Number.isInteger(workspaceId),
+        retry: false,
+    });
 
     const createMutation = useMutation({
         mutationFn: (input: CreateTaskInput) =>
@@ -55,19 +70,38 @@ function CreateTaskForm({
             setTitle('');
             setDescription('');
             setPriority('medium');
+            setAssignedTo('');
             setDueDate('');
             setIsCompleted(false);
             setErrorMessage(null);
 
-            await queryClient.invalidateQueries({
-                queryKey: [
-                    'tasks',
-                    workspaceId,
-                    projectId,
-                    boardId,
-                    columnId,
-                ],
-            });
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        'tasks',
+                        workspaceId,
+                        projectId,
+                        boardId,
+                        columnId,
+                    ],
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        'workspace-analytics',
+                        workspaceId,
+                    ],
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        'notifications',
+                    ],
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: [
+                        'notification-unread-count',
+                    ],
+                }),
+            ]);
         },
 
         onError: (
@@ -129,7 +163,10 @@ function CreateTaskForm({
             description:
                 description.trim() || null,
             priority,
-            assigned_to: null,
+            assigned_to:
+                assignedTo === ''
+                    ? null
+                    : Number(assignedTo),
             due_date: dueDate || null,
             completed_at: isCompleted
                 ? new Date().toISOString()
@@ -194,6 +231,54 @@ function CreateTaskForm({
 
             <label className="mt-4 block">
                 <span className="text-sm font-medium text-slate-300">
+                    Assignee
+                </span>
+
+                <select
+                    value={assignedTo}
+                    onChange={(event) =>
+                        setAssignedTo(
+                            event.target.value,
+                        )
+                    }
+                    disabled={
+                        membersQuery.isPending ||
+                        membersQuery.isError
+                    }
+                    className="mt-2 w-full border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100 outline-none focus:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                    <option value="">
+                        Unassigned
+                    </option>
+
+                    {membersQuery.data?.map(
+                        (member) => (
+                            <option
+                                key={member.id}
+                                value={member.id}
+                            >
+                                {member.name} —{' '}
+                                {member.email}
+                            </option>
+                        ),
+                    )}
+                </select>
+
+                {membersQuery.isPending && (
+                    <span className="mt-2 block text-xs text-slate-500">
+                        Loading workspace members...
+                    </span>
+                )}
+
+                {membersQuery.isError && (
+                    <span className="mt-2 block text-xs text-red-400">
+                        Unable to load workspace members.
+                    </span>
+                )}
+            </label>
+
+            <label className="mt-4 block">
+                <span className="text-sm font-medium text-slate-300">
                     Due date
                 </span>
 
@@ -252,7 +337,10 @@ function CreateTaskForm({
 
             <button
                 type="submit"
-                disabled={createMutation.isPending}
+                disabled={
+                    createMutation.isPending ||
+                    membersQuery.isPending
+                }
                 className="mt-5 border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
             >
                 {createMutation.isPending
