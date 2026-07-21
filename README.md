@@ -316,6 +316,42 @@ Verification:
 - Vite production build passed
 - 241 modules transformed
 
+### Milestone 7 - Workspace Analytics and Task Assignment
+
+Status: Completed
+
+Detailed documentation:
+
+- [docs/MILESTONE_7.md](docs/MILESTONE_7.md)
+
+Completed features:
+
+- Workspace analytics endpoint
+- Workspace summary statistics
+- Project status counts
+- Task status counts
+- Task priority counts
+- Overdue-task tracking
+- Due-today tracking
+- Upcoming task list
+- Tasks assigned to the current user
+- Workspace-scoped analytics authorization
+- Workspace analytics dashboard
+- Task assignee selection during creation
+- Task reassignment during editing
+- Task unassignment
+- Assignment notification integration
+- Analytics and notification query invalidation
+- Loading, empty, and error states
+
+Verification:
+
+- Workspace analytics backend: 7 tests and 36 assertions
+- Full backend suite after Milestone 7: 153 tests and 429 assertions
+- TypeScript build passed
+- Vite production build passed
+- 242 modules transformed
+
 ## Authorization Model
 
 Workspace access is controlled through the following roles:
@@ -330,7 +366,11 @@ General permissions:
 - Owners can fully manage the workspace, members, projects, boards, columns, and tasks.
 - Managers can manage projects, boards, columns, tasks, and workspace members within policy restrictions.
 - Members and viewers can access permitted workspace data but cannot perform protected management operations.
-- Comment authors can modify their own comments according to policy rules.\n- Workspace owners and managers can moderate comments.\n- Notifications are private to the authenticated recipient.\n- Resource nesting is validated so records from another workspace, project, board, column, task, or comment cannot be accessed through mismatched routes.
+- Comment authors can modify their own comments according to policy rules.
+- Workspace owners and managers can moderate comments.
+- Notifications are private to the authenticated recipient.
+- Workspace analytics are available only to workspace members.
+- Resource nesting is validated so records from another workspace, project, board, column, task, or comment cannot be accessed through mismatched routes.
 
 ## Ordering Model
 
@@ -416,10 +456,10 @@ The backend enforces these rules:
 
 ### Backend
 
-`	ext
-146 tests passed
-393 assertions passed
-`
+```text
+153 tests passed
+429 assertions passed
+```
 
 Verified areas include:
 
@@ -439,13 +479,17 @@ Verified areas include:
 - Task assignment notifications
 - Notification API authorization
 - Notification ownership isolation
+- Workspace analytics authorization
+- Workspace analytics scoping
+- Upcoming-task ordering
+- Assigned-to-me filtering
 
 ### Frontend
 
 ```text
 TypeScript build passed
 Vite production build passed
-241 modules transformed
+242 modules transformed
 ```
 
 The latest production build completed successfully.
@@ -456,6 +500,7 @@ Vite reported a non-blocking warning because the main JavaScript chunk exceeded 
 
 - [docs/MILESTONE_5.md](docs/MILESTONE_5.md)
 - [docs/MILESTONE_6.md](docs/MILESTONE_6.md)
+- [docs/MILESTONE_7.md](docs/MILESTONE_7.md)
 
 ## Current Completion State
 
@@ -467,3 +512,4 @@ Completed milestones:
 - Milestone 4 - Kanban Boards and Tasks
 - Milestone 5 - Collaboration and Activity Tracking
 - Milestone 6 - Notifications
+- Milestone 7 - Workspace Analytics and Task Assignment
