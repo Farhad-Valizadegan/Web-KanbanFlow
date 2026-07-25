@@ -23,7 +23,7 @@ class ColumnFactory extends Factory
                 'Done',
             ]),
             'position' => fake()->numberBetween(0, 10),
-            'wip_limit' => fake()->optional()->numberBetween(1, 20),
+            'wip_limit' => null,
         ];
     }
 }
