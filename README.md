@@ -1,8 +1,133 @@
-# Web Kanban Project Management System
+﻿# KanbanFlow
 
-A full-stack project management application built with Laravel, React, TypeScript, MySQL, Tailwind CSS, and dnd-kit.
+A full-stack Kanban project management system built with Laravel, React, TypeScript, MySQL, Tailwind CSS, and dnd-kit.
 
-The application supports authenticated workspace collaboration, project management, Kanban boards, workflow columns, task management, drag-and-drop ordering, WIP limits, role-based authorization, task comments, activity tracking, notifications, and compact board overview mode.
+KanbanFlow provides authenticated workspace collaboration, project management, interactive Kanban boards, task assignment, drag-and-drop ordering, Work in Progress limits, role-based authorization, comments, activity tracking, notifications, and workspace analytics.
+
+## Version
+
+Current release candidate:
+
+```text
+Version 1.0.0
+```
+
+Development status:
+
+```text
+Feature complete
+Backend tests passing
+Frontend lint passing
+Frontend production build passing
+GitHub Actions passing
+```
+
+## Features
+
+### Authentication
+
+- User registration
+- User login and logout
+- Laravel Sanctum SPA authentication
+- Authenticated-user endpoint
+- Persistent sessions
+- Protected frontend routes
+- Protected dashboard
+- Backend and frontend validation
+
+### Workspace Management
+
+- Create, view, update, and delete workspaces
+- Workspace ownership
+- Workspace member management
+- Add and remove members
+- Change member roles
+- Workspace-scoped authorization
+- Owner, manager, member, and viewer roles
+
+### Project Management
+
+- Create, view, update, and delete projects
+- Workspace-scoped project slugs
+- Active, completed, and archived statuses
+- Optional start and due dates
+- Soft deletion
+- Soft-delete slug collision protection
+
+### Kanban Boards
+
+- Create, view, update, and delete boards
+- Project-scoped board slugs
+- Workspace and private board visibility
+- Soft deletion
+- Board position ordering
+- Drag-and-drop board reordering
+- Detailed board mode
+- Compact overview mode
+- Per-board view preference stored locally
+
+### Workflow Columns
+
+- Create, view, update, and delete columns
+- Column position ordering
+- Drag-and-drop column reordering
+- Optional Work in Progress limits
+- Active-task WIP enforcement
+- Completed-task WIP handling
+
+### Task Management
+
+- Create, view, update, and delete tasks
+- Low, medium, high, and urgent priorities
+- Optional descriptions and due dates
+- Task assignment and reassignment
+- Task unassignment
+- Open and completed states
+- Task position ordering
+- Drag-and-drop ordering within columns
+- Drag-and-drop movement between columns
+- Destination-column validation
+- Optimistic frontend updates
+- Rollback after failed movement
+
+### Collaboration
+
+- Task comment creation, listing, editing, and deletion
+- Comment authorship and timestamps
+- Comment authorization and moderation
+- Comment soft deletion
+- Workspace activity logging
+- Structured activity metadata
+- Activity filtering
+- Workspace activity feed
+
+### Notifications
+
+- Database notifications
+- Task assignment notifications
+- Task reassignment notifications
+- Self-assignment notification prevention
+- Duplicate notification prevention
+- Notification listing
+- Unread-only filtering
+- Unread notification count
+- Mark one notification as read
+- Mark all notifications as read
+- Delete notifications
+- Authenticated-user notification isolation
+- Automatic frontend polling
+
+### Workspace Analytics
+
+- Workspace summary statistics
+- Project status counts
+- Task status counts
+- Task priority counts
+- Overdue-task tracking
+- Due-today tracking
+- Upcoming tasks
+- Tasks assigned to the authenticated user
+- Workspace-scoped analytics authorization
 
 ## Technology Stack
 
@@ -10,9 +135,9 @@ The application supports authenticated workspace collaboration, project manageme
 
 - PHP 8.4
 - Laravel 13
-- Laravel Sanctum
+- Laravel Sanctum 4
 - MySQL
-- PHPUnit
+- PHPUnit 12
 
 ### Frontend
 
@@ -27,434 +152,267 @@ The application supports authenticated workspace collaboration, project manageme
 - Zod
 - dnd-kit
 
-## Project Status
-
-### Milestone 1 - Project Foundation
-
-Status: Completed
-
-Completed features:
-
-- Laravel backend setup
-- React and TypeScript frontend setup
-- MySQL database integration
-- Laravel migrations
-- Laravel Sanctum installation
-- Tailwind CSS setup
-- Axios API client
-- TanStack Query setup
-- React Router setup
-- Frontend environment configuration
-- Backend CORS configuration
-- Frontend-to-backend health check
-- Git repository setup
-
-Dependencies installed during this milestone:
-
-#### Backend
-
-- `laravel/framework`
-- `laravel/sanctum`
-- `laravel/tinker`
-- `fakerphp/faker`
-- `mockery/mockery`
-- `phpunit/phpunit`
-- `nunomaduro/collision`
-- `laravel/pint`
-
-#### Frontend
-
-- `react`
-- `react-dom`
-- `typescript`
-- `vite`
-- `@vitejs/plugin-react`
-- `tailwindcss`
-- `@tailwindcss/vite`
-- `axios`
-- `@tanstack/react-query`
-- `react-router-dom`
-- `eslint`
-- `typescript-eslint`
-
-### Milestone 2 - Authentication
-
-Status: Completed
-
-Completed features:
-
-- User registration
-- User login
-- User logout
-- Authenticated user endpoint
-- Session persistence
-- Protected frontend routes
-- Protected dashboard
-- Authentication validation
-- Authentication tests
-
-Dependencies used for this milestone:
-
-#### Backend
-
-- `laravel/sanctum` for SPA authentication
-- `phpunit/phpunit` for authentication feature tests
-- `fakerphp/faker` for test data
-
-#### Frontend
-
-- `axios` for authentication API requests
-- `@tanstack/react-query` for authentication state and server-state caching
-- `react-router-dom` for protected routes and navigation
-- `react-hook-form` for form handling
-- `zod` for validation schemas
-- `@hookform/resolvers` for React Hook Form and Zod integration
-
-### Milestone 3 - Workspace and Project Management
-
-Status: Completed
-
-#### Workspace features
-
-- Workspace creation, listing, viewing, updating, and deletion
-- Workspace ownership and visibility
-- Workspace slug generation
-- Workspace member listing
-- Add and remove workspace members
-- Update workspace member roles
-- Owner, manager, member, and viewer roles
-- Workspace authorization policies
-- Workspace API tests
-- Workspace frontend integration
-
-#### Project features
-
-- Project creation, listing, viewing, updating, and deletion
-- Soft deletion
-- Active, completed, and archived statuses
-- Optional start and due dates
-- Due-date validation
-- Workspace-scoped project slugs
-- Project authorization policies
-- Project API tests
-- Project frontend integration
-- Project empty state
-- Project date formatting
-- Automatic query refresh after creation and deletion
-- Soft-delete slug collision protection
-
-Dependencies used for this milestone:
-
-#### Backend
-
-- `laravel/framework` for models, controllers, policies, validation, routing, migrations, factories, and Eloquent relationships
-- `laravel/sanctum` for authenticated workspace and project API access
-- `phpunit/phpunit` for workspace, member, and project feature tests
-- `fakerphp/faker` for workspace and project factories
-
-#### Frontend
-
-- `axios` for workspace, member, and project API requests
-- `@tanstack/react-query` for queries, mutations, cache invalidation, and optimistic updates
-- `react-router-dom` for dashboard and workspace navigation
-- `react-hook-form` for structured forms
-- `zod` for frontend validation
-- `@hookform/resolvers` for form-schema integration
-- `tailwindcss` for the dashboard, workspace, member, and project interfaces
-
-### Milestone 4 - Kanban Boards and Tasks
-
-Status: Completed
-
-#### Board features
-
-- Board creation, listing, viewing, updating, and deletion
-- Boards scoped to projects
-- Workspace and private visibility
-- Project-scoped board slug generation
-- Soft deletion
-- Soft-delete slug collision protection
-- Board position ordering
-- Dedicated board move endpoint
-- Drag-and-drop board reordering
-- Optimistic frontend board updates
-- Board authorization policies
-- Owner and manager board management permissions
-- Board API tests
-
-#### Column features
-
-- Column creation, listing, viewing, updating, and deletion
-- Columns scoped to boards
-- Column position ordering
-- Dedicated column move endpoint
-- Drag-and-drop column reordering
-- Optimistic frontend column updates
-- Optional WIP limits
-- Column authorization policies
-- Owner and manager column management permissions
-- Column API tests
-
-#### Task features
-
-- Task creation, listing, viewing, updating, and deletion
-- Tasks scoped to columns
-- Low, medium, high, and urgent priorities
-- Optional descriptions
-- Optional due dates
-- Optional assignees
-- Open and completed states
-- Task position ordering
-- Dedicated task move endpoint
-- Drag-and-drop task reordering inside a column
-- Drag-and-drop movement between columns
-- Destination-column validation
-- WIP-limit enforcement
-- Completed-task WIP handling
-- Task authorization policies
-- Owner and manager task management permissions
-- Task API tests
-
-#### Board interface features
-
-- Detailed board mode
-- Compact overview mode
-- Per-board view preference stored in local storage
-- Wider board layout in overview mode
-- Compact columns in overview mode
-- Compact task cards in overview mode
-- Full task details in detailed mode
-- Board drag-and-drop
-- Column drag-and-drop
-- Task drag-and-drop
-- Loading, validation, authorization, and error messages
-- Optimistic ordering updates
-- Cache rollback when movement fails
-
-Dependencies used for this milestone:
-
-#### Backend
-
-- `laravel/framework` for Kanban models, controllers, policies, validation, transactions, ordering, and soft deletion
-- `laravel/sanctum` for authenticated Kanban API access
-- `phpunit/phpunit` for board, column, task, movement, authorization, and WIP-limit feature tests
-- `fakerphp/faker` for Kanban test data
-
-#### Frontend
-
-- `@dnd-kit/core` for drag-and-drop sensors and contexts
-- `@dnd-kit/sortable` for sortable board, column, and task lists
-- `@dnd-kit/utilities` for drag transform styling
-- `axios` for Kanban API requests
-- `@tanstack/react-query` for queries, mutations, invalidation, optimistic updates, and rollback
-- `react-router-dom` for board navigation
-- `tailwindcss` for detailed and overview Kanban interfaces
-
-### Milestone 5 - Collaboration and Activity Tracking
-
-Status: Completed
-
-Detailed documentation:
-
-- [docs/MILESTONE_5.md](docs/MILESTONE_5.md)
-
-Completed features:
-
-- Task comment creation, listing, updating, and deletion
-- Comment authorship and timestamps
-- Comment authorization and moderation
-- Comment soft deletion
-- Nested comment route validation
-- Task comments frontend interface
-- Inline comment editing
-- Workspace activity logging
-- Task creation, update, movement, and deletion activity
-- Structured activity metadata
-- Activity filtering by action and subject type
-- Workspace activity feed frontend
-- Loading, empty, validation, and error states
-
-Verification:
-
-- Task comments backend: 14 tests and 36 assertions
-- Activity logging backend: 7 tests and 30 assertions
-- Full backend suite after Milestone 5: 126 tests and 334 assertions
-- Frontend production builds passed
-
-### Milestone 6 - Notifications
-
-Status: Completed
-
-Detailed documentation:
-
-- [docs/MILESTONE_6.md](docs/MILESTONE_6.md)
-
-Completed features:
-
-- Laravel database notifications
-- Task assignment notifications
-- Task reassignment notifications
-- Self-assignment notification prevention
-- Duplicate notification prevention
-- Notification listing
-- Unread-only filtering
-- Unread count endpoint
-- Mark one notification as read
-- Mark all notifications as read
-- Notification deletion
-- Authenticated-user notification isolation
-- Dashboard notification panel
-- Unread count badge
-- Automatic polling every 30 seconds
-- Loading, empty, error, and session-expiration states
-
-Verification:
-
-- Notification API: 20 tests and 59 assertions
-- Full backend suite after Milestone 6: 146 tests and 393 assertions
-- TypeScript build passed
-- Vite production build passed
-- 241 modules transformed
-
-### Milestone 7 - Workspace Analytics and Task Assignment
-
-Status: Completed
-
-Detailed documentation:
-
-- [docs/MILESTONE_7.md](docs/MILESTONE_7.md)
-
-Completed features:
-
-- Workspace analytics endpoint
-- Workspace summary statistics
-- Project status counts
-- Task status counts
-- Task priority counts
-- Overdue-task tracking
-- Due-today tracking
-- Upcoming task list
-- Tasks assigned to the current user
-- Workspace-scoped analytics authorization
-- Workspace analytics dashboard
-- Task assignee selection during creation
-- Task reassignment during editing
-- Task unassignment
-- Assignment notification integration
-- Analytics and notification query invalidation
-- Loading, empty, and error states
-
-Verification:
-
-- Workspace analytics backend: 7 tests and 36 assertions
-- Full backend suite after Milestone 7: 153 tests and 429 assertions
-- TypeScript build passed
-- Vite production build passed
-- 242 modules transformed
-
-## Authorization Model
-
-Workspace access is controlled through the following roles:
-
-- `owner`
-- `manager`
-- `member`
-- `viewer`
-
-General permissions:
-
-- Owners can fully manage the workspace, members, projects, boards, columns, and tasks.
-- Managers can manage projects, boards, columns, tasks, and workspace members within policy restrictions.
-- Members and viewers can access permitted workspace data but cannot perform protected management operations.
-- Comment authors can modify their own comments according to policy rules.
-- Workspace owners and managers can moderate comments.
-- Notifications are private to the authenticated recipient.
-- Workspace analytics are available only to workspace members.
-- Resource nesting is validated so records from another workspace, project, board, column, task, or comment cannot be accessed through mismatched routes.
-
-## Ordering Model
-
-Boards, columns, and tasks use dedicated move endpoints.
-
-Standard update endpoints do not accept position changes.
-
-Ordering behavior includes:
-
-- One-based positions
-- Position clamping to valid ranges
-- Sequential position normalization
-- Database transactions
-- Row locking during reorder operations
-- Protection against duplicate or inconsistent positions
-- Optimistic frontend updates
-- Automatic query invalidation after successful movement
-- Cache restoration after failed movement
-
-## WIP Limits
-
-Columns can optionally define a Work in Progress limit.
-
-The backend enforces these rules:
-
-- Active tasks cannot be created when the column is full.
-- Active tasks cannot be moved into a full column.
-- Completed tasks do not count toward the active WIP total.
-- A completed task cannot be reopened when doing so would exceed the WIP limit.
-- WIP limits must be positive whole numbers.
-
-## Installed Dependency Inventory
-
-### Backend runtime dependencies
-
-- `php`: `^8.3`
-- `laravel/framework`: `^13.8`
-- `laravel/sanctum`: `^4.0`
-- `laravel/tinker`: `^3.0`
-
-### Backend development dependencies
-
-- `fakerphp/faker`: `^1.23`
-- `laravel/pail`: `^1.2.5`
-- `laravel/pao`: `^1.0.6`
-- `laravel/pint`: `^1.27`
-- `mockery/mockery`: `^1.6`
-- `nunomaduro/collision`: `^8.6`
-- `phpunit/phpunit`: `^12.5.12`
-
-### Frontend runtime dependencies
-
-- `@dnd-kit/core`: `^6.3.1`
-- `@dnd-kit/sortable`: `^10.0.0`
-- `@dnd-kit/utilities`: `^3.2.2`
-- `@hookform/resolvers`: `^5.4.0`
-- `@tailwindcss/vite`: `^4.3.2`
-- `@tanstack/react-query`: `^5.101.2`
-- `axios`: `^1.18.1`
-- `react`: `^19.2.7`
-- `react-dom`: `^19.2.7`
-- `react-hook-form`: `^7.81.0`
-- `react-router-dom`: `^7.18.1`
-- `tailwindcss`: `^4.3.2`
-- `zod`: `^4.4.3`
-
-### Frontend development dependencies
-
-- `@eslint/js`: `^10.0.1`
-- `@types/node`: `^24.13.2`
-- `@types/react`: `^19.2.17`
-- `@types/react-dom`: `^19.2.3`
-- `@vitejs/plugin-react`: `^6.0.3`
-- `eslint`: `^10.6.0`
-- `eslint-plugin-react-hooks`: `^7.1.1`
-- `eslint-plugin-react-refresh`: `^0.5.3`
-- `globals`: `^17.7.0`
-- `typescript`: `~6.0.2`
-- `typescript-eslint`: `^8.62.0`
-- `vite`: `^8.1.1`
-
-## Verification Status
-
-### Backend
+### Development and Automation
+
+- Git
+- GitHub
+- GitHub Actions
+- Composer
+- npm
+- ESLint
+- Laravel Pint
+
+## Project Structure
+
+```text
+Kanban-Project-Management-System/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── backend/
+│   ├── app/
+│   ├── bootstrap/
+│   ├── config/
+│   ├── database/
+│   ├── routes/
+│   ├── tests/
+│   ├── .env.example
+│   └── composer.json
+├── docs/
+│   ├── MILESTONE_5.md
+│   ├── MILESTONE_6.md
+│   ├── MILESTONE_7.md
+│   └── MILESTONE_8.md
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   ├── .env.example
+│   └── package.json
+└── README.md
+```
+
+## Prerequisites
+
+Install the following software before running the application:
+
+- PHP 8.3 or later
+- Composer 2
+- MySQL 8 or MariaDB
+- Node.js 24
+- npm
+- Git
+
+For Windows development, XAMPP can provide PHP and MySQL.
+
+## Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Farhad-Valizadegan/Web-Kanban-Project-Management-System.git
+cd Web-Kanban-Project-Management-System
+```
+
+### 2. Create the Database
+
+Start MySQL and create a database named:
+
+```text
+kanbanflow
+```
+
+Example SQL:
+
+```sql
+CREATE DATABASE kanbanflow
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+```
+
+### 3. Configure the Backend
+
+Enter the backend directory:
+
+```bash
+cd backend
+```
+
+Install PHP dependencies:
+
+```bash
+composer install
+```
+
+Create the local environment file.
+
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Linux or macOS:
+
+```bash
+cp .env.example .env
+```
+
+Generate the Laravel application key:
+
+```bash
+php artisan key:generate
+```
+
+The default local database configuration is:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=kanbanflow
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Update these values in `backend/.env` if your local MySQL configuration is different.
+
+Run the database migrations:
+
+```bash
+php artisan migrate
+```
+
+### 4. Configure the Frontend
+
+Return to the repository root and enter the frontend directory:
+
+```bash
+cd ../frontend
+```
+
+Install JavaScript dependencies:
+
+```bash
+npm install
+```
+
+Create the frontend environment file.
+
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Linux or macOS:
+
+```bash
+cp .env.example .env
+```
+
+The frontend API URL should be:
+
+```env
+VITE_API_URL=http://127.0.0.1:8000
+```
+
+## Running the Application
+
+The backend and frontend must run in separate terminals.
+
+### Backend Server
+
+From the `backend` directory:
+
+```bash
+php artisan serve
+```
+
+The backend will be available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+### Frontend Development Server
+
+From the `frontend` directory:
+
+```bash
+npm run dev
+```
+
+The frontend will normally be available at:
+
+```text
+http://localhost:5173
+```
+
+Open the frontend URL in your browser.
+
+## Backend Commands
+
+Run the complete backend test suite:
+
+```bash
+php artisan test
+```
+
+Clear Laravel configuration and application caches:
+
+```bash
+php artisan optimize:clear
+```
+
+Run pending migrations:
+
+```bash
+php artisan migrate
+```
+
+Rebuild the database for local development:
+
+```bash
+php artisan migrate:fresh
+```
+
+Format backend code:
+
+```bash
+vendor/bin/pint
+```
+
+## Frontend Commands
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Run ESLint:
+
+```bash
+npm run lint
+```
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+## Testing
+
+### Backend Verification
+
+The complete backend suite currently contains:
 
 ```text
 153 tests passed
@@ -477,39 +435,302 @@ Verified areas include:
 - Task comments
 - Activity logging
 - Task assignment notifications
-- Notification API authorization
+- Notification authorization
 - Notification ownership isolation
 - Workspace analytics authorization
 - Workspace analytics scoping
 - Upcoming-task ordering
 - Assigned-to-me filtering
 
-### Frontend
+### Frontend Verification
+
+The frontend verification currently reports:
 
 ```text
+ESLint passed
 TypeScript build passed
 Vite production build passed
 242 modules transformed
 ```
 
-The latest production build completed successfully.
+Route-based code splitting reduced the largest JavaScript bundle from:
 
-Vite reported a non-blocking warning because the main JavaScript chunk exceeded 500 kB after minification.
+```text
+556.69 kB
+159.69 kB gzip
+```
 
-## Documentation
+to:
 
-- [docs/MILESTONE_5.md](docs/MILESTONE_5.md)
-- [docs/MILESTONE_6.md](docs/MILESTONE_6.md)
-- [docs/MILESTONE_7.md](docs/MILESTONE_7.md)
+```text
+314.40 kB
+101.94 kB gzip
+```
 
-## Current Completion State
+The previous Vite large-chunk warning is no longer reported.
 
-Completed milestones:
+## Continuous Integration
 
-- Milestone 1 - Project Foundation
-- Milestone 2 - Authentication
-- Milestone 3 - Workspace and Project Management
-- Milestone 4 - Kanban Boards and Tasks
-- Milestone 5 - Collaboration and Activity Tracking
-- Milestone 6 - Notifications
-- Milestone 7 - Workspace Analytics and Task Assignment
+GitHub Actions configuration is located at:
+
+```text
+.github/workflows/ci.yml
+```
+
+The workflow runs automatically for:
+
+- Pull requests targeting `main`
+- Pushes to `main`
+
+It contains two independent jobs.
+
+### Backend Tests
+
+The backend job:
+
+- Runs on Ubuntu
+- Uses PHP 8.4
+- Installs Composer 2
+- Enables SQLite extensions
+- Restores cached Composer dependencies
+- Installs locked dependencies
+- Creates the Laravel environment file
+- Generates an application key
+- Runs the complete backend test suite
+
+### Frontend Build and Lint
+
+The frontend job:
+
+- Runs on Ubuntu
+- Uses Node.js 24
+- Restores cached npm dependencies
+- Installs dependencies with `npm ci`
+- Runs ESLint
+- Runs the TypeScript and Vite production build
+
+Both GitHub Actions jobs currently pass.
+
+## Authorization Model
+
+Workspace access is controlled through four roles:
+
+- `owner`
+- `manager`
+- `member`
+- `viewer`
+
+General permissions:
+
+- Owners can fully manage workspaces, members, projects, boards, columns, and tasks.
+- Managers can manage projects, boards, columns, tasks, and workspace members within policy restrictions.
+- Members and viewers can access permitted workspace data but cannot perform protected management operations.
+- Comment authors can modify their own comments according to policy rules.
+- Workspace owners and managers can moderate comments.
+- Notifications are private to their authenticated recipient.
+- Workspace analytics are available only to workspace members.
+
+Nested-resource validation prevents records from one workspace, project, board, column, task, or comment from being accessed through a mismatched route.
+
+## Ordering Model
+
+Boards, columns, and tasks use dedicated movement endpoints.
+
+Standard update endpoints do not accept position changes.
+
+Ordering behavior includes:
+
+- One-based positions
+- Position clamping
+- Sequential position normalization
+- Database transactions
+- Row locking during reorder operations
+- Protection against duplicate positions
+- Optimistic frontend updates
+- Query invalidation after successful movement
+- Cache restoration after failed movement
+
+## Work in Progress Limits
+
+Columns can optionally define a Work in Progress limit.
+
+The backend enforces the following rules:
+
+- Active tasks cannot be created when a column is full.
+- Active tasks cannot be moved into a full column.
+- Completed tasks do not count toward the active WIP total.
+- A completed task cannot be reopened when doing so would exceed the limit.
+- WIP limits must be positive whole numbers.
+
+## Frontend Architecture
+
+The frontend uses route-based lazy loading.
+
+The following pages are loaded dynamically:
+
+- Home page
+- Login page
+- Registration page
+- Dashboard page
+- Workspace page
+- Project page
+- Board page
+
+React `Suspense` displays a loading state while route modules are downloaded.
+
+TanStack Query manages:
+
+- Server-state caching
+- Queries and mutations
+- Cache invalidation
+- Optimistic updates
+- Rollback after failed operations
+
+## Milestones
+
+### Milestone 1 – Project Foundation
+
+Status: Completed
+
+- Laravel backend
+- React and TypeScript frontend
+- MySQL integration
+- Laravel Sanctum
+- Tailwind CSS
+- Axios
+- TanStack Query
+- React Router
+- Frontend and backend environment configuration
+- CORS configuration
+- Frontend-to-backend health check
+- Git repository setup
+
+### Milestone 2 – Authentication
+
+Status: Completed
+
+- Registration
+- Login
+- Logout
+- Session persistence
+- Protected routes
+- Protected dashboard
+- Authentication validation and tests
+
+### Milestone 3 – Workspace and Project Management
+
+Status: Completed
+
+- Workspace CRUD
+- Workspace membership
+- Role management
+- Workspace authorization
+- Project CRUD
+- Project statuses and dates
+- Project soft deletion
+- Backend and frontend integration
+
+### Milestone 4 – Kanban Boards and Tasks
+
+Status: Completed
+
+- Board CRUD and ordering
+- Column CRUD and ordering
+- Task CRUD and ordering
+- Drag-and-drop interactions
+- WIP limits
+- Detailed and overview board modes
+- Optimistic updates and rollback
+
+### Milestone 5 – Collaboration and Activity Tracking
+
+Status: Completed
+
+- Task comments
+- Comment authorization
+- Comment moderation
+- Activity logging
+- Activity filtering
+- Workspace activity feed
+
+Detailed documentation:
+
+- [Milestone 5](docs/MILESTONE_5.md)
+
+### Milestone 6 – Notifications
+
+Status: Completed
+
+- Assignment and reassignment notifications
+- Notification listing
+- Unread filtering and counts
+- Mark-as-read operations
+- Notification deletion
+- Notification ownership isolation
+- Dashboard notification panel
+
+Detailed documentation:
+
+- [Milestone 6](docs/MILESTONE_6.md)
+
+### Milestone 7 – Workspace Analytics and Task Assignment
+
+Status: Completed
+
+- Workspace statistics
+- Project, task, and priority counts
+- Overdue and due-today tracking
+- Upcoming tasks
+- Assigned-to-me tasks
+- Task assignment, reassignment, and unassignment
+- Analytics dashboard
+
+Detailed documentation:
+
+- [Milestone 7](docs/MILESTONE_7.md)
+
+### Milestone 8 – Production Readiness and Continuous Integration
+
+Status: Completed
+
+- GitHub Actions workflow
+- Automated backend tests
+- Automated frontend lint and build
+- Composer and npm dependency caching
+- Route-based code splitting
+- Reduced frontend bundle size
+- Successful local and remote CI verification
+
+Detailed documentation:
+
+- [Milestone 8](docs/MILESTONE_8.md)
+
+## Milestone Completion
+
+All planned Version 1.0.0 milestones are complete:
+
+- Milestone 1 – Project Foundation
+- Milestone 2 – Authentication
+- Milestone 3 – Workspace and Project Management
+- Milestone 4 – Kanban Boards and Tasks
+- Milestone 5 – Collaboration and Activity Tracking
+- Milestone 6 – Notifications
+- Milestone 7 – Workspace Analytics and Task Assignment
+- Milestone 8 – Production Readiness and Continuous Integration
+
+## Security
+
+- Laravel Sanctum protects authenticated API endpoints.
+- Laravel policies enforce resource authorization.
+- Request validation protects API input.
+- Nested-route ownership is validated.
+- Passwords are securely hashed by Laravel.
+- Notification records are isolated by authenticated recipient.
+- Environment files containing secrets are excluded from Git.
+- Example environment files contain no private credentials.
+
+## License
+
+Copyright © 2026 Farhad Valizadegan. All rights reserved.
+
+This repository and its source code are provided solely for portfolio review. No permission is granted to copy, use, modify, distribute, publish, sublicense, sell, or create derivative works from any part of this project without the author's prior written permission.
