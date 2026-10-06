@@ -1,9 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "farhad-valizadegan/kanbanflow",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "KanbanFlow backend API for collaborative project management.",
+    "keywords": [
+        "kanbanflow",
+        "kanban",
+        "project-management",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.3",

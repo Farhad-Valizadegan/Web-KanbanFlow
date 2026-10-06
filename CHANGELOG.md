@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Standardize the product name as **KanbanFlow** in browser titles, application defaults, package metadata, and component documentation.
+- Rename the GitHub repository and local project folder to **Web-KanbanFlow**, and update repository/setup links.
+- Preserve release history and dependency versions.
+
+
 ## 1.0.1 — 2026-10-06
 
 Patch release containing the local code-review fixes, without dependency upgrades or database migrations.

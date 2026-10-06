@@ -167,7 +167,7 @@ Patch-release changes and known issues are documented in [CHANGELOG.md](CHANGELO
 ## Project Structure
 
 ```text
-Kanban-Project-Management-System/
+Web-KanbanFlow/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml
@@ -211,8 +211,8 @@ For Windows development, XAMPP can provide PHP and MySQL.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Farhad-Valizadegan/Web-Kanban-Project-Management-System.git
-cd Web-Kanban-Project-Management-System
+git clone https://github.com/Farhad-Valizadegan/Web-KanbanFlow.git
+cd Web-KanbanFlow
 ```
 
 ### 2. Create the Database
