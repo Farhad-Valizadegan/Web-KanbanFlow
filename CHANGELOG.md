@@ -1,11 +1,36 @@
 # Changelog
 
-## Unreleased
+## 1.0.2 — 2026-10-06
+
+Patch release for local session authentication and dashboard analytics, including the branding changes made since v1.0.1. No dependency upgrades or database migrations.
+
+### Fixed
+
+- Align default frontend/backend hosts on localhost and explicitly configure the frontend URL and Sanctum stateful domains, including port 5173.
+- Refresh workspace analytics after project creation, editing, and deletion.
+- Add regression coverage for trusted SPA origins, login/logout, and registration sessions.
+
+### Validation
+
+- Backend: 163 tests and 470 assertions passed.
+- Frontend lint, TypeScript checks, and production build passed.
+- Isolated browser checks passed for login, live project totals, persisted keyboard task reordering, and WIP-limit rejection/rollback.
+- Disposable MySQL contention checks passed for WIP limits and column position allocation with four competing requests each.
+
+### Remaining issues
+
+- Manager remove/re-add role changes remain possible pending a membership-permission decision.
+- Renaming the local folder to Web-KanbanFlow is still blocked by an open process. The GitHub repository has been renamed.
+
+### Upgrade
+
+Align APP_URL and VITE_API_URL on http://localhost:8000, set FRONTEND_URL=http://localhost:5173 and SANCTUM_STATEFUL_DOMAINS=localhost:5173,localhost:8000, clear the backend configuration cache, and restart development servers. Use deployment-specific URLs in production.
+
 
 ### Changed
 
 - Standardize the product name as **KanbanFlow** in browser titles, application defaults, package metadata, and component documentation.
-- Rename the GitHub repository and local project folder to **Web-KanbanFlow**, and update repository/setup links.
+- Rename the GitHub repository to **Web-KanbanFlow** and update repository/setup links; the local folder rename is pending.
 - Preserve release history and dependency versions.
 
 

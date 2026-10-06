@@ -51,9 +51,10 @@ function CreateProjectForm({
             setForm(initialFormState);
             setErrorMessage(null);
 
-            await queryClient.invalidateQueries({
-                queryKey: ['projects', workspaceId],
-            });
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['projects', workspaceId] }),
+                queryClient.invalidateQueries({ queryKey: ['workspace-analytics', workspaceId] }),
+            ]);
         },
 
         onError: (

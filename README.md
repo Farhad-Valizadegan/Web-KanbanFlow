@@ -1,4 +1,4 @@
-﻿# KanbanFlow
+# KanbanFlow
 
 A full-stack Kanban project management system built with Laravel, React, TypeScript, MySQL, Tailwind CSS, and dnd-kit.
 
@@ -9,7 +9,7 @@ KanbanFlow provides authenticated workspace collaboration, project management, i
 Current version:
 
 ```text
-Version 1.0.1
+Version 1.0.2
 ```
 
 Development status:
@@ -315,7 +315,7 @@ cp .env.example .env
 The frontend API URL should be:
 
 ```env
-VITE_API_URL=http://127.0.0.1:8000
+VITE_API_URL=http://localhost:8000
 ```
 
 ## Running the Application
@@ -333,7 +333,7 @@ php artisan serve
 The backend will be available at:
 
 ```text
-http://127.0.0.1:8000
+http://localhost:8000
 ```
 
 ### Frontend Development Server
