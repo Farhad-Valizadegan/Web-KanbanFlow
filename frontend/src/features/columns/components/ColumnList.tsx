@@ -1,7 +1,9 @@
+import { useWorkspacePermissions } from '../../workspaces/useWorkspacePermissions';
 import {
     closestCorners,
     DndContext,
     PointerSensor,
+    KeyboardSensor,
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
@@ -10,6 +12,7 @@ import {
     arrayMove,
     horizontalListSortingStrategy,
     SortableContext,
+    sortableKeyboardCoordinates,
     useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -102,6 +105,7 @@ function SortableColumnCard({
         attributes,
         listeners,
         setNodeRef,
+        setActivatorNodeRef,
         transform,
         transition,
         isDragging,
@@ -178,6 +182,7 @@ function SortableColumnCard({
 
             <button
                 type="button"
+                ref={setActivatorNodeRef}
                 aria-label={`Move ${column.name} column`}
                 title="Drag to reorder column"
                 disabled={disabled}
@@ -282,6 +287,7 @@ function ColumnList({
     viewMode,
 }: ColumnListProps) {
     const queryClient = useQueryClient();
+    const { canManage } = useWorkspacePermissions(workspaceId);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -289,6 +295,7 @@ function ColumnList({
                 distance: 8,
             },
         }),
+        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
     );
 
     const [editingColumnId, setEditingColumnId] =
@@ -454,6 +461,7 @@ function ColumnList({
     });
 
     const moveTaskMutation = useMutation({
+        mutationKey: ['move-task', workspaceId, projectId, boardId],
         mutationFn: ({
             sourceColumnId,
             destinationColumnId,
@@ -473,22 +481,42 @@ function ColumnList({
                 },
             ),
 
-        onSuccess: async () => {
-            setErrorMessage(null);
-
-            await queryClient.invalidateQueries({
-                queryKey: [
-                    'tasks',
-                    workspaceId,
-                    projectId,
-                    boardId,
-                ],
-            });
+        onMutate: async ({ sourceColumnId, destinationColumnId, taskId, position }) => {
+            const prefix = ['tasks', workspaceId, projectId, boardId];
+            await queryClient.cancelQueries({ queryKey: prefix });
+            const snapshots = queryClient.getQueriesData<Task[]>({ queryKey: prefix });
+            const source = queryClient.getQueryData<Task[]>(taskQueryKey(sourceColumnId));
+            const destination = queryClient.getQueryData<Task[]>(taskQueryKey(destinationColumnId));
+            const task = source?.find(item => item.id === taskId);
+            if (task && source && destination) {
+                const remaining = source.filter(item => item.id !== taskId);
+                const target = sourceColumnId === destinationColumnId ? remaining : [...destination];
+                target.splice(Math.min(position - 1, target.length), 0, { ...task, column_id: destinationColumnId });
+                const normalize = (items: Task[]) => items.map((item, index) => ({ ...item, position: index + 1 }));
+                if (sourceColumnId !== destinationColumnId) {
+                    queryClient.setQueryData(taskQueryKey(sourceColumnId), normalize(remaining));
+                }
+                queryClient.setQueryData(taskQueryKey(destinationColumnId), normalize(target));
+            }
+            return { snapshots };
+        },
+        onSuccess: () => setErrorMessage(null),
+        onSettled: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({ queryKey: ['tasks', workspaceId, projectId, boardId] }),
+                queryClient.invalidateQueries({ queryKey: ['workspace-analytics', workspaceId] }),
+                queryClient.invalidateQueries({ queryKey: ['workspace-activities', workspaceId] }),
+            ]);
         },
 
         onError: (
             error: AxiosError<ApiErrorResponse>,
+            _variables,
+            context,
         ) => {
+            for (const [key, data] of context?.snapshots ?? []) {
+                queryClient.setQueryData(key, data);
+            }
             if (error.response?.status === 403) {
                 setErrorMessage(
                     'You do not have permission to move this task.',
@@ -1114,7 +1142,7 @@ function ColumnList({
                                                         column,
                                                     )
                                                 }
-                                                disabled={
+                                                disabled={!canManage ||
                                                     updateMutation.isPending
                                                 }
                                                 className="border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -1129,7 +1157,7 @@ function ColumnList({
                                                 onClick={
                                                     cancelEditing
                                                 }
-                                                disabled={
+                                                disabled={!canManage ||
                                                     updateMutation.isPending
                                                 }
                                                 className="border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -1157,7 +1185,7 @@ function ColumnList({
                                     viewMode={
                                         viewMode
                                     }
-                                    disabled={
+                                    disabled={!canManage ||
                                         interactionDisabled
                                     }
                                     isDeleting={

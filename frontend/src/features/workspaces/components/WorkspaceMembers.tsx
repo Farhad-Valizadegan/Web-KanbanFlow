@@ -1,3 +1,5 @@
+import type { AxiosError } from 'axios';
+import { useWorkspacePermissions } from '../useWorkspacePermissions';
 import { useState } from 'react';
 import {
     useMutation,
@@ -24,12 +26,23 @@ function WorkspaceMembers({
     workspace,
 }: WorkspaceMembersProps) {
     const queryClient = useQueryClient();
+    const { canManage, isOwner } = useWorkspacePermissions(workspace.id);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    function onError(error: AxiosError<{ message?: string; errors?: Record<string, string[]> }>) {
+        setErrorMessage(error.response?.status === 403
+            ? 'You do not have permission to perform this action.'
+            : error.response?.status === 401
+              ? 'Your session has expired. Please sign in again.'
+              : Object.values(error.response?.data.errors ?? {})[0]?.[0]
+                ?? error.response?.data.message ?? 'Unable to update workspace members. Please try again.');
+    }
 
     const [email, setEmail] = useState('');
     const [role, setRole] =
         useState<EditableRole>('member');
 
     const refreshWorkspace = async () => {
+        setErrorMessage(null);
         await queryClient.invalidateQueries({
             queryKey: ['workspace', workspace.id],
         });
@@ -45,6 +58,7 @@ function WorkspaceMembers({
                 email,
                 role,
             }),
+        onError,
         onSuccess: async () => {
             setEmail('');
             setRole('member');
@@ -67,6 +81,7 @@ function WorkspaceMembers({
                     role: nextRole,
                 },
             ),
+        onError,
         onSuccess: refreshWorkspace,
     });
 
@@ -76,6 +91,7 @@ function WorkspaceMembers({
                 workspace.id,
                 member.id,
             ),
+        onError,
         onSuccess: refreshWorkspace,
     });
 
@@ -136,8 +152,7 @@ function WorkspaceMembers({
 
                     <button
                         type="submit"
-                        disabled={
-                            addMemberMutation.isPending ||
+                        disabled={!canManage || addMemberMutation.isPending ||
                             email.trim() === ''
                         }
                         className="border border-blue-500 bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -149,15 +164,11 @@ function WorkspaceMembers({
                 </form>
             </div>
 
-            {addMemberMutation.isError && (
-                <p className="mt-4 text-sm text-red-400">
-                    Unable to add the member. Confirm that the email belongs to a registered user who is not already a workspace member.
-                </p>
-            )}
+            {errorMessage && (<p role="alert" className="mt-4 text-sm text-red-400">{errorMessage}</p>)}
 
             <div className="mt-6 space-y-3">
                 {workspace.members?.map((member) => {
-                    const isOwner =
+                    const memberIsOwner =
                         member.pivot.role === 'owner';
 
                     return (
@@ -176,7 +187,7 @@ function WorkspaceMembers({
                             </div>
 
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                                {isOwner ? (
+                                {memberIsOwner ? (
                                     <span className="text-sm uppercase tracking-wide text-slate-400">
                                         Owner
                                     </span>
@@ -187,8 +198,7 @@ function WorkspaceMembers({
                                                 member.pivot
                                                     .role
                                             }
-                                            disabled={
-                                                updateRoleMutation.isPending
+                                            disabled={!isOwner || updateRoleMutation.isPending
                                             }
                                             onChange={(
                                                 event,
@@ -217,8 +227,7 @@ function WorkspaceMembers({
 
                                         <button
                                             type="button"
-                                            disabled={
-                                                removeMemberMutation.isPending
+                                            disabled={!canManage || removeMemberMutation.isPending
                                             }
                                             onClick={() =>
                                                 removeMemberMutation.mutate(

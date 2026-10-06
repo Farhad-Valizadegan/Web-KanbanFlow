@@ -1,3 +1,4 @@
+import { useWorkspacePermissions } from '../features/workspaces/useWorkspacePermissions';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
@@ -18,6 +19,7 @@ function BoardPage() {
 
     const numericWorkspaceId =
         Number(workspaceId);
+    const { canManage } = useWorkspacePermissions(numericWorkspaceId);
 
     const numericProjectId =
         Number(projectId);
@@ -241,7 +243,7 @@ function BoardPage() {
                         </div>
                     </div>
 
-                    <CreateColumnForm
+                    {canManage && (<CreateColumnForm
                         workspaceId={
                             numericWorkspaceId
                         }
@@ -249,7 +251,7 @@ function BoardPage() {
                             numericProjectId
                         }
                         boardId={numericBoardId}
-                    />
+                    />)}
 
                     <ColumnList
                         workspaceId={

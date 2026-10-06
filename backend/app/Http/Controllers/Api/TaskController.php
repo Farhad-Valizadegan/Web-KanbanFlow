@@ -20,8 +20,7 @@ class TaskController extends Controller
 {
     public function __construct(
         private readonly ActivityLogger $activityLogger
-    ) {
-    }
+    ) {}
 
     public function index(
         Workspace $workspace,
@@ -109,7 +108,7 @@ class TaskController extends Controller
             $column,
             $validated
         ): Task {
-            $column->refresh();
+            $column = Column::query()->whereKey($column->id)->lockForUpdate()->firstOrFail();
 
             $this->ensureColumnCanAcceptActiveTask(
                 $column,
@@ -118,20 +117,15 @@ class TaskController extends Controller
 
             $task = $column->tasks()->create([
                 'created_by' => $request->user()->id,
-                'assigned_to' =>
-                    $validated['assigned_to'] ?? null,
+                'assigned_to' => $validated['assigned_to'] ?? null,
                 'title' => $validated['title'],
-                'description' =>
-                    $validated['description'] ?? null,
+                'description' => $validated['description'] ?? null,
                 'priority' => $validated['priority'],
-                'position' =>
-                    (int) $column
-                        ->tasks()
-                        ->max('position') + 1,
-                'due_date' =>
-                    $validated['due_date'] ?? null,
-                'completed_at' =>
-                    $validated['completed_at'] ?? null,
+                'position' => (int) $column
+                    ->tasks()
+                    ->max('position') + 1,
+                'due_date' => $validated['due_date'] ?? null,
+                'completed_at' => $validated['completed_at'] ?? null,
             ]);
 
             $this->activityLogger->log(
@@ -142,10 +136,9 @@ class TaskController extends Controller
                 $task,
                 $task->title,
                 [
-                    'task' =>
-                        $this->taskActivityState(
-                            $task
-                        ),
+                    'task' => $this->taskActivityState(
+                        $task
+                    ),
                 ]
             );
 
@@ -271,8 +264,9 @@ class TaskController extends Controller
             $column,
             $validated
         ): void {
-            $task->refresh();
-            $column->refresh();
+            $column = Column::query()->whereKey($column->id)->lockForUpdate()->firstOrFail();
+            $task = Task::query()->whereKey($task->id)->lockForUpdate()->firstOrFail();
+            abort_unless($task->column_id === $column->id, 409, 'The task has moved. Refresh the board and try again.');
 
             $previousAssigneeId =
                 $task->assigned_to;
@@ -309,10 +303,9 @@ class TaskController extends Controller
                 $task->title,
                 [
                     'before' => $before,
-                    'after' =>
-                        $this->taskActivityState(
-                            $task
-                        ),
+                    'after' => $this->taskActivityState(
+                        $task
+                    ),
                 ]
             );
 
@@ -398,13 +391,17 @@ class TaskController extends Controller
             $destinationColumn,
             $validated
         ): void {
-            $task->refresh();
+            $lockedColumns = Column::query()->whereIn('id', [$column->id, $destinationColumn->id])
+                ->orderBy('id')->lockForUpdate()->get()->keyBy('id');
+            $column = $lockedColumns->get($column->id);
+            $destinationColumn = $lockedColumns->get($destinationColumn->id);
+            abort_unless($column && $destinationColumn, 404);
+            $task = Task::query()->whereKey($task->id)->lockForUpdate()->firstOrFail();
+            abort_unless($task->column_id === $column->id, 409, 'The task has moved. Refresh the board and try again.');
 
             $before = [
-                'column_id' =>
-                    $task->column_id,
-                'position' =>
-                    $task->position,
+                'column_id' => $task->column_id,
+                'position' => $task->position,
             ];
 
             if (
@@ -442,10 +439,8 @@ class TaskController extends Controller
                 [
                     'before' => $before,
                     'after' => [
-                        'column_id' =>
-                            $task->column_id,
-                        'position' =>
-                            $task->position,
+                        'column_id' => $task->column_id,
+                        'position' => $task->position,
                     ],
                 ]
             );
@@ -484,8 +479,12 @@ class TaskController extends Controller
         DB::transaction(function () use (
             $request,
             $workspace,
+            $column,
             $task
         ): void {
+            Column::query()->whereKey($column->id)->lockForUpdate()->firstOrFail();
+            $task = Task::query()->whereKey($task->id)->lockForUpdate()->firstOrFail();
+            abort_unless($task->column_id === $column->id, 409, 'The task has moved. Refresh the board and try again.');
             $taskState =
                 $this->taskActivityState(
                     $task
@@ -596,8 +595,7 @@ class TaskController extends Controller
         int $columnId
     ): void {
         foreach (
-            array_values($taskIds)
-            as $index => $taskId
+            array_values($taskIds) as $index => $taskId
         ) {
             Task::query()
                 ->whereKey($taskId)
@@ -740,24 +738,15 @@ class TaskController extends Controller
         Task $task
     ): array {
         return [
-            'column_id' =>
-                $task->column_id,
-            'created_by' =>
-                $task->created_by,
-            'assigned_to' =>
-                $task->assigned_to,
-            'title' =>
-                $task->title,
-            'description' =>
-                $task->description,
-            'priority' =>
-                $task->priority,
-            'position' =>
-                $task->position,
-            'due_date' =>
-                $task->due_date,
-            'completed_at' =>
-                $task->completed_at,
+            'column_id' => $task->column_id,
+            'created_by' => $task->created_by,
+            'assigned_to' => $task->assigned_to,
+            'title' => $task->title,
+            'description' => $task->description,
+            'priority' => $task->priority,
+            'position' => $task->position,
+            'due_date' => $task->due_date,
+            'completed_at' => $task->completed_at,
         ];
     }
 }

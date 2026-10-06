@@ -23,10 +23,7 @@ class BoardFactory extends Factory
             'name' => Str::title($name),
             'slug' => Str::slug($name),
             'description' => fake()->optional()->paragraph(),
-            'visibility' => fake()->randomElement([
-                'workspace',
-                'private',
-            ]),
+            'visibility' => 'workspace',
             'position' => fake()->numberBetween(0, 10),
         ];
     }

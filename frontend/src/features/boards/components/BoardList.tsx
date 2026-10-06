@@ -1,7 +1,9 @@
+import { useWorkspacePermissions } from '../../workspaces/useWorkspacePermissions';
 import {
     closestCenter,
     DndContext,
     PointerSensor,
+    KeyboardSensor,
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
@@ -12,6 +14,7 @@ import type {
 import {
     arrayMove,
     SortableContext,
+    sortableKeyboardCoordinates,
     useSortable,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
@@ -23,6 +26,7 @@ import {
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import type {
+    Ref,
     CSSProperties,
     SyntheticEvent,
 } from 'react';
@@ -72,6 +76,8 @@ interface SortableBoardCardProps {
 }
 
 interface DragHandleProps {
+    handleRef: Ref<HTMLButtonElement>;
+    disabled: boolean;
     attributes: DraggableAttributes;
     listeners:
         | Record<string, unknown>
@@ -79,6 +85,8 @@ interface DragHandleProps {
 }
 
 function DragHandle({
+    handleRef,
+    disabled,
     attributes,
     listeners,
 }: DragHandleProps) {
@@ -91,6 +99,8 @@ function DragHandle({
     return (
         <button
             type="button"
+            ref={handleRef}
+            disabled={disabled}
             aria-label="Drag board"
             title="Drag to reorder"
             onClick={stopPropagation}
@@ -116,6 +126,7 @@ function SortableBoardCard({
         attributes,
         listeners,
         setNodeRef,
+        setActivatorNodeRef,
         transform,
         transition,
         isDragging,
@@ -178,6 +189,8 @@ function SortableBoardCard({
 
             <div className="mt-6 flex flex-wrap gap-3 border-t border-slate-800 pt-4">
                 <DragHandle
+                    handleRef={setActivatorNodeRef}
+                    disabled={disabled}
                     attributes={attributes}
                     listeners={listeners}
                 />
@@ -213,6 +226,7 @@ function BoardList({
     projectId,
 }: BoardListProps) {
     const queryClient = useQueryClient();
+    const { canManage } = useWorkspacePermissions(workspaceId);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -220,6 +234,7 @@ function BoardList({
                 distance: 8,
             },
         }),
+        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
     );
 
     const [editingBoardId, setEditingBoardId] =
@@ -751,7 +766,7 @@ function BoardList({
                                                         board,
                                                     )
                                                 }
-                                                disabled={
+                                                disabled={!canManage ||
                                                     updateMutation.isPending
                                                 }
                                                 className="border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -766,7 +781,7 @@ function BoardList({
                                                 onClick={
                                                     cancelEditing
                                                 }
-                                                disabled={
+                                                disabled={!canManage ||
                                                     updateMutation.isPending
                                                 }
                                                 className="border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -788,7 +803,7 @@ function BoardList({
                                     projectId={
                                         projectId
                                     }
-                                    disabled={
+                                    disabled={!canManage ||
                                         interactionDisabled
                                     }
                                     isDeleting={

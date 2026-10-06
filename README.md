@@ -6,10 +6,10 @@ KanbanFlow provides authenticated workspace collaboration, project management, i
 
 ## Version
 
-Current release candidate:
+Current version:
 
 ```text
-Version 1.0.0
+Version 1.0.1
 ```
 
 Development status:
@@ -19,8 +19,10 @@ Feature complete
 Backend tests passing
 Frontend lint passing
 Frontend production build passing
-GitHub Actions passing
+GitHub Actions configured for pushes and pull requests
 ```
+
+Patch-release changes and known issues are documented in [CHANGELOG.md](CHANGELOG.md).
 
 ## Features
 
@@ -415,8 +417,8 @@ npm run preview
 The complete backend suite currently contains:
 
 ```text
-153 tests passed
-429 assertions passed
+160 tests passed
+459 assertions passed
 ```
 
 Verified areas include:

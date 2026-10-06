@@ -9,15 +9,15 @@ class BoardPolicy
 {
     public function view(User $user, Board $board): bool
     {
-        return $board->project
-            ->workspace
-            ->members()
-            ->where('users.id', $user->id)
-            ->exists();
+        return Board::query()->visibleTo($user)->whereKey($board->id)->exists();
     }
 
     public function update(User $user, Board $board): bool
     {
+        if (! $this->view($user, $board)) {
+            return false;
+        }
+
         $workspace = $board->project->workspace;
 
         if ($workspace->owner_id === $user->id) {

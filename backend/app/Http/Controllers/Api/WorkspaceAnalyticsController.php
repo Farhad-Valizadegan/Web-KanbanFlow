@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Board;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Workspace;
@@ -45,6 +46,7 @@ class WorkspaceAnalyticsController extends Controller
         $today = now()->startOfDay();
 
         $workspaceTaskQuery = Task::query()
+            ->whereHas('column.board', fn (Builder $query) => $query->visibleTo($request->user()))
             ->whereHas(
                 'column.board.project',
                 function (
@@ -200,28 +202,19 @@ class WorkspaceAnalyticsController extends Controller
         return response()->json([
             'data' => [
                 'summary' => [
-                    'members' =>
-                        $workspace
-                            ->members()
-                            ->count(),
-                    'projects' =>
-                        $workspace
-                            ->projects()
-                            ->count(),
-                    'boards' =>
-                        $workspace
-                            ->projects()
-                            ->withCount('boards')
-                            ->get()
-                            ->sum('boards_count'),
+                    'members' => $workspace
+                        ->members()
+                        ->count(),
+                    'projects' => $workspace
+                        ->projects()
+                        ->count(),
+                    'boards' => Board::query()->visibleTo($request->user())
+                        ->whereHas('project', fn (Builder $query) => $query->where('workspace_id', $workspace->id))->count(),
                     'tasks' => $totalTasks,
                     'open_tasks' => $openTasks,
-                    'completed_tasks' =>
-                        $completedTasks,
-                    'overdue_tasks' =>
-                        $overdueTasks,
-                    'due_today_tasks' =>
-                        $dueTodayTasks,
+                    'completed_tasks' => $completedTasks,
+                    'overdue_tasks' => $overdueTasks,
+                    'due_today_tasks' => $dueTodayTasks,
                 ],
                 'projects_by_status' => [
                     'active' => (int) (
@@ -242,12 +235,9 @@ class WorkspaceAnalyticsController extends Controller
                 ],
                 'tasks_by_status' => [
                     'open' => $openTasks,
-                    'completed' =>
-                        $completedTasks,
-                    'overdue' =>
-                        $overdueTasks,
-                    'due_today' =>
-                        $dueTodayTasks,
+                    'completed' => $completedTasks,
+                    'overdue' => $overdueTasks,
+                    'due_today' => $dueTodayTasks,
                 ],
                 'tasks_by_priority' => [
                     'low' => (int) (
@@ -271,10 +261,8 @@ class WorkspaceAnalyticsController extends Controller
                         ] ?? 0
                     ),
                 ],
-                'upcoming_tasks' =>
-                    $upcomingTasks,
-                'assigned_to_me' =>
-                    $assignedTasks,
+                'upcoming_tasks' => $upcomingTasks,
+                'assigned_to_me' => $assignedTasks,
             ],
         ]);
     }

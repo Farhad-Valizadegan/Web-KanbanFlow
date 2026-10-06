@@ -26,8 +26,8 @@ class TaskCommentPolicy
         User $user,
         TaskComment $taskComment
     ): bool {
-        return $taskComment->user_id ===
-            $user->id;
+        return $this->belongsToWorkspace($user, $taskComment)
+            && $taskComment->user_id === $user->id;
     }
 
     public function delete(

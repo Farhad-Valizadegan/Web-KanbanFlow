@@ -1,3 +1,4 @@
+import { useWorkspacePermissions } from '../features/workspaces/useWorkspacePermissions';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
 import CreateProjectForm from '../features/projects/components/CreateProjectForm';
@@ -12,6 +13,7 @@ function WorkspacePage() {
 
     const numericWorkspaceId =
         Number(workspaceId);
+    const { canManage } = useWorkspacePermissions(numericWorkspaceId);
 
     const workspaceQuery = useQuery({
         queryKey: [
@@ -123,11 +125,11 @@ function WorkspacePage() {
                         </p>
                     </div>
 
-                    <CreateProjectForm
+                    {canManage && (<CreateProjectForm
                         workspaceId={
                             numericWorkspaceId
                         }
-                    />
+                    />)}
 
                     <ProjectList
                         workspaceId={

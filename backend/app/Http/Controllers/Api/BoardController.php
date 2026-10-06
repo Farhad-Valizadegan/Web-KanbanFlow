@@ -27,6 +27,7 @@ class BoardController extends Controller
 
         $boards = $project
             ->boards()
+            ->visibleTo($request->user())
             ->with('creator')
             ->orderBy('position')
             ->orderBy('id')
@@ -65,28 +66,28 @@ class BoardController extends Controller
             ],
         ]);
 
-        $board = $project->boards()->create([
-            'created_by' => $request->user()->id,
-            'name' => $validated['name'],
-            'slug' => $this->generateUniqueSlug(
-                $project,
-                $validated['name']
-            ),
-            'description' =>
-                $validated['description'] ?? null,
-            'visibility' =>
-                $validated['visibility'],
-            'position' =>
-                (int) $project
+        $board = DB::transaction(function () use ($project, $request, $validated): Board {
+            Project::query()->whereKey($project->id)->lockForUpdate()->firstOrFail();
+
+            return $project->boards()->create([
+                'created_by' => $request->user()->id,
+                'name' => $validated['name'],
+                'slug' => $this->generateUniqueSlug(
+                    $project,
+                    $validated['name']
+                ),
+                'description' => $validated['description'] ?? null,
+                'visibility' => $validated['visibility'],
+                'position' => (int) $project
                     ->boards()
                     ->max('position') + 1,
-        ]);
+            ]);
+        });
 
         $board->load('creator');
 
         return response()->json([
-            'message' =>
-                'Board created successfully.',
+            'message' => 'Board created successfully.',
             'data' => $board,
         ], 201);
     }
@@ -102,7 +103,7 @@ class BoardController extends Controller
             $board
         );
 
-        $this->authorize('view', $project);
+        $this->authorize('view', $board);
 
         $board->load('creator');
 
@@ -165,8 +166,7 @@ class BoardController extends Controller
         $board->load('creator');
 
         return response()->json([
-            'message' =>
-                'Board updated successfully.',
+            'message' => 'Board updated successfully.',
             'data' => $board,
         ]);
     }
@@ -198,6 +198,7 @@ class BoardController extends Controller
             $board,
             $validated
         ): void {
+            Project::query()->whereKey($project->id)->lockForUpdate()->firstOrFail();
             $board->refresh();
 
             $boardIds = $project
@@ -231,8 +232,7 @@ class BoardController extends Controller
         $board->load('creator');
 
         return response()->json([
-            'message' =>
-                'Board moved successfully.',
+            'message' => 'Board moved successfully.',
             'data' => $board,
         ]);
     }
@@ -250,11 +250,14 @@ class BoardController extends Controller
 
         $this->authorize('update', $project);
 
-        $board->delete();
+        DB::transaction(function () use ($project, $board): void {
+            Project::query()->whereKey($project->id)->lockForUpdate()->firstOrFail();
+            $board->delete();
+            $this->applyBoardPositions($project->boards()->orderBy('position')->orderBy('id')->pluck('id')->all(), $project->id);
+        });
 
         return response()->json([
-            'message' =>
-                'Board deleted successfully.',
+            'message' => 'Board deleted successfully.',
         ]);
     }
 
@@ -263,8 +266,7 @@ class BoardController extends Controller
         int $projectId
     ): void {
         foreach (
-            array_values($boardIds)
-            as $index => $boardId
+            array_values($boardIds) as $index => $boardId
         ) {
             Board::query()
                 ->whereKey($boardId)
@@ -323,10 +325,9 @@ class BoardController extends Controller
                 ->withTrashed()
                 ->when(
                     $ignoredBoard !== null,
-                    fn ($query) =>
-                        $query->whereKeyNot(
-                            $ignoredBoard->id
-                        )
+                    fn ($query) => $query->whereKeyNot(
+                        $ignoredBoard->id
+                    )
                 )
                 ->where('slug', $slug)
                 ->exists()

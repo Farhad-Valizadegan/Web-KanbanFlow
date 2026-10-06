@@ -1,3 +1,4 @@
+import { useWorkspacePermissions } from '../../workspaces/useWorkspacePermissions';
 import { useDroppable } from '@dnd-kit/core';
 import {
     SortableContext,
@@ -5,6 +6,7 @@ import {
 } from '@dnd-kit/sortable';
 import {
     useMutation,
+    useIsMutating,
     useQuery,
     useQueryClient,
 } from '@tanstack/react-query';
@@ -78,6 +80,8 @@ function TaskList({
     viewMode,
 }: TaskListProps) {
     const queryClient = useQueryClient();
+    const { canManage } = useWorkspacePermissions(workspaceId);
+    const isTaskMoving = useIsMutating({ mutationKey: ['move-task', workspaceId, projectId, boardId] }) > 0;
 
     const isOverview =
         viewMode === 'overview';
@@ -623,7 +627,7 @@ function TaskList({
                                                             }),
                                                         )
                                                     }
-                                                    disabled={
+                                                    disabled={!canManage || isTaskMoving ||
                                                         membersQuery.isPending ||
                                                         membersQuery.isError
                                                     }
@@ -781,7 +785,7 @@ function TaskList({
                                                             task,
                                                         )
                                                     }
-                                                    disabled={
+                                                    disabled={!canManage || isTaskMoving ||
                                                         updateMutation.isPending ||
                                                         membersQuery.isPending
                                                     }
@@ -797,7 +801,7 @@ function TaskList({
                                                     onClick={
                                                         cancelEditing
                                                     }
-                                                    disabled={
+                                                    disabled={!canManage || isTaskMoving ||
                                                         updateMutation.isPending
                                                     }
                                                     className="border border-slate-700 px-3 py-2 text-xs font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -817,7 +821,7 @@ function TaskList({
                                     columnId={
                                         columnId
                                     }
-                                    disabled={
+                                    disabled={!canManage || isTaskMoving ||
                                         dragDisabled
                                     }
                                 >
@@ -974,7 +978,7 @@ function TaskList({
                                                         task,
                                                     )
                                                 }
-                                                disabled={
+                                                disabled={!canManage || isTaskMoving ||
                                                     updateMutation.isPending ||
                                                     deleteMutation.isPending
                                                 }
@@ -998,7 +1002,7 @@ function TaskList({
                                                         task,
                                                     )
                                                 }
-                                                disabled={
+                                                disabled={!canManage || isTaskMoving ||
                                                     updateMutation.isPending ||
                                                     deleteMutation.isPending
                                                 }
@@ -1018,7 +1022,7 @@ function TaskList({
                                                         task,
                                                     )
                                                 }
-                                                disabled={
+                                                disabled={!canManage || isTaskMoving ||
                                                     updateMutation.isPending ||
                                                     deleteMutation.isPending
                                                 }

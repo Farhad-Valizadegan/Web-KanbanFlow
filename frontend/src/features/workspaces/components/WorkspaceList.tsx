@@ -1,5 +1,7 @@
+import { getCurrentUser } from '../../auth/api';
 import {
     useMutation,
+    useQuery,
     useQueryClient,
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
@@ -34,6 +36,7 @@ function WorkspaceList({
     workspaces,
 }: WorkspaceListProps) {
     const queryClient = useQueryClient();
+    const userQuery = useQuery({ queryKey: ['current-user'], queryFn: getCurrentUser, retry: false });
 
     const [editingWorkspaceId, setEditingWorkspaceId] =
         useState<number | null>(null);
@@ -347,7 +350,7 @@ function WorkspaceList({
                                                 workspace,
                                             )
                                         }
-                                        disabled={
+                                        disabled={workspace.owner_id !== userQuery.data?.id ||
                                             updateMutation.isPending
                                         }
                                         className="border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -362,7 +365,7 @@ function WorkspaceList({
                                         onClick={
                                             cancelEditing
                                         }
-                                        disabled={
+                                        disabled={workspace.owner_id !== userQuery.data?.id ||
                                             updateMutation.isPending
                                         }
                                         className="border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -425,7 +428,7 @@ function WorkspaceList({
                                                 workspace,
                                             )
                                         }
-                                        disabled={
+                                        disabled={workspace.owner_id !== userQuery.data?.id ||
                                             deleteMutation.isPending ||
                                             updateMutation.isPending
                                         }
@@ -441,7 +444,7 @@ function WorkspaceList({
                                                 workspace,
                                             )
                                         }
-                                        disabled={
+                                        disabled={workspace.owner_id !== userQuery.data?.id ||
                                             deleteMutation.isPending ||
                                             updateMutation.isPending
                                         }

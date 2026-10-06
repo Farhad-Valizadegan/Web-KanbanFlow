@@ -64,19 +64,20 @@ class ColumnController extends Controller
             ],
         ]);
 
-        $column = $board->columns()->create([
-            'name' => $validated['name'],
-            'position' =>
-                (int) $board
+        $column = DB::transaction(function () use ($board, $validated): Column {
+            Board::query()->whereKey($board->id)->lockForUpdate()->firstOrFail();
+
+            return $board->columns()->create([
+                'name' => $validated['name'],
+                'position' => (int) $board
                     ->columns()
                     ->max('position') + 1,
-            'wip_limit' =>
-                $validated['wip_limit'] ?? null,
-        ]);
+                'wip_limit' => $validated['wip_limit'] ?? null,
+            ]);
+        });
 
         return response()->json([
-            'message' =>
-                'Column created successfully.',
+            'message' => 'Column created successfully.',
             'data' => $column,
         ], 201);
     }
@@ -135,11 +136,14 @@ class ColumnController extends Controller
             ],
         ]);
 
-        $column->update($validated);
+        DB::transaction(function () use ($board, $column, $validated): void {
+            Board::query()->whereKey($board->id)->lockForUpdate()->firstOrFail();
+            Column::query()->whereKey($column->id)->lockForUpdate()->firstOrFail();
+            $column->update($validated);
+        });
 
         return response()->json([
-            'message' =>
-                'Column updated successfully.',
+            'message' => 'Column updated successfully.',
             'data' => $column,
         ]);
     }
@@ -173,6 +177,7 @@ class ColumnController extends Controller
             $column,
             $validated
         ): void {
+            Board::query()->whereKey($board->id)->lockForUpdate()->firstOrFail();
             $column->refresh();
 
             $columnIds = $board
@@ -208,8 +213,7 @@ class ColumnController extends Controller
         $column->refresh();
 
         return response()->json([
-            'message' =>
-                'Column moved successfully.',
+            'message' => 'Column moved successfully.',
             'data' => $column,
         ]);
     }
@@ -229,11 +233,15 @@ class ColumnController extends Controller
 
         $this->authorize('delete', $board);
 
-        $column->delete();
+        DB::transaction(function () use ($board, $column): void {
+            Board::query()->whereKey($board->id)->lockForUpdate()->firstOrFail();
+            Column::query()->whereKey($column->id)->lockForUpdate()->firstOrFail();
+            $column->delete();
+            $this->applyColumnPositions($board->columns()->orderBy('position')->orderBy('id')->pluck('id')->all(), $board->id);
+        });
 
         return response()->json([
-            'message' =>
-                'Column deleted successfully.',
+            'message' => 'Column deleted successfully.',
         ]);
     }
 
@@ -242,8 +250,7 @@ class ColumnController extends Controller
         int $boardId
     ): void {
         foreach (
-            array_values($columnIds)
-            as $index => $columnId
+            array_values($columnIds) as $index => $columnId
         ) {
             Column::query()
                 ->whereKey($columnId)

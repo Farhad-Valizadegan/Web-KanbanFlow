@@ -128,6 +128,7 @@ class TaskCommentController extends Controller
             $comment
         );
 
+        $this->authorize('view', $board);
         $this->authorize('update', $comment);
 
         $validated = $request->validate([
@@ -168,6 +169,8 @@ class TaskCommentController extends Controller
             $task,
             $comment
         );
+
+        $this->authorize('view', $board);
 
         $isAuthor =
             $comment->user_id ===

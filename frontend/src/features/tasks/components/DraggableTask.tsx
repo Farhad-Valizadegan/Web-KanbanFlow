@@ -19,6 +19,7 @@ function DraggableTask({
         attributes,
         listeners,
         setNodeRef,
+        setActivatorNodeRef,
         transform,
         transition,
         isDragging,
@@ -43,11 +44,12 @@ function DraggableTask({
         <div
             ref={setNodeRef}
             style={style}
-            {...attributes}
         >
             <div className="relative">
                 <button
                     type="button"
+                    ref={setActivatorNodeRef}
+                    {...attributes}
                     {...listeners}
                     disabled={disabled}
                     aria-label="Drag task"

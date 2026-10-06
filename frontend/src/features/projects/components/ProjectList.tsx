@@ -1,3 +1,4 @@
+import { useWorkspacePermissions } from '../../workspaces/useWorkspacePermissions';
 import {
     useMutation,
     useQuery,
@@ -54,6 +55,7 @@ function ProjectList({
     workspaceId,
 }: ProjectListProps) {
     const queryClient = useQueryClient();
+    const { canManage } = useWorkspacePermissions(workspaceId);
 
     const [editingProjectId, setEditingProjectId] =
         useState<number | null>(null);
@@ -474,7 +476,7 @@ function ProjectList({
                                                 project,
                                             )
                                         }
-                                        disabled={
+                                        disabled={!canManage ||
                                             updateMutation.isPending
                                         }
                                         className="border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -489,7 +491,7 @@ function ProjectList({
                                         onClick={
                                             cancelEditing
                                         }
-                                        disabled={
+                                        disabled={!canManage ||
                                             updateMutation.isPending
                                         }
                                         className="border border-slate-700 px-4 py-2 text-sm font-medium text-slate-300 hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -564,7 +566,7 @@ function ProjectList({
                                     onClick={() =>
                                         beginEditing(project)
                                     }
-                                    disabled={
+                                    disabled={!canManage ||
                                         deleteMutation.isPending ||
                                         updateMutation.isPending
                                     }
@@ -578,7 +580,7 @@ function ProjectList({
                                     onClick={() =>
                                         handleDelete(project)
                                     }
-                                    disabled={
+                                    disabled={!canManage ||
                                         deleteMutation.isPending ||
                                         updateMutation.isPending
                                     }
