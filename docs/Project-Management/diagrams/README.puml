@@ -1,11 +1,23 @@
 @startuml
-title Project Management
-rectangle "Management guidance" as M
-rectangle "Planning" as P
-rectangle "Execution" as E
-rectangle "Evidence and release" as R
-M --> P
-P --> E
-E --> R
-R --> P : feedback
+title KanbanFlow Project Management Workflow
+left to right direction
+rectangle "Definition and scope" as D
+rectangle "Roadmap and product backlog" as B
+rectangle "Refinement and decisions" as R
+rectangle "Sprint planning and implementation" as S
+rectangle "Quality checks and traceability" as Q
+rectangle "Milestone and release review" as M
+rectangle "Feedback and maintenance" as F
+D --> B
+B --> R
+R --> S
+S --> Q
+Q --> M
+M --> F
+F --> B
+note bottom of M
+Historical records require evidence.
+Release publication and deployment
+are separate authorized actions.
+end note
 @enduml
