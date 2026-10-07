@@ -1,10 +1,20 @@
 @startuml
-title KanbanFlow v1.0.1
-rectangle "v1.0.1 source tag" as T
-rectangle "Recorded validation" as V
-rectangle "Published release notes" as N
-rectangle "Upgrade review" as U
+title KanbanFlow v1.0.1 Corrections and Evidence
+left to right direction
+rectangle "v1.0.0 baseline" as B
+rectangle "Privacy and authentication fixes" as S
+rectangle "Keyboard, rollback, ordering fixes" as U
+rectangle "v1.0.1 tagged source" as T
+rectangle "Historical checks\n160 tests / 459 assertions\nFrontend and CI passed" as V
+rectangle "Outstanding at release\nBrowser and MySQL checks\nMembership policy" as G
+B --> S
+B --> U
+S --> T
+U --> T
 T --> V
-V --> N
-N --> U
+T --> G
+note bottom of S
+Ordinary members lose access to
+another user private board.
+end note
 @enduml
