@@ -1,0 +1,12 @@
+@startuml
+title Versioning Strategy
+rectangle "Assess compatibility" as A
+rectangle "Choose major, minor, or patch" as V
+rectangle "Align version metadata" as M
+rectangle "Verify release commit" as C
+rectangle "Tag and publish" as T
+A --> V
+V --> M
+M --> C
+C --> T
+@enduml

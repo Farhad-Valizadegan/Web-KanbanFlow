@@ -1,0 +1,12 @@
+@startuml
+title Quality and Risk Plan
+rectangle "Change risk" as R
+rectangle "Focused checks" as F
+rectangle "CI checks" as C
+rectangle "Browser or concurrency checks" as B
+rectangle "Evidence review" as E
+R --> F
+F --> C
+C --> B : when relevant
+B --> E
+@enduml

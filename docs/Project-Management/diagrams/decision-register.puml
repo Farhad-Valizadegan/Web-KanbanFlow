@@ -1,0 +1,10 @@
+@startuml
+title Decision Register
+rectangle "Question" as Q
+rectangle "Options and consequences" as O
+rectangle "Approved decision" as D
+rectangle "Implementation evidence" as I
+Q --> O
+O --> D
+D --> I
+@enduml

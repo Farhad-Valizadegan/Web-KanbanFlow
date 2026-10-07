@@ -1,0 +1,10 @@
+@startuml
+title Product Backlog
+rectangle "Policy decision" as P
+rectangle "PB-001 Permission fix" as F
+rectangle "PB-002 User guidance" as U
+rectangle "PB-003 Recovery guide" as R
+P --> F : dependency
+U ..> F : document final behavior
+R ..> U : operational complement
+@enduml

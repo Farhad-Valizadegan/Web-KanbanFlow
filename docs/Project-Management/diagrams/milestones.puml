@@ -1,0 +1,10 @@
+@startuml
+title Milestones
+rectangle "Historical milestones" as H
+rectangle "Released baseline v1.1.0" as B
+rectangle "Policy resolution candidate" as P
+rectangle "Documentation candidate" as D
+H --> B
+B ..> P : proposed
+B ..> D : proposed
+@enduml

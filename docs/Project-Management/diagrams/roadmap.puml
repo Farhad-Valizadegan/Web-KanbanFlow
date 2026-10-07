@@ -1,0 +1,10 @@
+@startuml
+title Roadmap
+rectangle "Current baseline" as B
+rectangle "Permissions decision and fix" as P
+rectangle "User and operational guidance" as G
+rectangle "Usability review" as U
+B ..> P : proposed
+P ..> G : proposed
+G ..> U : proposed
+@enduml

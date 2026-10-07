@@ -1,0 +1,10 @@
+@startuml
+title Backlog Refinement
+rectangle "Candidate item" as A
+rectangle "Clarify scope and policy" as B
+rectangle "Define acceptance" as C
+rectangle "Ready for planning" as D
+A --> B
+B --> C
+C --> D
+@enduml

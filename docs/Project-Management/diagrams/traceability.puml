@@ -1,0 +1,12 @@
+@startuml
+title Traceability
+rectangle "Requirement" as R
+rectangle "Decision or backlog item" as D
+rectangle "Implementation commit" as I
+rectangle "Verification result" as V
+rectangle "Release record" as E
+R --> D
+D --> I
+I --> V
+V --> E
+@enduml

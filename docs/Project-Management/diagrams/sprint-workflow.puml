@@ -1,0 +1,13 @@
+@startuml
+title Sprint Workflow
+rectangle "Refine" as R
+rectangle "Plan goal" as P
+rectangle "Implement" as I
+rectangle "Verify" as V
+rectangle "Review and retrospect" as E
+R --> P
+P --> I
+I --> V
+V --> E
+E --> R
+@enduml

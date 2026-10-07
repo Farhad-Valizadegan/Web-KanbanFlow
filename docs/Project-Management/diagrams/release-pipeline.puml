@@ -1,0 +1,12 @@
+@startuml
+title Release Pipeline
+rectangle "Review and checks" as C
+rectangle "Verified main" as M
+rectangle "Version and notes" as V
+rectangle "Annotated tag" as T
+rectangle "GitHub release" as R
+C --> M
+M --> V
+V --> T
+T --> R
+@enduml

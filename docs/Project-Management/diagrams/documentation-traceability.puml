@@ -1,0 +1,10 @@
+@startuml
+title Documentation Traceability
+rectangle "Code or policy change" as C
+rectangle "Affected documents" as D
+rectangle "Source and preview updates" as U
+rectangle "Review links and claims" as R
+C --> D
+D --> U
+U --> R
+@enduml

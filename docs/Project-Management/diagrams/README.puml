@@ -1,0 +1,11 @@
+@startuml
+title Project Management
+rectangle "Management guidance" as M
+rectangle "Planning" as P
+rectangle "Execution" as E
+rectangle "Evidence and release" as R
+M --> P
+P --> E
+E --> R
+R --> P : feedback
+@enduml
