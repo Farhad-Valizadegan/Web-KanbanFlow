@@ -1,12 +1,19 @@
 @startuml
-title Versioning Strategy
-rectangle "Assess compatibility" as A
-rectangle "Choose major, minor, or patch" as V
-rectangle "Align version metadata" as M
-rectangle "Verify release commit" as C
-rectangle "Tag and publish" as T
-A --> V
-V --> M
-M --> C
-C --> T
+title KanbanFlow Version Selection
+start
+:Assess actual release changes and compatibility;
+if (Incompatible contract change?) then (yes)
+ :Select major increment;
+else (no)
+ if (Compatible feature added?) then (yes)
+  :Select minor increment;
+ else (no)
+  :Select patch for compatible fixes;
+ endif
+endif
+:Align metadata and write upgrade notes;
+:Verify final candidate and exact commit;
+:Create new annotated tag when authorized;
+:Publish and verify release identity;
+stop
 @enduml
