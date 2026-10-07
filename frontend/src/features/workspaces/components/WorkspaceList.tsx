@@ -35,6 +35,7 @@ interface ApiErrorResponse {
 function WorkspaceList({
     workspaces,
 }: WorkspaceListProps) {
+    const [search, setSearch] = useState('');
     const queryClient = useQueryClient();
     const userQuery = useQuery({ queryKey: ['current-user'], queryFn: getCurrentUser, retry: false });
 
@@ -203,6 +204,7 @@ function WorkspaceList({
         deleteMutation.mutate(workspace.id);
     }
 
+    const visibleItems = workspaces.filter(item => (item.name + ' ' + (item.description ?? '')).toLowerCase().includes(search.trim().toLowerCase()));
     if (workspaces.length === 0) {
         return (
             <div className="border border-dashed border-slate-700 bg-slate-950 p-8 text-center">
@@ -225,8 +227,13 @@ function WorkspaceList({
                 </p>
             )}
 
+                        <div className="list-toolbar">
+                <input type="search" aria-label="Search workspaces" placeholder="Search workspaces…" value={search} onChange={event => setSearch(event.target.value)} />
+                <p role="status">{visibleItems.length} of {workspaces.length} workspaces</p>
+            </div>
+            {visibleItems.length === 0 && <p className="empty-search">No matching workspaces. Try another name or clear your search.</p>}
             <div className="grid gap-4 md:grid-cols-2">
-                {workspaces.map((workspace) => {
+                {visibleItems.map((workspace) => {
                     const isEditing =
                         editingWorkspaceId ===
                         workspace.id;

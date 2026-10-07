@@ -54,6 +54,7 @@ function dateInputValue(value: string | null): string {
 function ProjectList({
     workspaceId,
 }: ProjectListProps) {
+    const [search, setSearch] = useState('');
     const queryClient = useQueryClient();
     const { canManage } = useWorkspacePermissions(workspaceId);
 
@@ -272,6 +273,7 @@ function ProjectList({
 
     const projects = projectsQuery.data;
 
+    const visibleItems = projects.filter(item => (item.name + ' ' + (item.description ?? '')).toLowerCase().includes(search.trim().toLowerCase()));
     if (projects.length === 0) {
         return (
             <p className="mt-6 border border-slate-800 bg-slate-900 p-6 text-slate-400">
@@ -282,6 +284,11 @@ function ProjectList({
 
     return (
         <div className="mt-6">
+            <div className="list-toolbar">
+                <input type="search" aria-label="Search projects" placeholder="Search projects…" value={search} onChange={event => setSearch(event.target.value)} />
+                <p role="status">{visibleItems.length} of {projects.length} projects</p>
+            </div>
+            {visibleItems.length === 0 && <p className="empty-search">No matching projects. Try another name or clear your search.</p>}
             {errorMessage && (
                 <p className="mb-4 border border-red-900 bg-red-950/40 p-4 text-sm text-red-400">
                     {errorMessage}
@@ -289,7 +296,7 @@ function ProjectList({
             )}
 
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {projects.map((project) => {
+                {visibleItems.map((project) => {
                     const isEditing =
                         editingProjectId === project.id;
 

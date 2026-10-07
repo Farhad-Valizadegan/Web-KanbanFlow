@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.1.0 — 2026-10-07
+
+### UI and UX
+
+- Add Light, Dark, and System themes across all screens, remember the preference, and synchronize it between tabs.
+- Add persistent navigation, breadcrumbs, a skip link, route titles, and recoverable unexpected-error/not-found screens.
+- Redesign the welcome page and standardize cards, spacing, typography, form fields, keyboard focus, and phone layouts.
+- Add workspace/project/board search with result counts and empty-result feedback; disable board reordering while filtered.
+- Add password visibility controls and connect validation messages to their fields.
+- Make the workspace creation dialog keyboard accessible with focus containment, Escape dismissal, focus restoration, and scroll locking.
+- Redirect existing sessions away from sign-in and registration forms; show clear connection, expired-session, and rate-limit errors.
+
+### Validation
+
+- Frontend lint, TypeScript checks, and production build passed.
+- Backend regression suite: 163 tests, 470 assertions passed.
+- Browser checks covered light/dark modes, saved preference, mobile layout, list search, password controls, dialog keyboard navigation, and existing-session redirects.
+
+### Upgrade and known issues
+
+- Rebuild the frontend; no database migrations or dependency upgrades are required.
+- Manager remove/re-add role changes remain possible pending a membership-permission decision. Workspace owners should manage membership until resolved.
+
+
 ## 1.0.2 — 2026-10-06
 
 Patch release for local session authentication and dashboard analytics, including the branding changes made since v1.0.1. No dependency upgrades or database migrations.

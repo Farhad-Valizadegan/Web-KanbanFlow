@@ -1,3 +1,5 @@
+import { authenticationErrorMessage } from '../features/auth/errorMessage';
+import PasswordField from '../components/ui/PasswordField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
@@ -68,8 +70,7 @@ function RegisterPage() {
                 setError('root', {
                     type: 'server',
                     message:
-                        error.response?.data.message ??
-                        'Registration failed. Please try again.',
+                        authenticationErrorMessage(error, 'Unable to create your account. Please try again.'),
                 });
             }
         },
@@ -112,11 +113,13 @@ function RegisterPage() {
                             type="text"
                             autoComplete="name"
                             {...register('name')}
+                            aria-invalid={!!errors.name}
+                            aria-describedby={errors.name ? 'name-error' : undefined}
                             className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 outline-none focus:border-blue-500"
                         />
 
                         {errors.name && (
-                            <p className="mt-2 text-sm text-red-400">
+                            <p id="name-error" role="alert" className="mt-2 text-sm text-red-400">
                                 {errors.name.message}
                             </p>
                         )}
@@ -135,11 +138,13 @@ function RegisterPage() {
                             type="email"
                             autoComplete="email"
                             {...register('email')}
+                            aria-invalid={!!errors.email}
+                            aria-describedby={errors.email ? 'email-error' : undefined}
                             className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 outline-none focus:border-blue-500"
                         />
 
                         {errors.email && (
-                            <p className="mt-2 text-sm text-red-400">
+                            <p id="email-error" role="alert" className="mt-2 text-sm text-red-400">
                                 {errors.email.message}
                             </p>
                         )}
@@ -153,16 +158,17 @@ function RegisterPage() {
                             Password
                         </label>
 
-                        <input
-                            id="password"
+                        <PasswordField id="password"
                             type="password"
                             autoComplete="new-password"
                             {...register('password')}
+                            aria-invalid={!!errors.password}
+                            aria-describedby={errors.password ? 'password-error' : undefined}
                             className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 outline-none focus:border-blue-500"
                         />
 
                         {errors.password && (
-                            <p className="mt-2 text-sm text-red-400">
+                            <p id="password-error" role="alert" className="mt-2 text-sm text-red-400">
                                 {errors.password.message}
                             </p>
                         )}
@@ -176,16 +182,17 @@ function RegisterPage() {
                             Confirm password
                         </label>
 
-                        <input
-                            id="password_confirmation"
+                        <PasswordField id="password_confirmation"
                             type="password"
                             autoComplete="new-password"
                             {...register('password_confirmation')}
+                            aria-invalid={!!errors.password_confirmation}
+                            aria-describedby={errors.password_confirmation ? 'password_confirmation-error' : undefined}
                             className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 outline-none focus:border-blue-500"
                         />
 
                         {errors.password_confirmation && (
-                            <p className="mt-2 text-sm text-red-400">
+                            <p id="password_confirmation-error" role="alert" className="mt-2 text-sm text-red-400">
                                 {errors.password_confirmation.message}
                             </p>
                         )}

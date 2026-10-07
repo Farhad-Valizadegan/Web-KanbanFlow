@@ -1,6 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import GuestRoute from './components/auth/GuestRoute';
+import AppShell from './components/layout/AppShell';
+import ErrorBoundary, { NotFoundPage } from './components/ui/ErrorBoundary';
 
 const BoardPage = lazy(() => import('./pages/BoardPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
@@ -12,17 +15,20 @@ const WorkspacePage = lazy(() => import('./pages/WorkspacePage'));
 
 function App() {
     return (
-        <Suspense
+        <AppShell><ErrorBoundary><Suspense
             fallback={
                 <div className="flex min-h-screen items-center justify-center">
-                    <p className="text-sm text-gray-600">Loading...</p>
+                    <p className="loading-state" role="status">Opening your workspace…</p>
                 </div>
             }
         >
             <Routes>
+                <Route path="*" element={<NotFoundPage />} />
                 <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
+                <Route element={<GuestRoute />}>
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                </Route>
 
                 <Route element={<ProtectedRoute />}>
                     <Route
@@ -46,7 +52,7 @@ function App() {
                     />
                 </Route>
             </Routes>
-        </Suspense>
+        </Suspense></ErrorBoundary></AppShell>
     );
 }
 

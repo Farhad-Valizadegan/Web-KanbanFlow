@@ -1,3 +1,5 @@
+import { authenticationErrorMessage } from '../features/auth/errorMessage';
+import PasswordField from '../components/ui/PasswordField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
@@ -53,8 +55,7 @@ function LoginPage() {
             setError('root', {
                 type: 'server',
                 message:
-                    error.response?.data.message ??
-                    'Login failed. Please try again.',
+                    authenticationErrorMessage(error, 'Unable to sign in. Please try again.'),
             });
         },
     });
@@ -96,11 +97,13 @@ function LoginPage() {
                             type="email"
                             autoComplete="email"
                             {...register('email')}
+                            aria-invalid={!!errors.email}
+                            aria-describedby={errors.email ? 'email-error' : undefined}
                             className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 outline-none focus:border-blue-500"
                         />
 
                         {errors.email && (
-                            <p className="mt-2 text-sm text-red-400">
+                            <p id="email-error" role="alert" className="mt-2 text-sm text-red-400">
                                 {errors.email.message}
                             </p>
                         )}
@@ -114,16 +117,17 @@ function LoginPage() {
                             Password
                         </label>
 
-                        <input
-                            id="password"
+                        <PasswordField id="password"
                             type="password"
                             autoComplete="current-password"
                             {...register('password')}
+                            aria-invalid={!!errors.password}
+                            aria-describedby={errors.password ? 'password-error' : undefined}
                             className="mt-2 w-full border border-slate-700 bg-slate-950 px-3 py-2 outline-none focus:border-blue-500"
                         />
 
                         {errors.password && (
-                            <p className="mt-2 text-sm text-red-400">
+                            <p id="password-error" role="alert" className="mt-2 text-sm text-red-400">
                                 {errors.password.message}
                             </p>
                         )}
