@@ -1,10 +1,16 @@
 @startuml
-title Backlog Refinement
-rectangle "Candidate item" as A
-rectangle "Clarify scope and policy" as B
-rectangle "Define acceptance" as C
-rectangle "Ready for planning" as D
-A --> B
-B --> C
-C --> D
+title KanbanFlow Backlog Refinement
+start
+:Capture user problem and evidence;
+:Clarify scope, data, and permissions;
+if (Policy or dependency unresolved?) then (yes)
+ :Record decision and blocker;
+ :Keep item out of implementation selection;
+else (no)
+ :Split into verifiable outcomes;
+ :Define acceptance and checks;
+ :Review risks and priority;
+ :Mark ready when criteria are met;
+endif
+stop
 @enduml
