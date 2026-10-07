@@ -1,13 +1,16 @@
 @startuml
-title Release Verification Record Template
-rectangle "Exact commit and environment" as C
-rectangle "Automated evidence" as A
-rectangle "Runtime evidence" as B
-rectangle "Known gaps" as G
-rectangle "Verification record" as R
-C --> A
-C --> B
-A --> R
-B --> R
-G --> R
+title KanbanFlow Verification Evidence Record
+start
+:Record exact candidate and environment;
+:Map acceptance criteria to relevant checks;
+:Execute authorized checks and capture results;
+:Classify pass, fail, blocked, not run, or not applicable;
+:Record evidence links and residual risks;
+if (Required criteria demonstrated?) then (yes)
+ :Record readiness review outcome;
+else (no)
+ :Keep verification incomplete;
+ :Record next action and rerun affected checks;
+endif
+stop
 @enduml
