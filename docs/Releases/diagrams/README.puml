@@ -1,10 +1,20 @@
 @startuml
-title KanbanFlow Releases
-rectangle "Published history" as H
-rectangle "Unreleased changes" as U
-rectangle "Preparation and checks" as C
-rectangle "Next authorized release" as R
+title KanbanFlow Release Documentation Lifecycle
+left to right direction
+rectangle "Published version records" as H
+rectangle "Later main / local changes\nUnreleased snapshot" as U
+rectangle "Version and notes preparation" as P
+rectangle "Exact candidate verification" as V
+rectangle "Authorized tag and publication" as R
+rectangle "Remote identity and notes checks" as C
 H --> U
-U --> C
-C --> R
+U --> P
+P --> V
+V --> R
+R --> C
+C --> H : new historical record
+note bottom of R
+Source publication is not deployment.
+Existing published tags remain immutable.
+end note
 @enduml
