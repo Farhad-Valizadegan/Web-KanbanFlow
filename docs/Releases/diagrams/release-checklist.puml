@@ -1,12 +1,17 @@
 @startuml
-title Release Checklist
-rectangle "Scope and compatibility" as S
-rectangle "Version metadata" as M
-rectangle "Fresh verification" as V
-rectangle "Authorized tag and release" as R
-rectangle "Verify remote state" as C
-S --> M
-M --> V
-V --> R
-R --> C
+title KanbanFlow Release Checklist Gates
+start
+:Confirm scope, compatibility, and version;
+:Align metadata and prepare notes;
+:Verify final candidate and exact CI commit;
+if (Required criteria demonstrated?) then (yes)
+ :Review known risks and publication authorization;
+ :Create and push new annotated tag;
+ :Publish notes;
+ :Verify remote tag, release state, and evidence;
+else (no)
+ :Record failure, blocker, or missing evidence;
+ :Keep release pending;
+endif
+stop
 @enduml
