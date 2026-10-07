@@ -1,10 +1,22 @@
 @startuml
-title Overview and Goals
-actor "Team member" as U
-rectangle "Organize work" as W
-rectangle "Track progress" as P
-rectangle "Collaborate" as C
-U --> W
-U --> P
-U --> C
+title KanbanFlow Overview and Goals
+left to right direction
+actor "Workspace users" as U
+rectangle "KanbanFlow" {
+ rectangle "Organize work\nWorkspace > Project > Board" as O
+ rectangle "Track workflow\nColumns, tasks, WIP limits" as W
+ rectangle "Collaborate\nAssignments, comments, activity" as C
+ rectangle "Inspect progress\nNotifications and analytics" as A
+}
+rectangle "Intended outcomes\nVisible ownership\nReliable saved state\nAccessible interaction" as R
+U --> O
+O --> W
+W --> C
+C --> A
+W --> R
+A --> R
+note bottom of R
+Acceptance targets require verification.
+No productivity or uptime guarantee is implied.
+end note
 @enduml
