@@ -1,16 +1,37 @@
 @startuml
-title Scope Boundary Diagram
-rectangle "KanbanFlow scope" {
- rectangle "Authentication and membership" as A
- rectangle "Projects, boards, tasks" as W
- rectangle "Collaboration and analytics" as C
+title KanbanFlow Product Scope Boundary
+left to right direction
+actor "Workspace users" as Users
+rectangle "Included product scope" {
+ rectangle "Authentication and membership" as Auth
+ rectangle "Projects, boards, columns, tasks" as Work
+ rectangle "Assignments, comments, activity" as Collaboration
+ rectangle "Database notifications and analytics" as Insights
+ rectangle "Search, themes, accessible interaction" as UX
 }
-rectangle "Outside current definition" {
- rectangle "Billing and payroll" as P
- rectangle "Offline editing" as O
- rectangle "Third-party synchronization" as T
- rectangle "Email and SMS" as E
+rectangle "Supporting responsibilities" {
+ rectangle "Source review and CI" as CI
+ rectangle "Runtime, database, backup decisions" as Operations
 }
-A --> W
-W --> C
+rectangle "Outside current working scope" {
+ rectangle "Billing, payroll, time tracking" as Business
+ rectangle "Offline editing and guaranteed real-time sync" as Sync
+ rectangle "Third-party task synchronization" as Integration
+ rectangle "Email and SMS delivery" as Delivery
+}
+Users --> Auth
+Auth --> Work
+Work --> Collaboration
+Collaboration --> Insights
+Users --> UX
+CI ..> Work : supports delivery
+Operations ..> Auth : supports operation
+note bottom of Auth
+Membership policy loophole remains open.
+Included scope is not proof of complete enforcement.
+end note
+note bottom of Integration
+Future additions require agreed requirements,
+permissions, and verification.
+end note
 @enduml
