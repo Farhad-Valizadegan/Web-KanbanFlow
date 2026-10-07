@@ -1,0 +1,12 @@
+@startuml
+title Definition of Done
+rectangle "Implemented change" as N0
+rectangle "Relevant checks" as N1
+rectangle "Review" as N2
+rectangle "Documentation" as N3
+rectangle "Done" as N4
+N0 --> N1
+N1 --> N2
+N2 --> N3
+N3 --> N4
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+title Sprint Metrics and Evidence
+rectangle "Actual records" as N0
+rectangle "Defined measures" as N1
+rectangle "Review context" as N2
+rectangle "Planning improvement" as N3
+N0 --> N1
+N1 --> N2
+N2 --> N3
+@enduml

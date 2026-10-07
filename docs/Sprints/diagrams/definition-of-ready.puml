@@ -1,0 +1,12 @@
+@startuml
+title Definition of Ready
+rectangle "User need" as N0
+rectangle "Clear scope" as N1
+rectangle "Acceptance criteria" as N2
+rectangle "Dependency review" as N3
+rectangle "Ready" as N4
+N0 --> N1
+N1 --> N2
+N2 --> N3
+N3 --> N4
+@enduml

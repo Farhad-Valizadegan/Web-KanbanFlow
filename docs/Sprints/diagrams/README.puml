@@ -1,0 +1,14 @@
+@startuml
+title KanbanFlow Sprints
+rectangle "Agree sprint" as N0
+rectangle "Plan" as N1
+rectangle "Execute" as N2
+rectangle "Verify" as N3
+rectangle "Review" as N4
+rectangle "Retrospect" as N5
+N0 --> N1
+N1 --> N2
+N2 --> N3
+N3 --> N4
+N4 --> N5
+@enduml

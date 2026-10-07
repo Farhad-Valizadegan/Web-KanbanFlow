@@ -1,0 +1,10 @@
+@startuml
+title Daily Progress and Blockers
+rectangle "Observe progress" as N0
+rectangle "Identify blocker" as N1
+rectangle "Agree next action" as N2
+rectangle "Update backlog" as N3
+N0 --> N1
+N1 --> N2
+N2 --> N3
+@enduml

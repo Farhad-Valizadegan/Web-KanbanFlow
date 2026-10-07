@@ -1,0 +1,12 @@
+@startuml
+title Sprint Review Template
+rectangle "Sprint goal" as N0
+rectangle "Demonstrate outcomes" as N1
+rectangle "Review evidence" as N2
+rectangle "Record feedback" as N3
+rectangle "Update backlog" as N4
+N0 --> N1
+N1 --> N2
+N2 --> N3
+N3 --> N4
+@enduml

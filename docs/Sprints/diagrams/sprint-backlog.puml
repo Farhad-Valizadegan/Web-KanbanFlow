@@ -1,0 +1,12 @@
+@startuml
+title Sprint Backlog Template
+rectangle "Ready" as N0
+rectangle "In progress" as N1
+rectangle "In review" as N2
+rectangle "Verified" as N3
+rectangle "Done" as N4
+N0 --> N1
+N1 --> N2
+N2 --> N3
+N3 --> N4
+@enduml

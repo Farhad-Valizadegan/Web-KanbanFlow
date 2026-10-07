@@ -1,0 +1,12 @@
+@startuml
+title Sprint Planning
+rectangle "Refined backlog" as N0
+rectangle "Agree goal" as N1
+rectangle "Select items" as N2
+rectangle "Confirm capacity" as N3
+rectangle "Sprint plan" as N4
+N0 --> N1
+N1 --> N2
+N2 --> N3
+N3 --> N4
+@enduml

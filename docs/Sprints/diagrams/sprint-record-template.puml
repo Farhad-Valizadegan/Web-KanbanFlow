@@ -1,0 +1,10 @@
+@startuml
+title Sprint Record Template
+rectangle "Goal and baseline" as N0
+rectangle "Scope" as N1
+rectangle "Execution evidence" as N2
+rectangle "Closure" as N3
+N0 --> N1
+N1 --> N2
+N2 --> N3
+@enduml

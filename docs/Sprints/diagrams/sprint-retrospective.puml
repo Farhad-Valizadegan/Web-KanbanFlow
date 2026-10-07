@@ -1,0 +1,12 @@
+@startuml
+title Sprint Retrospective Template
+rectangle "Observe" as N0
+rectangle "Discuss causes" as N1
+rectangle "Choose improvement" as N2
+rectangle "Assign follow-up" as N3
+rectangle "Evaluate" as N4
+N0 --> N1
+N1 --> N2
+N2 --> N3
+N3 --> N4
+@enduml
