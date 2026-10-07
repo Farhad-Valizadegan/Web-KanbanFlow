@@ -6,7 +6,23 @@ Owners administer workspaces; managers coordinate permitted work; members contri
 
 The known manager remove/re-add role-change loophole remains unresolved pending a membership-policy decision. UI visibility alone is not authorization.
 
+## Responsibility boundary
+
+| Stakeholder | Responsibility |
+| --- | --- |
+| Workspace owner | Membership decisions and workspace administration. |
+| Manager | Coordination within permissions granted by the backend. |
+| Member | Task contributions within permitted workspaces. |
+| Viewer | Inspection within permitted workspaces. |
+| Maintainer | Implementation, review, and verification. |
+| Operator | Runtime configuration, backups, and service availability. |
+
+This table describes responsibilities, not a complete authorization matrix. Consult backend policies for actual allowed actions.
+
+
 ## PlantUML diagram
+
+![scope-and-stakeholders diagram](diagrams/scope-and-stakeholders.png)
 
 [Standalone source](diagrams/scope-and-stakeholders.puml)
 

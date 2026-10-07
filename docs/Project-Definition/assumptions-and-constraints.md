@@ -6,7 +6,18 @@ The current stack uses React, TypeScript, Vite, Laravel, and MySQL. Exact runtim
 
 No numerical availability or capacity commitment is defined here. Offline editing and real-time synchronization are outside this working scope. Intended role restrictions require closure of the known membership loophole.
 
+## Configuration dependencies
+
+- Backend dependency requirements: [Composer manifest](../../backend/composer.json).
+- Frontend commands and dependencies: [npm manifest](../../frontend/package.json).
+- Runtime environment setup: [project setup guide](../../README.md).
+
+Treat database backups, availability targets, and production capacity as operational decisions to document before deployment.
+
+
 ## PlantUML diagram
+
+![assumptions-and-constraints diagram](diagrams/assumptions-and-constraints.png)
 
 [Standalone source](diagrams/assumptions-and-constraints.puml)
 

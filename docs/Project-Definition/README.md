@@ -15,9 +15,11 @@ KanbanFlow organizes collaborative work into workspaces, projects, boards, colum
 
 ## Sources and maintenance
 
-Consult the [project README](../../README.md), [API routes](../../backend/routes/api.php), and implementation for delivered behavior. Each document contains PlantUML source, with an identical standalone file under diagrams/. Keep both copies synchronized. GitHub may show PlantUML blocks as source; use a compatible renderer for visual output.
+Consult the [project README](../../README.md), [API routes](../../backend/routes/api.php), and implementation for delivered behavior. Each document contains PlantUML source, with an identical standalone file under diagrams/. Keep both copies synchronized. The embedded PNG previews render directly on GitHub. Regenerate them whenever the PlantUML source changes; the source blocks remain available below each preview.
 
 ## PlantUML diagram
+
+![README diagram](diagrams/README.png)
 
 [Standalone source](diagrams/README.puml)
 

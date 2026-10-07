@@ -4,7 +4,21 @@ Workspace users access KanbanFlow through a browser. React calls the Laravel bac
 
 Maintainers use GitHub and GitHub Actions for source history and CI. GitHub is development infrastructure rather than a dependency for ordinary task requests. Current notifications are database notifications; email, SMS, and external integrations are not promised.
 
+## Interface boundaries
+
+| Boundary | Purpose |
+| --- | --- |
+| Browser to application | User interaction and authenticated requests. |
+| Backend to database | Persistent application data. |
+| Maintainer to GitHub | Source review, history, and automated checks. |
+| Operator to runtime | Configuration and service operation. |
+
+Avoid treating development tooling as a user-facing integration.
+
+
 ## PlantUML diagram
+
+![stakeholders-and-external-systems diagram](diagrams/stakeholders-and-external-systems.png)
 
 [Standalone source](diagrams/stakeholders-and-external-systems.puml)
 
