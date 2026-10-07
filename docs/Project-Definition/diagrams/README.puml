@@ -1,0 +1,10 @@
+@startuml
+title Project Definition
+rectangle "Project definition" as D
+rectangle "Goals and scope" as G
+rectangle "Stakeholders and constraints" as S
+rectangle "Risks and criteria" as R
+D --> G
+D --> S
+D --> R
+@enduml

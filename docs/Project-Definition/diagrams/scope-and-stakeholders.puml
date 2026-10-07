@@ -1,0 +1,12 @@
+@startuml
+title Scope and Stakeholders
+actor Owner
+actor Manager
+actor Member
+actor Viewer
+rectangle "Workspace" as W
+Owner --> W : administer
+Manager --> W : coordinate
+Member --> W : contribute
+Viewer --> W : inspect
+@enduml

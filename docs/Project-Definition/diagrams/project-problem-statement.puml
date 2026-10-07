@@ -1,0 +1,10 @@
+@startuml
+title Project Problem Statement
+rectangle "Scattered information" as A
+rectangle "Unclear ownership" as B
+rectangle "Shared board" as C
+rectangle "Visible progress" as D
+A --> B
+B --> C : product response
+C --> D : intended benefit
+@enduml

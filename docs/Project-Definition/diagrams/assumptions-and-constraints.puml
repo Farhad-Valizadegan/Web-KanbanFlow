@@ -1,0 +1,12 @@
+@startuml
+title Assumptions and Constraints
+rectangle Browser as B
+rectangle "React frontend" as F
+rectangle "Session configuration" as S
+rectangle "Laravel backend" as L
+database MySQL as M
+B --> F
+F --> S
+S --> L
+L --> M
+@enduml

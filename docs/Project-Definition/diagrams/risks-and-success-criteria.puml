@@ -1,0 +1,13 @@
+@startuml
+title Risks and Success Criteria
+rectangle "Identify risks" as I
+rectangle "Agree criteria" as C
+rectangle "Implement mitigation" as M
+rectangle "Verify evidence" as V
+rectangle "Release decision" as R
+I --> C
+C --> M
+M --> V
+V --> R
+V --> M : unmet criteria
+@enduml

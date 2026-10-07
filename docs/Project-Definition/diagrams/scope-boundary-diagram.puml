@@ -1,0 +1,16 @@
+@startuml
+title Scope Boundary Diagram
+rectangle "KanbanFlow scope" {
+ rectangle "Authentication and membership" as A
+ rectangle "Projects, boards, tasks" as W
+ rectangle "Collaboration and analytics" as C
+}
+rectangle "Outside current definition" {
+ rectangle "Billing and payroll" as P
+ rectangle "Offline editing" as O
+ rectangle "Third-party synchronization" as T
+ rectangle "Email and SMS" as E
+}
+A --> W
+W --> C
+@enduml
