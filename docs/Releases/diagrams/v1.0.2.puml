@@ -1,10 +1,19 @@
 @startuml
-title KanbanFlow v1.0.2
-rectangle "v1.0.2 source tag" as T
-rectangle "Recorded validation" as V
-rectangle "Published release notes" as N
-rectangle "Upgrade review" as U
+title KanbanFlow v1.0.2 Login and Analytics Corrections
+left to right direction
+rectangle "Consistent localhost origins\nSession and CSRF configuration" as S
+rectangle "Project mutations\nInvalidate workspace analytics" as A
+rectangle "KanbanFlow naming\nWeb-KanbanFlow repository" as N
+rectangle "v1.0.2 tagged source" as T
+rectangle "Historical validation\n163 tests / 470 assertions\nBrowser and isolated MySQL checks" as V
+rectangle "Remaining membership-policy issue" as O
+S --> T
+A --> T
+N --> T
 T --> V
-V --> N
-N --> U
+T --> O
+note bottom of V
+Recorded scenarios, not universal concurrency
+or fresh current-main guarantees.
+end note
 @enduml
