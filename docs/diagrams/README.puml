@@ -1,0 +1,16 @@
+@startuml
+title KanbanFlow Documentation Map
+rectangle "Documentation index" as Index
+rectangle "Project Definition\nPurpose and boundaries" as Definition
+rectangle "Project Management\nPriorities and decisions" as Management
+rectangle "SDLC\nDevelopment guidance" as Lifecycle
+rectangle "Sprints\nPlanning and review kit" as Sprints
+rectangle "Releases\nVersion records and evidence" as Releases
+rectangle "Diagram guide\nSources and previews" as Diagrams
+Index --> Definition
+Index --> Management
+Index --> Lifecycle
+Index --> Sprints
+Index --> Releases
+Index --> Diagrams
+@enduml
