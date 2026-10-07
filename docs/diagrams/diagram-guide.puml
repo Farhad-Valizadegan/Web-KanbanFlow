@@ -1,0 +1,14 @@
+@startuml
+title KanbanFlow Documentation Diagram Workflow
+start
+:Identify document purpose and evidence;
+:Update canonical PlantUML source;
+:Match embedded source in Markdown;
+:Render PNG preview locally;
+if (Syntax, links, and visual review pass?) then (yes)
+ :Commit document, source, and preview together;
+else (no)
+ :Correct source or layout and render again;
+endif
+stop
+@enduml
