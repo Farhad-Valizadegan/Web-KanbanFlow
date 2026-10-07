@@ -152,8 +152,8 @@ function BoardPage() {
                             'No description has been added.'}
                     </p>
 
-                    <dl className="mt-6 grid gap-4 text-sm sm:grid-cols-2">
-                        <div className="border border-slate-800 bg-slate-950 p-4">
+                    <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-4 text-sm">
+                        <div>
                             <dt className="text-slate-500">
                                 Created by
                             </dt>
@@ -164,7 +164,7 @@ function BoardPage() {
                             </dd>
                         </div>
 
-                        <div className="border border-slate-800 bg-slate-950 p-4">
+                        <div>
                             <dt className="text-slate-500">
                                 Created
                             </dt>
