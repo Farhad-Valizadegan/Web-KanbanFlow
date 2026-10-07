@@ -2,12 +2,12 @@
 
 ## Historical references
 
-The existing milestone documents remain at their original paths. They describe development stages; this index does not assert new dates or completion evidence beyond those documents.
+The historical milestone documents are grouped in the Milestones folder. They describe development stages; this index does not assert new dates or completion evidence beyond those documents.
 
-- [Milestone 5](../MILESTONE_5.md)
-- [Milestone 6](../MILESTONE_6.md)
-- [Milestone 7](../MILESTONE_7.md)
-- [Milestone 8](../MILESTONE_8.md)
+- [Milestone 5](Milestones/MILESTONE_5.md)
+- [Milestone 6](Milestones/MILESTONE_6.md)
+- [Milestone 7](Milestones/MILESTONE_7.md)
+- [Milestone 8](Milestones/MILESTONE_8.md)
 
 ## Released baseline
 

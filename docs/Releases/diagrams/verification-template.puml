@@ -1,0 +1,13 @@
+@startuml
+title Release Verification Record Template
+rectangle "Exact commit and environment" as C
+rectangle "Automated evidence" as A
+rectangle "Runtime evidence" as B
+rectangle "Known gaps" as G
+rectangle "Verification record" as R
+C --> A
+C --> B
+A --> R
+B --> R
+G --> R
+@enduml

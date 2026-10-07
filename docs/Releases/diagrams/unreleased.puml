@@ -1,0 +1,10 @@
+@startuml
+title Unreleased Changes
+rectangle "v1.1.0 published baseline" as B
+rectangle "Later main commits" as M
+rectangle "Local documentation work" as L
+rectangle "Future release decision" as R
+B --> M
+M --> L
+L ..> R : not yet released
+@enduml

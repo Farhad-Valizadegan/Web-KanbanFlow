@@ -14,12 +14,12 @@ See the [diagram guide](diagram-guide.md) for documentation diagrams.
 
 ## Existing documents
 
-- [Milestone 5](MILESTONE_5.md)
-- [Milestone 6](MILESTONE_6.md)
-- [Milestone 7](MILESTONE_7.md)
-- [Milestone 8](MILESTONE_8.md)
+- [Milestone 5](Project-Management/Milestones/MILESTONE_5.md)
+- [Milestone 6](Project-Management/Milestones/MILESTONE_6.md)
+- [Milestone 7](Project-Management/Milestones/MILESTONE_7.md)
+- [Milestone 8](Project-Management/Milestones/MILESTONE_8.md)
 - [Local review fixes](LOCAL_REVIEW_FIXES.md)
 
-The category folders are ready for new documentation. Existing documents remain at their current paths.
+The category folders are ready for new documentation. Historical milestone documents are grouped under Project-Management/Milestones.
 
 See the [project README](../README.md) for setup and local demo instructions, and the [changelog](../CHANGELOG.md) for released changes.

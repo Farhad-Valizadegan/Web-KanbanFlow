@@ -1,0 +1,12 @@
+@startuml
+title Release Notes Template
+rectangle "Identity" as I
+rectangle "Behavior changes" as C
+rectangle "Validation evidence" as V
+rectangle "Upgrade and known issues" as U
+rectangle "Published notes" as P
+I --> C
+C --> V
+V --> U
+U --> P
+@enduml

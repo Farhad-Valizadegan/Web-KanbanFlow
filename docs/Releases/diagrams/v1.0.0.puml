@@ -1,0 +1,10 @@
+@startuml
+title KanbanFlow v1.0.0
+rectangle "v1.0.0 source tag" as T
+rectangle "Recorded validation" as V
+rectangle "Published release notes" as N
+rectangle "Upgrade review" as U
+T --> V
+V --> N
+N --> U
+@enduml

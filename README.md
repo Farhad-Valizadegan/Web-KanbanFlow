@@ -181,10 +181,14 @@ Web-KanbanFlow/
 │   ├── .env.example
 │   └── composer.json
 ├── docs/
-│   ├── MILESTONE_5.md
-│   ├── MILESTONE_6.md
-│   ├── MILESTONE_7.md
-│   └── MILESTONE_8.md
+│   ├── Project-Definition/
+│   ├── Project-Management/
+│   │   └── Milestones/
+│   ├── Releases/
+│   ├── SDLC/
+│   ├── Sprints/
+│   ├── diagram-guide.md
+│   └── README.md
 ├── frontend/
 │   ├── public/
 │   ├── src/
@@ -657,7 +661,7 @@ Status: Completed
 
 Detailed documentation:
 
-- [Milestone 5](docs/MILESTONE_5.md)
+- [Milestone 5](docs/Project-Management/Milestones/MILESTONE_5.md)
 
 ### Milestone 6 – Notifications
 
@@ -673,7 +677,7 @@ Status: Completed
 
 Detailed documentation:
 
-- [Milestone 6](docs/MILESTONE_6.md)
+- [Milestone 6](docs/Project-Management/Milestones/MILESTONE_6.md)
 
 ### Milestone 7 – Workspace Analytics and Task Assignment
 
@@ -689,7 +693,7 @@ Status: Completed
 
 Detailed documentation:
 
-- [Milestone 7](docs/MILESTONE_7.md)
+- [Milestone 7](docs/Project-Management/Milestones/MILESTONE_7.md)
 
 ### Milestone 8 – Production Readiness and Continuous Integration
 
@@ -705,7 +709,7 @@ Status: Completed
 
 Detailed documentation:
 
-- [Milestone 8](docs/MILESTONE_8.md)
+- [Milestone 8](docs/Project-Management/Milestones/MILESTONE_8.md)
 
 ## Milestone Completion
 

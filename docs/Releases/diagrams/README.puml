@@ -1,0 +1,10 @@
+@startuml
+title KanbanFlow Releases
+rectangle "Published history" as H
+rectangle "Unreleased changes" as U
+rectangle "Preparation and checks" as C
+rectangle "Next authorized release" as R
+H --> U
+U --> C
+C --> R
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+title Upgrade and Rollback Guidance
+rectangle "Review release and current version" as R
+rectangle "Preserve data and configuration" as B
+rectangle "Apply compatible update" as U
+rectangle "Smoke checks" as S
+rectangle "Rollback assessment if needed" as A
+R --> B
+B --> U
+U --> S
+S --> A : failed checks
+@enduml

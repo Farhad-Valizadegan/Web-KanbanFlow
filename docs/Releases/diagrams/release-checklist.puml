@@ -1,0 +1,12 @@
+@startuml
+title Release Checklist
+rectangle "Scope and compatibility" as S
+rectangle "Version metadata" as M
+rectangle "Fresh verification" as V
+rectangle "Authorized tag and release" as R
+rectangle "Verify remote state" as C
+S --> M
+M --> V
+V --> R
+R --> C
+@enduml
