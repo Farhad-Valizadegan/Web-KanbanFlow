@@ -1,12 +1,17 @@
 @startuml
-title Quality and Risk Plan
-rectangle "Change risk" as R
-rectangle "Focused checks" as F
-rectangle "CI checks" as C
-rectangle "Browser or concurrency checks" as B
-rectangle "Evidence review" as E
-R --> F
-F --> C
-C --> B : when relevant
-B --> E
+title KanbanFlow Risk-Based Quality Review
+start
+:Identify change scope and failure boundaries;
+:Select focused regression and static checks;
+:Run relevant browser, database, or operational checks;
+:Record exact commit, environment, and results;
+if (Required outcome demonstrated?) then (yes)
+ :Review residual risks and documentation;
+ :Assess release readiness;
+else (no)
+ :Classify failure or verification gap;
+ :Repair within scope or record blocker;
+ :Repeat affected verification;
+endif
+stop
 @enduml
