@@ -1,13 +1,18 @@
 @startuml
-title Sprint Workflow
-rectangle "Refine" as R
-rectangle "Plan goal" as P
-rectangle "Implement" as I
-rectangle "Verify" as V
-rectangle "Review and retrospect" as E
-R --> P
-P --> I
-I --> V
-V --> E
-E --> R
+title KanbanFlow Sprint Workflow
+start
+:Refine candidates and resolve dependencies;
+:Agree goal, scope, participants, and capacity;
+:Select ready items and record sprint plan;
+:Implement small reviewed changes;
+:Verify acceptance criteria and record evidence;
+if (Item outcome demonstrated?) then (yes)
+ :Record completed outcome;
+else (no)
+ :Record blocker or unfinished work;
+endif
+:Review goal and user-visible behavior;
+:Record retrospective actions and carryover;
+:Update backlog and next planning inputs;
+stop
 @enduml
