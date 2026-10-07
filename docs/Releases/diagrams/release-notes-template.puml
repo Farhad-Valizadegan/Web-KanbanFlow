@@ -1,12 +1,15 @@
 @startuml
-title Release Notes Template
-rectangle "Identity" as I
-rectangle "Behavior changes" as C
-rectangle "Validation evidence" as V
-rectangle "Upgrade and known issues" as U
-rectangle "Published notes" as P
-I --> C
-C --> V
-V --> U
-U --> P
+title KanbanFlow Release Notes Preparation
+start
+:Identify version, baseline, and exact commit;
+:Describe user-visible changes and compatibility;
+:Attach fresh verification and explicit gaps;
+:Record upgrade steps and known issues;
+:Check metadata, links, and factual accuracy;
+if (Release publication authorized?) then (yes)
+ :Publish and verify final notes;
+else (no)
+ :Keep notes clearly marked draft;
+endif
+stop
 @enduml
