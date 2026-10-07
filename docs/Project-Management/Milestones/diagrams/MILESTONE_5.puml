@@ -1,0 +1,21 @@
+@startuml
+title KanbanFlow Milestone 5 Collaboration and Activity
+left to right direction
+actor "Authorized workspace user" as U
+rectangle "Task comment interface" as C
+rectangle "Backend access and validation" as B
+database "Comments and activity records" as D
+rectangle "Workspace activity feed" as F
+U --> C : read or submit comment
+C --> B : permitted request
+B --> D : accepted comment operations
+B --> D : record supported work events
+U --> F : inspect and filter activity
+F --> B : request permitted activity
+D --> B : scoped records
+note bottom of B
+Historical milestone delivery is recorded.
+Later releases refined visibility and
+removed-member comment authorization.
+end note
+@enduml
