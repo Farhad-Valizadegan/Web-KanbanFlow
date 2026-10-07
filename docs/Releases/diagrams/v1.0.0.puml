@@ -1,10 +1,19 @@
 @startuml
-title KanbanFlow v1.0.0
-rectangle "v1.0.0 source tag" as T
-rectangle "Recorded validation" as V
-rectangle "Published release notes" as N
-rectangle "Upgrade review" as U
-T --> V
-V --> N
-N --> U
+title KanbanFlow v1.0.0 Historical Release
+left to right direction
+rectangle "v1.0.0 tagged source\nInitial portfolio baseline" as T
+rectangle "Recorded feature set\nWorkspaces, Kanban, collaboration" as F
+rectangle "Historical verification\n153 tests / 429 assertions\nFrontend and CI passed" as V
+rectangle "Published 2026-07-25 UTC" as P
+rectangle "Later corrections\nv1.0.1 and v1.0.2" as C
+rectangle "Later features\nv1.1.0 themes and UI" as U
+T --> F
+F --> V
+V --> P
+P --> C
+C --> U
+note bottom of P
+Historical evidence, not fresh testing
+or proof of production deployment.
+end note
 @enduml
