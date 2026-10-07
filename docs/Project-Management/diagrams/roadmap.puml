@@ -1,10 +1,25 @@
 @startuml
-title Roadmap
-rectangle "Current baseline" as B
-rectangle "Permissions decision and fix" as P
-rectangle "User and operational guidance" as G
-rectangle "Usability review" as U
-B ..> P : proposed
-P ..> G : proposed
-G ..> U : proposed
+title KanbanFlow Evidence-Based Roadmap
+left to right direction
+rectangle "Delivered baseline\nPublished through v1.1.0" as B
+rectangle "DEC-003\nMembership policy agreement" as D
+rectangle "PB-001\nPermission enforcement" as P
+rectangle "PB-002\nVerified user guidance" as U
+rectangle "Operational decisions\nEnvironment and recovery objectives" as O
+rectangle "PB-003\nVerified recovery guidance" as R
+rectangle "Usability observations\nFuture refinement" as F
+rectangle "PB-004\nDocumentation consistency" as M
+B ..> D : proposed priority
+D --> P : prerequisite
+P ..> U : final membership guidance
+B ..> U : independent core guidance
+B ..> O : proposed
+O --> R : prerequisite
+U ..> F : observed feedback
+M ..> U : ongoing support
+M ..> R : ongoing support
+note bottom of B
+Main may contain later untagged changes.
+No dates or delivery commitments implied.
+end note
 @enduml
