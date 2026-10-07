@@ -1,13 +1,28 @@
 @startuml
-title Stakeholders and External Systems
-actor User
+title KanbanFlow Stakeholders and Supporting Systems
+left to right direction
+actor "Owners, managers, members, viewers" as Users
 actor Maintainer
 actor Operator
-rectangle KanbanFlow as App
-database MySQL as DB
-cloud "GitHub and CI" as Git
-User --> App : browser
-App --> DB : persistence
-Maintainer --> Git : development
-Operator --> App : configuration
+rectangle "User browser\nTheme preference and session interaction" as Browser
+rectangle "KanbanFlow\nReact frontend and Laravel backend" as App
+database "MySQL\nPersistent work records" as Database
+cloud "GitHub\nSource, review, releases" as GitHub
+rectangle "GitHub Actions\nBackend tests and frontend checks" as CI
+Users --> Browser : interact
+Browser --> App : HTTP and session flow
+App --> Database : authorized reads and writes
+Maintainer --> GitHub : source changes and review
+GitHub --> CI : configured workflow triggers
+Operator ..> App : environment and service operation
+Operator ..> Database : availability and recovery
+note bottom of CI
+Development verification.
+No automatic deployment is implied.
+end note
+note bottom of App
+Database notifications are included.
+External task, email, and SMS integrations
+are not promised by current scope.
+end note
 @enduml
