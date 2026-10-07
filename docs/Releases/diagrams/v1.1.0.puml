@@ -1,10 +1,20 @@
 @startuml
-title KanbanFlow v1.1.0
-rectangle "v1.1.0 source tag" as T
-rectangle "Recorded validation" as V
-rectangle "Published release notes" as N
-rectangle "Upgrade review" as U
-T --> V
-V --> N
-N --> U
+title KanbanFlow v1.1.0 Themes and Interface Release
+left to right direction
+rectangle "Light / Dark / System\nSaved browser preference" as T
+rectangle "Navigation, search, responsive views" as N
+rectangle "Password and dialog accessibility\nError recovery" as A
+rectangle "Session redirects and clear auth feedback" as S
+rectangle "v1.1.0 tagged source" as R
+rectangle "Historical checks\n163 tests / 470 assertions\nFrontend and browser journeys" as V
+T --> R
+N --> R
+A --> R
+S --> R
+R --> V
+note bottom of R
+Rebuild frontend; no migrations or
+dependency upgrades recorded.
+Membership loophole remains unresolved.
+end note
 @enduml
