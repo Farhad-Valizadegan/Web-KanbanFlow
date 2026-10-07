@@ -1,15 +1,28 @@
 @startuml
-title Project Context Diagram
-actor "Workspace user" as U
-actor Operator
-rectangle KanbanFlow {
- component "React frontend" as F
- component "Laravel backend" as B
+title KanbanFlow System Context
+left to right direction
+actor "Workspace users\nOwners, managers, members, viewers" as Users
+actor "Maintainer" as Maintainer
+actor "Operator" as Operator
+rectangle "KanbanFlow application boundary" {
+ component "React / TypeScript frontend\nNavigation, boards, task interaction" as Frontend
+ component "Laravel backend\nSessions, authorization, validation" as Backend
 }
-database MySQL as M
-U --> F : browser
-F --> B : authenticated HTTP
-B --> M : read / write
-Operator --> B : configuration
-Operator --> M : operation
+database "MySQL\nPersistent application records" as Database
+cloud "GitHub and GitHub Actions\nSource history and automated checks" as GitHub
+Users --> Frontend : browser interaction
+Frontend --> Backend : HTTP requests and responses\nsession cookies and CSRF
+Backend --> Database : authorized reads and writes
+Maintainer --> GitHub : changes and review
+GitHub ..> Backend : development checks
+Operator ..> Frontend : runtime configuration and assets
+Operator ..> Backend : service and environment operation
+Operator ..> Database : availability and recovery
+note bottom of GitHub
+Development infrastructure.
+No automatic deployment is implied.
+end note
+note bottom of Frontend
+Theme preference is browser-local.
+end note
 @enduml
