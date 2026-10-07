@@ -1,10 +1,22 @@
 @startuml
-title Product Backlog
-rectangle "Policy decision" as P
-rectangle "PB-001 Permission fix" as F
-rectangle "PB-002 User guidance" as U
-rectangle "PB-003 Recovery guide" as R
-P --> F : dependency
-U ..> F : document final behavior
-R ..> U : operational complement
+title KanbanFlow Product Backlog Dependencies
+left to right direction
+rectangle "DEC-003\nMembership policy agreement" as D
+rectangle "PB-001\nMembership enforcement" as P1
+rectangle "PB-002\nUser guidance" as P2
+rectangle "Target environment and recovery decisions" as O
+rectangle "PB-003\nBackup and recovery guidance" as P3
+rectangle "PB-004\nDocumentation and diagram maintenance" as P4
+D --> P1 : prerequisite
+P1 ..> P2 : final membership instructions
+O --> P3 : prerequisite
+P4 ..> P1 : documentation review
+P4 ..> P2 : links and previews
+P4 ..> P3 : evidence consistency
+note bottom of P1
+Known defect; no completed fix recorded.
+end note
+note bottom of P3
+Proposed work, not a verified restore procedure.
+end note
 @enduml
