@@ -1,14 +1,20 @@
 @startuml
-title KanbanFlow Sprints
-rectangle "Agree sprint" as N0
-rectangle "Plan" as N1
-rectangle "Execute" as N2
-rectangle "Verify" as N3
-rectangle "Review" as N4
-rectangle "Retrospect" as N5
-N0 --> N1
-N1 --> N2
-N2 --> N3
-N3 --> N4
-N4 --> N5
+title KanbanFlow Sprint Planning and Evidence Workflow
+start
+:Agree goal, dates, participants, and baseline;
+:Select ready items and record dependencies;
+:Implement and record progress or blockers;
+:Verify acceptance criteria on exact commits;
+if (Completion criteria met?) then (yes)
+ :Record completed outcomes and evidence;
+else (no)
+ :Record unfinished work and next action;
+endif
+:Review feedback and retrospective actions;
+:Refine backlog for future planning;
+note right
+Release publication and deployment
+require their own checks and authorization.
+end note
+stop
 @enduml
