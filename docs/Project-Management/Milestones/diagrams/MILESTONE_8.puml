@@ -1,0 +1,23 @@
+@startuml
+title KanbanFlow Milestone 8 CI and Build Readiness
+start
+:Main push or pull request targeting main;
+fork
+ :Backend job on Ubuntu;
+ :PHP 8.4 and Composer dependencies;
+ :SQLite test environment and Laravel tests;
+fork again
+ :Frontend job on Ubuntu;
+ :Node.js 24 and npm ci;
+ :Lint and TypeScript/Vite build;
+end fork
+:Review exact commit and job results;
+:Record historical readiness evidence;
+note right
+Route-based lazy loading reduces
+initial page-module loading.
+CI does not deploy or prove
+production recovery/readiness.
+end note
+stop
+@enduml
