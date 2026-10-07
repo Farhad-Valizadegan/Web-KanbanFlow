@@ -1,0 +1,21 @@
+@startuml
+title KanbanFlow Milestone 7 Analytics and Assignment
+left to right direction
+actor "Authorized workspace user" as U
+rectangle "Workspace analytics view" as A
+rectangle "Task assignee controls" as T
+rectangle "Backend access and validation" as B
+database "Projects, tasks, membership" as D
+rectangle "Assignment notification behavior" as N
+U --> A : inspect summaries and deadlines
+A --> B : request scoped analytics
+B --> D : permitted records
+U --> T : create or edit assignment
+T --> B : validated task mutation
+B --> D : persist accepted assignment
+B --> N : eligible assignment event
+note bottom of A
+v1.0.2 later corrected analytics refresh
+after project changes.
+end note
+@enduml
