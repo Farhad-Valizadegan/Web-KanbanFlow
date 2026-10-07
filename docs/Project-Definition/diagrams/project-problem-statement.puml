@@ -1,10 +1,28 @@
 @startuml
-title Project Problem Statement
-rectangle "Scattered information" as A
-rectangle "Unclear ownership" as B
-rectangle "Shared board" as C
-rectangle "Visible progress" as D
-A --> B
-B --> C : product response
-C --> D : intended benefit
+title KanbanFlow Problem and Product Response
+left to right direction
+rectangle "Working problem hypotheses" {
+ rectangle "Scattered work information" as S
+ rectangle "Unclear ownership and stage" as U
+ rectangle "Detached discussions" as D
+}
+rectangle "KanbanFlow response" {
+ rectangle "Shared boards and columns" as B
+ rectangle "Assignments and WIP limits" as A
+ rectangle "Comments and activity" as C
+}
+rectangle "Intended outcomes" {
+ rectangle "Discover who owns work\nand its current stage" as O
+ rectangle "Update work and verify\npersisted state" as P
+}
+S --> B
+U --> A
+D --> C
+B --> O
+A --> O
+C --> P
+note bottom of O
+Validate with representative users.
+No quantified productivity gain is established.
+end note
 @enduml
