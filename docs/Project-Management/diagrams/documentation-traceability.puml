@@ -1,10 +1,16 @@
 @startuml
-title Documentation Traceability
-rectangle "Code or policy change" as C
-rectangle "Affected documents" as D
-rectangle "Source and preview updates" as U
-rectangle "Review links and claims" as R
-C --> D
-D --> U
-U --> R
+title KanbanFlow Documentation Traceability
+start
+:Identify code, policy, or scope change;
+:Locate affected claims and documents;
+:Link authoritative source and exact evidence;
+:Update text and matching PlantUML copies;
+:Render diagram previews and check links;
+if (Claims supported and references valid?) then (yes)
+ :Record scoped review and commit;
+else (no)
+ :Correct claim or mark evidence pending;
+ :Repeat verification;
+endif
+stop
 @enduml
