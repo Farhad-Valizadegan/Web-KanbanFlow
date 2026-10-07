@@ -1,12 +1,22 @@
 @startuml
-title Assumptions and Constraints
-rectangle Browser as B
-rectangle "React frontend" as F
-rectangle "Session configuration" as S
-rectangle "Laravel backend" as L
-database MySQL as M
-B --> F
-F --> S
-S --> L
-L --> M
+title KanbanFlow Assumptions and Constraints
+left to right direction
+actor "Workspace user" as User
+rectangle "Modern browser\nNetwork access and cookies" as Browser
+rectangle "React frontend\nLocal theme preference" as Frontend
+rectangle "Session boundary\nOrigins, cookies, CSRF" as Session
+rectangle "Laravel backend\nAuthorization and validation" as Backend
+database "MySQL\nPersistent work data" as Database
+rectangle "Operator decisions\nHosting, backups, capacity" as Ops
+User --> Browser
+Browser --> Frontend
+Frontend --> Session
+Session --> Backend
+Backend --> Database
+Ops ..> Session : configure
+Ops ..> Database : protect and recover
+note bottom of Backend
+Manager membership policy remains open.
+SQLite tests do not prove MySQL contention.
+end note
 @enduml
