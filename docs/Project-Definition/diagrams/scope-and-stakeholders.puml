@@ -1,12 +1,28 @@
 @startuml
-title Scope and Stakeholders
-actor Owner
+title KanbanFlow Scope and Stakeholders
+left to right direction
+actor "Workspace owner" as Owner
 actor Manager
 actor Member
 actor Viewer
-rectangle "Workspace" as W
+actor Maintainer
+actor Operator
+rectangle "KanbanFlow product scope" {
+ rectangle "Membership and workspace organization" as W
+ rectangle "Projects, boards, columns, tasks" as T
+ rectangle "Comments, activity, notifications, analytics" as C
+}
+rectangle "Development and operation" as Ops
 Owner --> W : administer
-Manager --> W : coordinate
-Member --> W : contribute
-Viewer --> W : inspect
+Manager --> T : coordinate permitted work
+Member --> T : contribute where authorized
+Viewer --> T : inspect permitted resources
+T --> C : collaboration context
+Maintainer --> Ops : implementation and checks
+Operator --> Ops : configuration and recovery
+Ops ..> W : supports application
+note bottom of W
+Responsibilities are not an authorization matrix.
+Manager membership loophole remains open.
+end note
 @enduml
