@@ -1,10 +1,21 @@
 @startuml
-title Milestones
-rectangle "Historical milestones" as H
-rectangle "Released baseline v1.1.0" as B
-rectangle "Policy resolution candidate" as P
-rectangle "Documentation candidate" as D
-H --> B
-B ..> P : proposed
-B ..> D : proposed
+title KanbanFlow Milestones and Release Evidence
+left to right direction
+rectangle "M5\nCollaboration and activity" as M5
+rectangle "M6\nDatabase notifications" as M6
+rectangle "M7\nAnalytics and assignment controls" as M7
+rectangle "M8\nCI and frontend code splitting" as M8
+rectangle "Published releases\nv1.0.0 through v1.1.0" as R
+rectangle "Proposed\nMembership policy and enforcement" as P
+rectangle "Proposed\nUser and operational guidance" as G
+M5 --> M6
+M6 --> M7
+M7 --> M8
+M8 --> R
+R ..> P : candidate, not scheduled
+R ..> G : candidate, not scheduled
+note bottom of R
+Historical sequence, not a dated schedule.
+CI readiness is not production deployment.
+end note
 @enduml
