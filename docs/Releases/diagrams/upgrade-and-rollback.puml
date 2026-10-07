@@ -1,12 +1,21 @@
 @startuml
-title Upgrade and Rollback Guidance
-rectangle "Review release and current version" as R
-rectangle "Preserve data and configuration" as B
-rectangle "Apply compatible update" as U
-rectangle "Smoke checks" as S
-rectangle "Rollback assessment if needed" as A
-R --> B
-B --> U
-U --> S
-S --> A : failed checks
+title KanbanFlow Upgrade and Recovery Assessment
+start
+:Identify current and target source/environment;
+:Review compatibility, permissions, and data effects;
+:Preserve local work, configuration, and verified backups;
+:Validate update in isolated environment;
+if (Target checks pass and operation authorized?) then (yes)
+ :Apply environment-specific update;
+ :Verify services and accepted data;
+ if (Post-update checks pass?) then (yes)
+  :Record successful update evidence;
+ else (no)
+  :Contain failure and assess recovery;
+  :Choose compatible forward fix or verified rollback;
+ endif
+else (no)
+ :Keep update pending and record blocker;
+endif
+stop
 @enduml
