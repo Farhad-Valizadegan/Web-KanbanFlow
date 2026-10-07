@@ -1,12 +1,20 @@
 @startuml
-title Traceability
-rectangle "Requirement" as R
-rectangle "Decision or backlog item" as D
-rectangle "Implementation commit" as I
-rectangle "Verification result" as V
-rectangle "Release record" as E
-R --> D
+title KanbanFlow Feature Traceability
+left to right direction
+rectangle "User need and acceptance criteria" as N
+rectangle "Decision / backlog ID" as D
+rectangle "Implementation commit or PR" as I
+rectangle "Verification record\nExact commit and environment" as V
+rectangle "Release tag and notes\nWhen published" as R
+rectangle "Open gaps and follow-up" as G
+N --> D
 D --> I
 I --> V
-V --> E
+V --> R : demonstrated outcome
+V --> G : unmet or unverified criteria
+G --> D : refinement
+note bottom of V
+Linked tests are not proof they passed.
+Historical results are not fresh evidence.
+end note
 @enduml
