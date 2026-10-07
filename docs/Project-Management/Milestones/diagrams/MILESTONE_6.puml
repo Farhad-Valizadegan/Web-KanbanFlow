@@ -1,0 +1,21 @@
+@startuml
+title KanbanFlow Milestone 6 Database Notifications
+left to right direction
+actor "Authorized task editor" as Editor
+actor Assignee
+rectangle "Task assignment request" as Request
+rectangle "Backend validation and access" as Backend
+database "Task and notification records" as Data
+rectangle "Notification panel\nUnread state and read actions" as Panel
+Editor --> Request
+Request --> Backend
+Backend --> Data : persist accepted assignment
+Backend --> Data : notify eligible recipient
+Assignee --> Panel : inspect own notifications
+Panel --> Backend : authenticated requests
+Data --> Backend : recipient-scoped records
+note bottom of Backend
+Check self-assignment and duplicate cases.
+Database notifications do not imply email or SMS.
+end note
+@enduml
