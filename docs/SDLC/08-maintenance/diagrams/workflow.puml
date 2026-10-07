@@ -1,0 +1,11 @@
+@startuml
+title KanbanFlow Maintenance
+rectangle "Inputs and context" as I
+rectangle "Maintenance work" as W
+rectangle "Review evidence" as R
+rectangle "Phase outputs" as O
+I --> W
+W --> R
+R --> O
+R --> W : unresolved questions
+@enduml

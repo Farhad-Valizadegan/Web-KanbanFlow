@@ -1,0 +1,19 @@
+@startuml
+title KanbanFlow Software Development Lifecycle
+rectangle "Planning" as P0
+rectangle "Requirements" as P1
+rectangle "Analysis" as P2
+rectangle "Design" as P3
+rectangle "Implementation" as P4
+rectangle "Testing" as P5
+rectangle "Deployment" as P6
+rectangle "Maintenance" as P7
+P0 --> P1
+P1 --> P2
+P2 --> P3
+P3 --> P4
+P4 --> P5
+P5 --> P6
+P6 --> P7
+P7 --> P0 : feedback
+@enduml
