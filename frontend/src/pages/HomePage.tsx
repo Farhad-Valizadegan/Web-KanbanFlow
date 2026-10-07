@@ -1,58 +1,20 @@
-import { useQuery } from '@tanstack/react-query';
-import { apiClient } from '../api/client';
+import { Link } from 'react-router-dom';
 
-interface HealthResponse {
-    status: string;
-    application: string;
+export default function HomePage() {
+ return <main className="hero">
+  <div className="hero-grid">
+   <section><p className="eyebrow">A clearer way to work together</p><h1>Less juggling.<br /><span>More progress.</span></h1>
+    <p className="hero-description">Bring your projects, people, and priorities into one place. See what’s moving, what needs attention, and what’s next.</p>
+    <div className="hero-actions"><Link className="primary-button" to="/register">Create your workspace <span aria-hidden="true">&nbsp;→</span></Link><Link className="secondary-button" to="/login">Sign in</Link></div><p className="hero-note">Your team’s work. One shared view.</p>
+   </section>
+   <section className="board-preview" aria-label="Example project board"><div className="preview-header">Website launch <span>Team workspace</span></div>
+    <div className="preview-columns"><div className="preview-column"><h3>To do · 2</h3><div className="preview-card"><small>PLANNING</small>Map the customer journey</div><div className="preview-card">Write launch checklist</div></div><div className="preview-column"><h3>In progress · 1</h3><div className="preview-card"><small>DESIGN</small>Polish the homepage</div></div><div className="preview-column"><h3>Done · 1</h3><div className="preview-card done"><small>COMPLETE</small>Gather team feedback</div></div></div>
+   </section>
+  </div>
+  <section className="feature-grid" aria-label="What you can do with KanbanFlow">
+   <article><span className="feature-icon" aria-hidden="true">▦</span><h2>See the whole picture</h2><p>Organize work into projects and boards. Keep priorities visible as plans change.</p></article>
+   <article><span className="feature-icon" aria-hidden="true">↔</span><h2>Keep work moving</h2><p>Move tasks through your workflow, limit work in progress, and focus on finishing.</p></article>
+   <article><span className="feature-icon" aria-hidden="true">◎</span><h2>Stay connected</h2><p>Share updates, discuss tasks, and follow your team’s progress from one workspace.</p></article>
+  </section>
+ </main>;
 }
-
-async function getHealth(): Promise<HealthResponse> {
-    const response = await apiClient.get<HealthResponse>('/api/health');
-
-    return response.data;
-}
-
-function HomePage() {
-    const healthQuery = useQuery({
-        queryKey: ['health'],
-        queryFn: getHealth,
-    });
-
-    return (
-        <main className="min-h-screen bg-slate-950 px-6 py-16 text-slate-100">
-            <section className="mx-auto max-w-5xl border border-slate-800 bg-slate-900 p-10">
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                    KanbanFlow
-                </p>
-
-                <h1 className="mt-3 text-4xl font-bold">
-                    Collaborative Project Management Platform
-                </h1>
-
-                <div className="mt-8 border border-slate-700 bg-slate-950 p-5">
-                    <h2 className="font-semibold">Backend connection</h2>
-
-                    {healthQuery.isPending && (
-                        <p className="mt-2 text-slate-400">
-                            Checking backend connection...
-                        </p>
-                    )}
-
-                    {healthQuery.isError && (
-                        <p className="mt-2 text-red-400">
-                            Backend connection failed.
-                        </p>
-                    )}
-
-                    {healthQuery.data && (
-                        <p className="mt-2 text-green-400">
-                            Connected to {healthQuery.data.application}
-                        </p>
-                    )}
-                </div>
-            </section>
-        </main>
-    );
-}
-
-export default HomePage;

@@ -71,6 +71,7 @@ interface SortableBoardCardProps {
     projectId: number;
     disabled: boolean;
     isDeleting: boolean;
+    dragDisabled?: boolean;
     onEdit: (board: Board) => void;
     onDelete: (board: Board) => void;
 }
@@ -119,6 +120,7 @@ function SortableBoardCard({
     projectId,
     disabled,
     isDeleting,
+    dragDisabled = false,
     onEdit,
     onDelete,
 }: SortableBoardCardProps) {
@@ -136,7 +138,7 @@ function SortableBoardCard({
             type: 'board',
             boardId: board.id,
         },
-        disabled,
+        disabled: disabled || dragDisabled,
     });
 
     const style: CSSProperties = {
@@ -225,6 +227,7 @@ function BoardList({
     workspaceId,
     projectId,
 }: BoardListProps) {
+    const [search, setSearch] = useState('');
     const queryClient = useQueryClient();
     const { canManage } = useWorkspacePermissions(workspaceId);
 
@@ -605,6 +608,7 @@ function BoardList({
 
     const boards = boardsQuery.data;
 
+    const visibleItems = boards.filter(item => (item.name + ' ' + (item.description ?? '')).toLowerCase().includes(search.trim().toLowerCase()));
     if (boards.length === 0) {
         return (
             <p className="mt-6 border border-slate-800 bg-slate-900 p-6 text-slate-400">
@@ -620,6 +624,11 @@ function BoardList({
 
     return (
         <div className="mt-6">
+            <div className="list-toolbar">
+                <input type="search" aria-label="Search boards" placeholder="Search boards…" value={search} onChange={event => setSearch(event.target.value)} />
+                <p role="status">{visibleItems.length} of {boards.length} boards</p>
+            </div>
+            {visibleItems.length === 0 && <p className="empty-search">No matching boards. Try another name or clear your search.</p>}
             {errorMessage && (
                 <p className="mb-4 border border-red-900 bg-red-950/40 p-4 text-sm text-red-400">
                     {errorMessage}
@@ -646,7 +655,7 @@ function BoardList({
                     }
                 >
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                        {boards.map((board) => {
+                        {visibleItems.map((board) => {
                             const isEditing =
                                 editingBoardId ===
                                 board.id;
@@ -794,7 +803,7 @@ function BoardList({
                             }
 
                             return (
-                                <SortableBoardCard
+                                <SortableBoardCard dragDisabled={search.trim() !== ''}
                                     key={board.id}
                                     board={board}
                                     workspaceId={

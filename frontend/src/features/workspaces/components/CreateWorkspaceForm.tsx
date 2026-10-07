@@ -1,3 +1,4 @@
+import Modal from '../../../components/ui/Modal';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createWorkspace } from '../api';
@@ -38,14 +39,14 @@ function CreateWorkspaceForm({
         event.preventDefault();
 
         createMutation.mutate({
-            name,
+            name: name.trim(),
             description: description || undefined,
             visibility,
         });
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 px-4">
+        <Modal title="Create workspace" onClose={onClose} busy={createMutation.isPending}>
             <section className="w-full max-w-lg border border-slate-700 bg-slate-900 p-6">
                 <div className="flex items-center justify-between gap-4">
                     <div>
@@ -60,7 +61,7 @@ function CreateWorkspaceForm({
 
                     <button
                         type="button"
-                        onClick={onClose}
+                        onClick={onClose} disabled={createMutation.isPending}
                         className="border border-slate-700 px-3 py-1 text-slate-300 hover:border-slate-500"
                     >
                         Close
@@ -81,6 +82,7 @@ function CreateWorkspaceForm({
 
                         <input
                             id="workspace-name"
+                            autoFocus
                             type="text"
                             required
                             maxLength={255}
@@ -149,7 +151,7 @@ function CreateWorkspaceForm({
                     <div className="flex justify-end gap-3">
                         <button
                             type="button"
-                            onClick={onClose}
+                            onClick={onClose} disabled={createMutation.isPending}
                             className="border border-slate-700 px-4 py-2 text-slate-300 hover:border-slate-500"
                         >
                             Cancel
@@ -170,7 +172,7 @@ function CreateWorkspaceForm({
                     </div>
                 </form>
             </section>
-        </div>
+        </Modal>
     );
 }
 

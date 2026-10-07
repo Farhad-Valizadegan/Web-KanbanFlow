@@ -9,7 +9,7 @@ KanbanFlow provides authenticated workspace collaboration, project management, i
 Current version:
 
 ```text
-Version 1.0.2
+Version 1.1.0
 ```
 
 Development status:

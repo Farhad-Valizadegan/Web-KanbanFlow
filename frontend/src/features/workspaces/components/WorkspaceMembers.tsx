@@ -126,12 +126,12 @@ function WorkspaceMembers({
                         onChange={(event) =>
                             setEmail(event.target.value)
                         }
-                        placeholder="Member email"
+                        placeholder="Member email" aria-label="Member email"
                         className="border border-slate-700 bg-slate-950 px-3 py-2 text-slate-100 outline-none focus:border-blue-500"
                     />
 
                     <select
-                        value={role}
+                        aria-label="New member role" value={role}
                         onChange={(event) =>
                             setRole(
                                 event.target.value as EditableRole,

@@ -56,7 +56,7 @@ function ProjectPage() {
 
     if (projectQuery.isPending) {
         return (
-            <main className="min-h-screen bg-slate-950 p-8 text-slate-300">
+            <main role="status" className="min-h-screen bg-slate-950 p-8 text-slate-300">
                 Loading project...
             </main>
         );
