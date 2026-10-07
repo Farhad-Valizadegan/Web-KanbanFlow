@@ -1,10 +1,20 @@
 @startuml
-title Decision Register
-rectangle "Question" as Q
-rectangle "Options and consequences" as O
-rectangle "Approved decision" as D
-rectangle "Implementation evidence" as I
-Q --> O
-O --> D
-D --> I
+title KanbanFlow Decision Lifecycle
+start
+:Record question, context, and evidence;
+:Compare options and consequences;
+if (Explicit decision recorded?) then (yes)
+ :Record outcome and actual approval evidence;
+ :Implement scoped change;
+ :Verify enforcement and update documentation;
+ if (Outcome demonstrated?) then (yes)
+  :Mark implemented with commit and checks;
+ else (no)
+  :Keep implementation or verification gap open;
+ endif
+else (no)
+ :Keep decision open;
+ :Record next question and blocked dependencies;
+endif
+stop
 @enduml
