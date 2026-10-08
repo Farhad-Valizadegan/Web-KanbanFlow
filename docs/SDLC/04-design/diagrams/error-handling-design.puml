@@ -1,9 +1,24 @@
 @startuml
-title KanbanFlow Error Handling Design
+title KanbanFlow Error Classification and Recovery
 start
-:Classify failure at its boundary;
-:Present safe actionable feedback;
-:Offer applicable recovery;
-:Verify visible and persisted state;
+:Identify failure boundary and actual response evidence;
+if (Mutation outcome uncertain?) then (yes)
+ :Inspect authoritative state before considering retry;
+else (no)
+ :Classify input, identity, permission, resource, or runtime failure;
+endif
+:Present safe operation-specific feedback;
+:Assess retained input, focus, and applicable recovery;
+if (Recovery action available?) then (yes)
+ :Perform actual correction, navigation, reload, or bounded retry;
+ :Reassess access and visible/persisted state;
+else (no)
+ :Keep failure and next investigation step visible;
+endif
+:Record sanitized evidence and unresolved gaps;
 stop
+note right
+Feedback text does not execute recovery.
+No response does not prove no commit.
+end note
 @enduml
