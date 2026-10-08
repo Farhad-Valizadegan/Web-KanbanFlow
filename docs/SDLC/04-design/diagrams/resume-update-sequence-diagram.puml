@@ -1,19 +1,40 @@
 @startuml
-title KanbanFlow resume update sequence diagram
-actor Actor
-participant "Client interface" as UI
-participant "Actual or proposed endpoint" as API
-participant "Applicable authorization" as Policy
-Actor -> UI : Request operation
-UI -> API : Submit request
-API -> Policy : Check identity and authority
-Policy --> API : Decision
-alt Allowed under applicable contract
- API --> UI : Defined result
- UI --> Actor : Verify state
-else Denied or unavailable
- API --> UI : Safe failure
- UI --> Actor : Recovery
+title KanbanFlow Task Field Update - Representative Sequence
+actor User
+participant "Form / Update helper" as Client
+participant "TaskController" as API
+participant "Ancestry / Board policy / Validation" as Checks
+database "Task / Column / Activity records" as DB
+participant "Assignment notification helper" as Notice
+User -> Client : Edit task fields
+Client -> API : Actual nested update request
+API -> Checks : Check ancestry, authority, fields, assignee
+alt Allowed and valid
+ Checks --> API : Validated input
+ API -> DB : Begin transaction; lock column and fresh task
+ alt Task still belongs to submitted column
+  API -> DB : Check WIP if explicitly reopening
+  alt Domain checks pass
+   API -> DB : Update fields and record before/after activity
+   opt Supplied assignment changed
+    API -> Notice : Invoke actual notification helper
+   end
+   API -> DB : Commit; refresh task and relationships
+   API --> Client : Message and updated data
+   Client --> User : Actual success transition / query refresh
+  else Domain rejected
+   API --> Client : Applicable failure; verify final state
+  end
+ else Task moved
+  API --> Client : 409; refresh board guidance
+ end
+else Denied or invalid
+ Checks --> API : Reject
+ API --> Client : Safe failure without protected update
 end
-note over Actor, API : KanbanFlow resource interaction, not a resume/CV entity.
+note over User, Notice
+Representative task path, not every resource update.
+No resume/CV entity or automatic conflict merging.
+Failures and uncertain responses require final-state evidence.
+end note
 @enduml
