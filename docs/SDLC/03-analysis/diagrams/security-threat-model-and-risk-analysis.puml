@@ -1,9 +1,27 @@
 @startuml
-title KanbanFlow Security Threat Model and Risk Analysis
+title KanbanFlow Threat Assessment and Risk Disposition
 start
-:Identify actors, assets, and boundaries;
-:Assess misuse and existing controls;
-:Record evidence and residual risks;
-:Link mitigation and actual decision;
+:Identify actor, asset, entry point, and trust boundary;
+:Trace endpoint, policy, data flow, and operational controls;
+:Describe misuse scenario and prerequisites;
+:Separate hypothesis, source gap, and observed defect;
+:Assess impact, likelihood, and uncertainty with rationale;
+if (Verification evidence available?) then (yes)
+  :Record result and environment limitations;
+else (no)
+  :Record proposed check and unverified exposure;
+endif
+if (Mitigation required?) then (yes)
+  :Link agreed decision, backlog, and responsible role;
+  :Implement control and verify affected scenarios;
+  if (Closure evidence sufficient?) then (yes)
+    :Record closure and residual risk;
+  else (no)
+    :Keep finding open;
+  endif
+else (accepted or deferred)
+  :Record actual decision, rationale, and review trigger;
+endif
+:Reassess when boundaries or controls change;
 stop
 @enduml
