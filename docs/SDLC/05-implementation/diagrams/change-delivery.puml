@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow change delivery
+start
+:Review final diff and evidence;
+:Stage intended paths and commit;
+:Push authorized branch and fetch;
+:Compare identities and report delivery state;
+stop
+@enduml

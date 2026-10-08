@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow implementation status
+start
+:Inspect source-backed capability;
+:Separate implemented, proposed, and open issues;
+:Attach candidate and actual verification evidence;
+:Update status and release linkage;
+stop
+@enduml

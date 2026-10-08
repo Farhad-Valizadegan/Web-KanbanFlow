@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow dependency baseline
+start
+:Inspect manifests, lockfiles, and target runtime;
+:Explain proposed dependency change;
+:Review resolution and lifecycle scripts;
+:Verify affected behavior and record baseline;
+stop
+@enduml

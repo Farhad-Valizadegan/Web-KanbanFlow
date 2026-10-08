@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow implementation
+start
+:Trace client, route, authority, and data contract;
+:Implement normal and failure behavior;
+:Check ancestry, integrity, and shared consumers;
+:Record acceptance evidence and remaining gaps;
+stop
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow development workflow
+start
+:Inspect checkout and preserve existing work;
+:Prepare locked dependencies and local configuration;
+:Develop and verify scoped behavior;
+:Review diff and deliver candidate;
+stop
+@enduml

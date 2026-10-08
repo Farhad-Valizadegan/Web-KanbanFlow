@@ -1,11 +1,9 @@
 @startuml
-title KanbanFlow Implementation
-rectangle "Inputs and context" as I
-rectangle "Implementation work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Implementation Phase
+start
+:Identify requirement and design inputs;
+:Implement scoped change;
+:Collect review and verification evidence;
+:Hand off candidate and unresolved limitations;
+stop
 @enduml
