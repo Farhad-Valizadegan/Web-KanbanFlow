@@ -1,19 +1,39 @@
 @startuml
-title KanbanFlow resume deletion sequence diagram
-actor Actor
-participant "Client interface" as UI
-participant "Actual or proposed endpoint" as API
-participant "Applicable authorization" as Policy
-Actor -> UI : Request operation
-UI -> API : Submit request
-API -> Policy : Check identity and authority
-Policy --> API : Decision
-alt Allowed under applicable contract
- API --> UI : Defined result
- UI --> Actor : Verify state
+title KanbanFlow Resource Deletion - Endpoint-Specific Sequence
+actor User
+participant "Feature UI / DELETE helper" as Client
+participant "Authenticated resource controller" as API
+participant "Ancestry / Invoked authority" as Rules
+database "Resource persistence" as DB
+User -> Client : Select deletion; confirm where provided
+Client -> API : DELETE actual nested resource
+API -> Rules : Check identity, ancestry, actual operation authority
+alt Request allowed
+ Rules --> API : Allow
+ group Endpoint-specific persistence
+  API -> DB : Apply actual transaction/locks where present
+  opt Task endpoint
+   API -> DB : Re-read task and reject if column changed
+  end
+  API -> DB : Soft-delete selected row
+  opt Board or column endpoint
+   API -> DB : Renumber remaining scoped siblings
+  end
+  opt Task endpoint
+   API -> DB : Write deletion activity within transaction
+  end
+  DB --> API : Actual result or failure
+ end
+ API --> Client : Endpoint result
+ Client --> User : Refresh affected views; verify authoritative state
 else Denied or unavailable
- API --> UI : Safe failure
- UI --> Actor : Recovery
+ Rules --> API : Reject
+ API --> Client : Safe failure without protected deletion
+ Client --> User : Applicable feedback/recovery
 end
-note over Actor, API : KanbanFlow resource interaction, not a resume/CV entity.
+note over User, DB
+No resume/CV entity; this is resource deletion.
+Soft deletion does not trigger physical FK cascades.
+Actual failures/stale-state outcomes require endpoint-specific checks.
+end note
 @enduml
