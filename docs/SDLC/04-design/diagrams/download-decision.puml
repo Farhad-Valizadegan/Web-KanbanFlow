@@ -1,9 +1,21 @@
 @startuml
-title KanbanFlow Download Decision
+title KanbanFlow Proposed Download Capability Decision
 start
-:Propose artifact and audience;
-:Define authorization filtering and lifecycle;
-:Approve explicit contract and acceptance cases;
-:Implement and verify before claiming support;
+:Define user outcome, artifact, and resource scope;
+:Specify current authority and private-data selection;
+:Compare direct, stored, and asynchronous delivery;
+:Define contract, limits, lifecycle, and failure recovery;
+if (Material decisions recorded?) then (yes)
+ :Prepare scoped implementation and acceptance cases;
+ :Implement chosen capability;
+ :Verify output, denial, revocation, limits, and cleanup;
+ if (Required evidence demonstrates support?) then (yes)
+  :Record delivered candidate and remaining limitations;
+ else (no)
+  :Keep implementation or verification gap visible;
+ endif
+else (no)
+ :Keep proposal open; no download support claimed;
+endif
 stop
 @enduml
