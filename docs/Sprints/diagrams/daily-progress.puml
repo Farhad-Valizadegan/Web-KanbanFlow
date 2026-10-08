@@ -1,10 +1,20 @@
 @startuml
-title Daily Progress and Blockers
-rectangle "Observe progress" as N0
-rectangle "Identify blocker" as N1
-rectangle "Agree next action" as N2
-rectangle "Update backlog" as N3
-N0 --> N1
-N1 --> N2
-N2 --> N3
+title KanbanFlow Daily Progress and Blocker Handling
+start
+:Record observed progress and evidence;
+if (Work blocked?) then (yes)
+ :Describe dependency, impact, and discovery date;
+ :Agree next action and responsible person;
+ :Mark affected backlog item Blocked;
+else (no)
+ :Record concrete next step and current state;
+endif
+:Link decisions and material scope changes;
+if (Blocker resolved with evidence?) then (yes)
+ :Record resolution and reassess readiness;
+else (no / not applicable)
+ :Keep current status and next review visible;
+endif
+:Update sprint record and backlog;
+stop
 @enduml
