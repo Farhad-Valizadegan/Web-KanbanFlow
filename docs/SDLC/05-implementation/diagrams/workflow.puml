@@ -1,9 +1,22 @@
 @startuml
-title KanbanFlow Implementation Phase
+title KanbanFlow Implementation Phase and Evidence Handoff
 start
-:Identify requirement and design inputs;
-:Implement scoped change;
-:Collect review and verification evidence;
-:Hand off candidate and unresolved limitations;
+:Identify requirement, acceptance cases, and repository state;
+if (Material policy or contract unresolved?) then (yes)
+ :Return question to analysis and decision register;
+ :Record dependency before implementation;
+else (no)
+ :Trace affected client, API authority, and persistence;
+ :Implement scoped change and meaningful regression coverage;
+ :Review final diff and update affected documentation;
+ :Collect candidate-specific checks and environment limits;
+ if (Affected acceptance criteria demonstrated?) then (yes)
+  :Hand off reviewed candidate for authorized delivery;
+ else (no)
+  :Keep failed or unverified criteria visible;
+  :Correct scoped defect or record remaining blocker;
+ endif
+endif
+:Link evidence, residual issues, and next phase;
 stop
 @enduml
