@@ -1,9 +1,16 @@
 @startuml
-title KanbanFlow User Stories and Use Cases
+title KanbanFlow Stories to Acceptance Evidence
 start
 :Describe actor need and benefit;
-:Define preconditions and main flow;
-:Include alternatives and postconditions;
-:Link criteria and backlog;
+:Define scope, preconditions, and observable flow;
+:Specify alternatives and persisted postconditions;
+if (Essential rules and dependencies clear?) then (yes)
+ :Link criteria and bounded backlog work;
+ :Record candidate evidence when checks occur;
+else (no)
+ :Refine story or define bounded investigation;
+ :Keep dependent implementation blocked;
+endif
+:Preserve traceability through material changes;
 stop
 @enduml
