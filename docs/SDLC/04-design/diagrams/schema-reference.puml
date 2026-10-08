@@ -1,9 +1,22 @@
 @startuml
-title KanbanFlow Schema Reference
-start
-:Read migration schema and foreign keys;
-:Compare model fields relationships and casts;
-:Specify compatible data change and recovery;
-:Verify migration and persisted constraints;
-stop
+title KanbanFlow Schema Responsibilities and Verification
+package "Migration source" {
+ rectangle "Core resources and membership" as Core
+ rectangle "Activity and polymorphic notifications" as Secondary
+ rectangle "Account / Session / Token infrastructure" as Account
+ rectangle "Cache / Jobs infrastructure" as Infra
+}
+rectangle "Physical keys / Nullability / Defaults / Indexes" as Schema
+rectangle "Models: Relationships / Casts / Soft deletion" as Models
+rectangle "Controllers: Authority / Validation / WIP / Ordering" as Rules
+database "Actual applied database schema and records" as DB
+Core --> Schema
+Secondary --> Schema
+Account --> Schema
+Infra --> Schema
+Schema --> DB : migrations
+Models --> DB
+Rules --> Models
+note bottom of Schema : FK cascade applies to physical deletion, not deleted_at updates.
+note bottom of DB : Verify applied schema and engine; source alone is insufficient.
 @enduml
