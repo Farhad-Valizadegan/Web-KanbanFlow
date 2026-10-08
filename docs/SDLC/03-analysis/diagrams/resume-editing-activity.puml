@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Resuming Editing Activity
+start
+:Reassess session and current resource access;
+:Load current data and edit input;
+:Submit using actual validation and authorization;
+:Record accepted result or failure recovery;
+stop
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+title KanbanFlow Conceptual Data Flow
+rectangle Browser as B
+rectangle "Authenticated API boundary" as A
+rectangle "Validation, access, and domain operation" as O
+database "Application database" as D
+B --> A : request
+A --> O : guarded operation
+O --> D : scoped read or mutation
+D --> O : records
+O --> B : result or rejection
+@enduml

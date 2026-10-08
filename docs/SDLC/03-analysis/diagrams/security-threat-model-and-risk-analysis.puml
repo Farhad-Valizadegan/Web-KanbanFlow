@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Security Threat Model and Risk Analysis
+start
+:Identify actors, assets, and boundaries;
+:Assess misuse and existing controls;
+:Record evidence and residual risks;
+:Link mitigation and actual decision;
+stop
+@enduml

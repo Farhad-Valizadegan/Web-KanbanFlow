@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Analysis Guide
+start
+:Identify requirement and baseline;
+:Trace actual behavior and affected boundaries;
+:Assess hypotheses and compatibility;
+:Hand bounded findings to design;
+stop
+@enduml

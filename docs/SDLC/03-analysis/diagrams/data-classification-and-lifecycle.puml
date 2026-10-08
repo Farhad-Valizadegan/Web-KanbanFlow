@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Data Classification and Lifecycle
+start
+:Identify data and purpose;
+:Trace storage, access, and derived data;
+:Assess lifecycle and recovery questions;
+:Record actual policy or pending decision;
+stop
+@enduml

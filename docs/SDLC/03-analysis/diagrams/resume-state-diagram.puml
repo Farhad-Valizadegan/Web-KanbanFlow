@@ -1,0 +1,18 @@
+@startuml
+title KanbanFlow Conceptual Editing States
+state Viewing
+state Editing
+state Submitting
+state Accepted
+state Rejected
+state "Access unavailable" as Unavailable
+[*] --> Viewing
+Viewing --> Editing
+Editing --> Submitting
+Submitting --> Accepted : accepted request
+Submitting --> Rejected : invalid or conflicting request
+Submitting --> Unavailable : access no longer permitted
+Rejected --> Editing : reassess and correct
+Accepted --> Viewing : refresh current data
+Unavailable --> Viewing : valid session and access restored
+@enduml

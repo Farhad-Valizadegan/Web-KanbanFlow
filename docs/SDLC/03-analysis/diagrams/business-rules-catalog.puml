@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Business Rules Catalog
+start
+:Identify rule and source;
+:Assess actors and accepted or rejected behavior;
+:Record open policy dependency;
+:Link acceptance and follow-up;
+stop
+@enduml

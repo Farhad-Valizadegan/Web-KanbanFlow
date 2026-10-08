@@ -1,0 +1,16 @@
+@startuml
+title KanbanFlow Conceptual Domain Hierarchy
+rectangle Workspace as W
+rectangle Project as P
+rectangle Board as B
+rectangle Column as C
+rectangle Task as T
+rectangle "Membership and role context" as M
+rectangle "Comments and activity" as A
+W --> P : contains
+P --> B : contains
+B --> C : contains
+C --> T : contains
+M --> W : access context
+T --> A : collaboration context
+@enduml
