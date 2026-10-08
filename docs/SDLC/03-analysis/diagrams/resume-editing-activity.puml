@@ -1,9 +1,32 @@
 @startuml
-title KanbanFlow Resuming Editing Activity
+title KanbanFlow Returning to an Editing Interaction
 start
-:Reassess session and current resource access;
-:Load current data and edit input;
-:Submit using actual validation and authorization;
-:Record accepted result or failure recovery;
+:Resolve current session;
+if (Session available?) then (yes)
+  :Load current resource and reassess access;
+else (no)
+  :Follow authentication recovery;
+  stop
+endif
+if (Resource accessible?) then (yes)
+  :Establish server baseline;
+  :Inspect remaining client values;
+  :Edit and submit;
+else (no)
+  :Show applicable access or resource recovery;
+  stop
+endif
+:Server checks current authorization and validation;
+if (Accepted response?) then (yes)
+  :Observe update and verify persisted values;
+else (no or unknown)
+  if (Definite rejection?) then (yes)
+    :Classify failure and inspect feedback;
+    :Verify persisted state and recovery;
+  else (unknown)
+    :Read authoritative state before considering retry;
+  endif
+endif
+:Record evidence and unresolved decisions;
 stop
 @enduml
