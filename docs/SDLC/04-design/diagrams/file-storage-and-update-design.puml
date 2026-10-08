@@ -1,9 +1,33 @@
 @startuml
-title KanbanFlow File Storage and Update Design
+title KanbanFlow Proposed File Replacement and Recovery
 start
-:Define proposed attachment ownership and lifecycle;
-:Specify validation access and storage boundary;
-:Design update failure and cleanup behavior;
-:Verify approved feature before publication;
+:Resolve actor, owning resource, and prior version;
+:Apply agreed authority, content, and limit checks;
+if (Allowed and valid?) then (yes)
+ :Write new bytes to isolated server-selected key;
+ if (Storage write confirmed?) then (yes)
+  :Commit metadata selection under agreed concurrency rule;
+  if (Metadata commit succeeds?) then (yes)
+   :Expose new artifact through authorized delivery;
+   :Apply previous-artifact cleanup policy;
+   if (Cleanup succeeds?) then (yes)
+    :Record consistent final state;
+   else (no)
+    :Record residual artifact and reconciliation action;
+   endif
+  else (no)
+   :Keep prior state and compensate staged bytes as agreed;
+  endif
+ else (no)
+  :Report storage failure; preserve prior state as agreed;
+ endif
+else (no)
+ :Reject without unauthorized change;
+endif
+:Verify metadata, bytes, access, and remaining gaps;
 stop
+note right
+Proposed workflow only.
+Storage and database writes are not automatically atomic.
+end note
 @enduml
