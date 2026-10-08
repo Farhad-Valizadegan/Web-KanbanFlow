@@ -1,0 +1,13 @@
+@startuml
+title KanbanFlow Project Planning Layers
+rectangle "Product purpose and boundaries" as P
+rectangle "Priorities, risks, and decisions" as M
+rectangle "Bounded planning and requirements" as R
+rectangle "Agreed execution scope" as S
+rectangle "Outcome evidence and delivery decisions" as E
+P --> M
+M --> R
+R --> S
+S --> E
+E --> M : feedback
+@enduml

@@ -1,5 +1,10 @@
 # Planning
 
+## Guides
+
+- [Planning process and record](planning.md)
+- [Project planning overview](project-planning-overview.md)
+
 ## Purpose and activities
 
 Define the user problem, scope, priorities, dependencies, and risks before scheduling work. Use the existing management roadmap and backlog as proposals; do not infer committed dates or staffing.
