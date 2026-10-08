@@ -1,9 +1,32 @@
 @startuml
-title KanbanFlow Editor Interaction Flow
+title KanbanFlow Form Editing and Submission
 start
-:Load current resource and permission context;
-:Edit fields and submit request;
-:Handle accepted rejected or uncertain result;
-:Verify authoritative state and recovery;
+:Resolve resource context and loaded baseline;
+:Open editor with local input values;
+:Edit operation-specific fields;
+if (Cancel before submission?) then (yes)
+ :Close editor according to actual form behavior;
+ stop
+else (no)
+ :Apply client checks and prepare payload;
+endif
+if (Client input valid?) then (yes)
+ :Submit request and show pending state;
+ :Server checks current access, input, and domain rules;
+ if (Accepted response?) then (yes)
+  :Apply actual success/editor transition;
+  :Refresh affected queries and verify persisted values;
+ else (no or unknown)
+  if (Definite rejection?) then (yes)
+   :Show applicable feedback and inspect input retention;
+   :Reassess session/resource/access for recovery;
+  else (unknown)
+   :Establish server state before considering retry;
+  endif
+ endif
+else (no)
+ :Show validation feedback and allow correction;
+endif
+:Record actual transitions, focus, and remaining gaps;
 stop
 @enduml
