@@ -1,0 +1,20 @@
+@startuml
+title KanbanFlow Deployment Components - Target To Be Established
+actor Browser
+rectangle "Frontend assets\nReact / Vite build" as UI
+rectangle "HTTP server / PHP runtime" as HTTP
+rectangle "Laravel API" as API
+database "Application database\nMySQL local example" as DB
+rectangle "Configured storage" as FS
+rectangle "Background services\nwhere required" as BG
+Browser --> UI : load client
+Browser --> HTTP : authenticated API requests
+HTTP --> API
+API --> DB
+API --> FS
+BG --> DB
+note bottom of API
+Actual hosts, service controls, and
+production topology are not established.
+end note
+@enduml

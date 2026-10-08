@@ -1,0 +1,15 @@
+@startuml
+title KanbanFlow deployment
+start
+:Identify target, candidate, and authorization;
+:Assess compatibility and recovery evidence;
+:Apply reviewed source, assets, and changes;
+:Observe smoke checks and persisted state;
+if (Checks meet agreed criteria?) then (yes)
+:Record acceptance and residual limitations;
+else (no)
+:Contain failure and assess correction or recovery;
+:Reverify resulting candidate and state;
+endif
+stop
+@enduml

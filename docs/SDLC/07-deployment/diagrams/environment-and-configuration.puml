@@ -1,0 +1,15 @@
+@startuml
+title KanbanFlow environment and configuration
+start
+:Inspect actual target and configuration;
+:Align hosts, session, runtime, and services;
+:Apply assessed settings and matching assets;
+:Verify real browser and database behavior;
+if (Checks meet agreed criteria?) then (yes)
+:Record acceptance and residual limitations;
+else (no)
+:Contain failure and assess correction or recovery;
+:Reverify resulting candidate and state;
+endif
+stop
+@enduml

@@ -1,11 +1,15 @@
 @startuml
-title KanbanFlow Deployment
-rectangle "Inputs and context" as I
-rectangle "Deployment work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Deployment Phase
+start
+:Identify target, candidate, and authorization;
+:Assess compatibility and recovery evidence;
+:Apply reviewed source, assets, and changes;
+:Observe smoke checks and persisted state;
+if (Checks meet agreed criteria?) then (yes)
+:Record acceptance and residual limitations;
+else (no)
+:Contain failure and assess correction or recovery;
+:Reverify resulting candidate and state;
+endif
+stop
 @enduml

@@ -1,34 +1,49 @@
-# Deployment
+# KanbanFlow Deployment
 
-## Purpose and activities
+## Purpose and status
 
-Separate source publication from runtime deployment. Review environment URLs, session configuration, assets, data compatibility, backups, and recovery before an authorized deployment. GitHub Actions does not automatically deploy this application.
+This phase prepares a named application candidate for an identified runtime environment and records the outcome of an authorized rollout. These documents are operational guidance, not evidence that production hosting, backups, restoration, or deployment have occurred. GitHub source publication and CI checks are separate from deployment.
 
-## Completion evidence
+## Document catalog
 
-A verified target environment, approved deployment scope, smoke-check evidence, and a recovery plan tested as appropriate. No production deployment is asserted by this guide.
+| Document | Purpose |
+| --- | --- |
+| [Deployment](deployment.md) | Entry conditions, rollout controls, and completion evidence. |
+| [Deployment architecture](deployment-architecture.md) | Runtime components and operational boundaries. |
+| [Environment and configuration](environment-and-configuration.md) | Hosts, credentials, services, and environment review. |
+| [Release and upgrade runbook](release-and-upgrade-runbook.md) | Candidate preparation, rollout, verification, and recovery decisions. |
+| [Upgrade activity](upgrade-activity.md) | Upgrade decision flow and evidence checkpoints. |
+| [Backup and recovery runbook](backup-and-recovery-runbook.md) | Recovery objectives, backup scope, restore verification, and access control. |
+| [Backup recovery activity](backup-recovery-activity.md) | Recovery workflow and failure handling. |
 
-## Related guidance
+The screenshot abbreviates two filenames; the catalog uses their full descriptive names. Each document includes an editable PlantUML source and rendered preview.
 
-- [Supporting documentation](../../Releases/upgrade-and-rollback.md)
-- [SDLC index](../README.md)
+## Phase inputs and outputs
 
-## PlantUML workflow
+Inputs include exact candidate identity, actual verification evidence, target ownership/configuration, compatibility assessment, recoverable data/configuration, and operation authorization. Outputs include observed runtime identity, smoke results, data integrity observations, residual issues, and the selected recovery or acceptance outcome.
 
-![Deployment workflow](diagrams/workflow.png)
+Do not advance a failed or unverified operation solely because the source push succeeded. See [testing](../06-testing/README.md), [release checklist](../../Releases/release-checklist.md), [upgrade and rollback](../../Releases/upgrade-and-rollback.md), and [maintenance](../08-maintenance/README.md).
 
-[Editable source](diagrams/workflow.puml)
+## PlantUML diagram
+
+![KanbanFlow Deployment Phase](diagrams/workflow.png)
+
+[Editable PlantUML source](diagrams/workflow.puml)
 
 ```plantuml
 @startuml
-title KanbanFlow Deployment
-rectangle "Inputs and context" as I
-rectangle "Deployment work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Deployment Phase
+start
+:Identify target, candidate, and authorization;
+:Assess compatibility and recovery evidence;
+:Apply reviewed source, assets, and changes;
+:Observe smoke checks and persisted state;
+if (Checks meet agreed criteria?) then (yes)
+:Record acceptance and residual limitations;
+else (no)
+:Contain failure and assess correction or recovery;
+:Reverify resulting candidate and state;
+endif
+stop
 @enduml
 ```
