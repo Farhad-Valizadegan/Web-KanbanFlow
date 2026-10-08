@@ -1,11 +1,16 @@
 @startuml
-title KanbanFlow Planning
-rectangle "Inputs and context" as I
-rectangle "Planning work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Planning Phase Handoff
+start
+:Review product context, priorities, and constraints;
+:Define outcome, scope, and success criteria;
+:Assess dependencies, risks, and verification needs;
+if (Required planning decisions recorded?) then (yes)
+ :Record agreed outputs and remaining assumptions;
+ :Hand off bounded scope to requirements;
+else (no)
+ :Keep dependent work pending or blocked;
+ :Record decision action or bounded investigation;
+endif
+:Revisit planning when evidence or scope changes;
+stop
 @enduml
