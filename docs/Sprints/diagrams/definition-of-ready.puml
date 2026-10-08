@@ -1,12 +1,17 @@
 @startuml
-title Definition of Ready
-rectangle "User need" as N0
-rectangle "Clear scope" as N1
-rectangle "Acceptance criteria" as N2
-rectangle "Dependency review" as N3
-rectangle "Ready" as N4
-N0 --> N1
-N1 --> N2
-N2 --> N3
-N3 --> N4
+title KanbanFlow Definition of Ready
+start
+:Describe need, outcome, and boundaries;
+:Define observable acceptance criteria;
+:Assess permissions, data, and compatibility;
+:Identify dependencies and verification environment;
+if (Blocking questions resolved?) then (yes)
+ :Record readiness decision and evidence;
+ :Mark item Ready for selection;
+else (no)
+ :Keep item Proposed or Blocked as appropriate;
+ :Assign next action or define bounded investigation;
+endif
+:Reassess when scope or dependencies change;
+stop
 @enduml
