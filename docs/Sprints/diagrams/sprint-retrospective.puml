@@ -1,12 +1,16 @@
 @startuml
-title Sprint Retrospective Template
-rectangle "Observe" as N0
-rectangle "Discuss causes" as N1
-rectangle "Choose improvement" as N2
-rectangle "Assign follow-up" as N3
-rectangle "Evaluate" as N4
-N0 --> N1
-N1 --> N2
-N2 --> N3
-N3 --> N4
+title KanbanFlow Sprint Retrospective
+start
+:Review actual outcomes and previous actions;
+:Collect helpful and hindering process observations;
+:Separate evidence from causal hypotheses;
+:Choose a small set of feasible improvements;
+:Agree owners, success signals, and follow-up;
+:Record actual action progress;
+if (Follow-up evidence available?) then (yes)
+ :Evaluate, adapt, or close with reason;
+else (no)
+ :Keep outcome pending and next action visible;
+endif
+stop
 @enduml
