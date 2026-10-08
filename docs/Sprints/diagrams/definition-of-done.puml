@@ -1,12 +1,20 @@
 @startuml
-title Definition of Done
-rectangle "Implemented change" as N0
-rectangle "Relevant checks" as N1
-rectangle "Review" as N2
-rectangle "Documentation" as N3
-rectangle "Done" as N4
-N0 --> N1
-N1 --> N2
-N2 --> N3
-N3 --> N4
+title KanbanFlow Definition of Done
+start
+:Identify agreed scope and candidate revision;
+:Demonstrate acceptance criteria;
+:Record relevant checks and scoped review;
+:Update documentation and residual issues;
+if (All required criteria satisfied?) then (yes)
+ :Record completion decision and evidence;
+ :Mark item Done;
+else (no)
+ :Keep item unfinished;
+ :Record gap, next action, and responsible person;
+endif
+note right
+Release publication and deployment
+are separate decisions.
+end note
+stop
 @enduml
