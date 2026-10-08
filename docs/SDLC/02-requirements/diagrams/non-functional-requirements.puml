@@ -1,9 +1,16 @@
 @startuml
-title KanbanFlow Non-functional Requirements
+title KanbanFlow Quality Criteria and Evidence
 start
-:Identify quality boundary;
-:Agree observable criterion and environment;
-:Measure with stated limitations;
-:Review outcome or evidence gap;
+:Identify affected quality boundary and risk;
+:Define criterion, conditions, and evidence method;
+if (Target and environment agreed?) then (yes)
+ :Perform relevant candidate checks;
+ :Record actual results and limitations;
+else (no)
+ :Record pending target or environment dependency;
+ :Keep affected compliance unverified;
+endif
+:Review criteria and residual gaps;
+:Reassess after material changes;
 stop
 @enduml
