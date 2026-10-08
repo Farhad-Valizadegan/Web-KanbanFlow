@@ -35,6 +35,95 @@ Consider removed membership, changed roles, stale sessions, private versus works
 
 DEC-003/PB-001 track the manager remove/re-add role loophole. Keep dependent enforcement requirements blocked until essential policy is agreed. Use the [decision register](../../Project-Management/decision-register.md) and [security guide](security-and-privacy-requirements.md).
 
+## Source-grounded authorization boundaries
+
+The following describes inspected source boundaries, not a complete endpoint matrix or fresh runtime verification. Controllers, request validation, nested-resource checks, and policies must be evaluated together.
+
+| Boundary | Inspected source | Recorded rule/limit |
+| --- | --- | --- |
+| Workspace viewing | [WorkspacePolicy](../../../backend/app/Policies/WorkspacePolicy.php) | Viewing checks current membership. |
+| Workspace update/delete | WorkspacePolicy | Checks `owner_id`; do not infer every surrounding guard from this method alone. |
+| Member management | WorkspacePolicy | Owner or current manager role can pass the management policy. |
+| Direct member-role change | WorkspacePolicy | Owner-only policy; indirect remove/re-add issue remains open. |
+| Project view/update/delete | [ProjectPolicy](../../../backend/app/Policies/ProjectPolicy.php) | Viewing checks membership; update/delete policy allows owner or manager. |
+| Board view/update/delete | [BoardPolicy](../../../backend/app/Policies/BoardPolicy.php) | View uses visibility scope; update/delete first require view, then owner/manager. |
+| Board visibility | [Board model](../../../backend/app/Models/Board.php) | Current workspace membership is required; private visibility adds creator/owner/manager conditions. |
+| Comment access | [Comment controller](../../../backend/app/Http/Controllers/Api/TaskCommentController.php) and [comment policy](../../../backend/app/Policies/TaskCommentPolicy.php) | Nested ancestry and board view checks surround action rules; policy methods alone are insufficient to describe endpoint access. |
+
+Policy methods for restore/force-delete do not establish a user-facing endpoint or screen. Verify routes and controllers before documenting those as available use cases. Maintainer/operator responsibilities remain separate from application authorization.
+
+## Use-case catalog
+
+These UC identifiers organize this document; they are not issue numbers or selected work.
+
+| ID | Use case | Actor/access context | Relevant alternate path |
+| --- | --- | --- | --- |
+| UC-01 | Establish/end a session | Guest or authenticated account, as applicable | Invalid input, throttling, expired session |
+| UC-02 | Inspect a workspace/project | Current workspace member | Removed membership or cross-workspace resource |
+| UC-03 | Manage workspace settings | Owner, with applicable request guards | Unauthorized direct mutation |
+| UC-04 | Manage membership | Owner/manager under current implementation | Unresolved indirect role changes and protected member conditions |
+| UC-05 | Change a member role directly | Owner under the role-change policy | Manager direct update rejected; indirect path remains unresolved |
+| UC-06 | Inspect permitted boards | Current member plus board visibility | Another user's private board unavailable to ordinary members |
+| UC-07 | Manage permitted project/board | Applicable owner/manager rules and resource guards | Invisible board, invalid ancestry, rejected mutation |
+| UC-08 | Contribute to tasks/comments | Action-specific role, authorship, and visibility checks | Validation, removal, stale state, and WIP rejection |
+| UC-09 | Inspect summaries/activity | Permitted resource context | Restricted data excluded from nested/aggregate responses |
+
+For UC-08, inspect the specific action's controller before deciding whether a viewer or another role may contribute. Do not derive all mutation permissions from the words member, contributor, or viewer.
+
+## Detailed use-case record
+
+```text
+UC reference and actual requirement/backlog link:
+Actor and authenticated session context:
+Current membership and role:
+Workspace/project/board ancestry and visibility:
+Preconditions and trigger:
+Allowed action and policy/controller references:
+Accepted visible and persisted outcome:
+Rejected conditions and recovery:
+Expected data exposure:
+Dependencies and unresolved policy:
+Verification scenarios and candidate revision:
+Actual result or pending evidence:
+```
+
+Use observable outcomes and distinguish current rules from proposed changes. Unknown permission details remain questions until inspected or agreed. Record actual agreement through the decision register when policy changes.
+
+## Role transition and revocation scenarios
+
+| Scenario | What to specify/check |
+| --- | --- |
+| User removed from workspace | Loss of applicable board and nested-resource access, including previously authored comments |
+| User role changes | Which actions become available/unavailable, with fresh server authorization |
+| Private-board creator no longer belongs | Membership restriction still applies to visibility |
+| Session expires | Protected requests reject appropriately and UI provides useful recovery |
+| Client caches an old role | Server guards prevent relying on stale UI permissions |
+| Cross-resource identifier submitted | Nested ancestry must match the requested workspace/project/board |
+
+Removal/re-addition and direct role change are different paths. Keep the known loophole visible in both requirements and verification rather than claiming the owner-only direct rule closes every path.
+
+## Acceptance and evidence
+
+| Use case/criterion | Actor/resource conditions | Expected outcome | Candidate/environment | Result/evidence |
+| --- | --- | --- | --- | --- |
+| Actual reference | Specific membership, role, and visibility | Accepted or rejected behavior | Exact candidate or pending | Actual result or not run |
+
+Use the [acceptance guide](validation-and-acceptance-criteria.md) and [verification template](../../Releases/verification-template.md). Check direct requests, list/aggregate responses, UI feedback, and persistence when relevant. Historical tests are not fresh evidence for a different candidate.
+
+Required unresolved policy or unexecuted acceptance checks prevent claiming the affected enforcement work complete. Keep unrelated residual issues tracked without pretending that every documentation edit is blocked by them.
+
+## Review and maintenance checklist
+
+- Actor responsibility is separated from actual application permission.
+- Current membership, ancestry, and board visibility are explicit.
+- Policies and controller/request guards are interpreted together.
+- Direct mutations and aggregate exposure are covered when relevant.
+- Role transitions and revoked access have observable criteria.
+- Proposed rules and unresolved decisions remain distinct from current behavior.
+- Source references and actual evidence identify their scope and limitations.
+
+Reassess this guide when permissions or controller guards change. Preserve decision context, repair links, and update diagram source and preview together. Do not include credentials or unnecessary personal information in role examples.
+
 ## Review
 
 Link each use case to [stories](user-stories-and-use-cases.md) and observable criteria. Record intended rules separately from current defects and actual test results. Avoid inventing a complete authorization matrix from stakeholder descriptions.
@@ -51,12 +140,18 @@ See the [requirements index](README.md), [planning phase](../01-planning/README.
 
 ```plantuml
 @startuml
-title KanbanFlow Roles and Use Cases
+title KanbanFlow Role and Resource Access Assessment
 start
-:Identify actor and current membership;
-:Assess resource visibility and policy;
-:Specify allowed and rejected actions;
-:Verify direct and aggregate boundaries;
+:Identify session, membership, and actor;
+:Check nested ancestry and board visibility;
+:Assess action policy and controller guards together;
+if (Access conditions satisfied?) then (yes)
+ :Specify accepted action and scoped data;
+else (no)
+ :Specify rejection and appropriate recovery;
+endif
+:Include role changes and membership removal;
+:Record evidence and unresolved policy separately;
 stop
 @enduml
 ```

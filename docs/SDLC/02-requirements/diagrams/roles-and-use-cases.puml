@@ -1,9 +1,15 @@
 @startuml
-title KanbanFlow Roles and Use Cases
+title KanbanFlow Role and Resource Access Assessment
 start
-:Identify actor and current membership;
-:Assess resource visibility and policy;
-:Specify allowed and rejected actions;
-:Verify direct and aggregate boundaries;
+:Identify session, membership, and actor;
+:Check nested ancestry and board visibility;
+:Assess action policy and controller guards together;
+if (Access conditions satisfied?) then (yes)
+ :Specify accepted action and scoped data;
+else (no)
+ :Specify rejection and appropriate recovery;
+endif
+:Include role changes and membership removal;
+:Record evidence and unresolved policy separately;
 stop
 @enduml
