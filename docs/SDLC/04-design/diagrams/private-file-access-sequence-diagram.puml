@@ -1,19 +1,38 @@
 @startuml
-title KanbanFlow private file access sequence diagram
-actor Actor
-participant "Client interface" as UI
-participant "Actual or proposed endpoint" as API
-participant "Applicable authorization" as Policy
-Actor -> UI : Request operation
-UI -> API : Submit request
-API -> Policy : Check identity and authority
-Policy --> API : Decision
-alt Allowed under applicable contract
- API --> UI : Defined result
- UI --> Actor : Verify state
-else Denied or unavailable
- API --> UI : Safe failure
- UI --> Actor : Recovery
+title KanbanFlow Proposed Private Artifact Retrieval
+actor User
+participant "Client" as Client
+participant "Proposed retrieval endpoint" as API
+participant "Metadata / Owning resource" as Metadata
+participant "Current visibility / Retrieval policy" as Policy
+participant "Selected private storage" as Storage
+User -> Client : Request artifact
+Client -> API : Authenticated artifact/resource request
+API -> Metadata : Resolve artifact, ancestry, lifecycle state
+Metadata --> API : Server-owned metadata or unavailable
+alt Resource and artifact resolved
+ API -> Policy : Check current actor, membership, visibility, authority
+ alt Retrieval allowed
+  Policy --> API : Allow
+  API -> Storage : Read server-selected key under chosen contract
+  alt Bytes available
+   Storage --> API : Artifact bytes
+   API --> Client : Controlled delivery with agreed headers
+   Client --> User : Actual transfer result
+  else Missing bytes or storage failure
+   Storage --> API : Failure
+   API --> Client : Safe unavailable result and reconciliation
+  end
+ else Denied
+  Policy --> API : Deny
+  API --> Client : Safe failure without private bytes or link
+ end
+else Unavailable or mismatched
+ API --> Client : Applicable safe failure
 end
-note over Actor, API : Proposed only; no current endpoint established.
+note over User, Storage
+Proposed controlled delivery; no current file endpoint.
+Temporary-link alternatives need separate revocation decisions.
+Downloaded copies cannot be recalled by later server denial.
+end note
 @enduml
