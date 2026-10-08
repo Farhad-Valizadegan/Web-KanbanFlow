@@ -1,13 +1,19 @@
 @startuml
-title KanbanFlow Project Planning Layers
+title KanbanFlow Planning and Evidence Layers
 rectangle "Product purpose and boundaries" as P
 rectangle "Priorities, risks, and decisions" as M
 rectangle "Bounded planning and requirements" as R
 rectangle "Agreed execution scope" as S
-rectangle "Outcome evidence and delivery decisions" as E
+rectangle "Candidate outcome evidence" as E
+rectangle "Separate delivery assessment" as D
 P --> M
 M --> R
 R --> S
 S --> E
-E --> M : feedback
+E --> M : feedback and unfinished work
+E --> D : evidence and residual risks
+note bottom of D
+Publication does not establish deployment.
+Each next step needs its actual decision.
+end note
 @enduml
