@@ -1,9 +1,16 @@
 @startuml
-title KanbanFlow Functional Requirements
+title KanbanFlow Functional Requirement Acceptance
 start
-:Identify actor and resource;
-:Define trigger and accepted outcome;
-:Specify rejection and persisted state;
-:Link acceptance evidence;
+:Identify capability, actor, and resource scope;
+:Specify accepted and rejected behavior;
+:Assess persistence, visibility, and dependencies;
+if (Essential policy agreed?) then (yes)
+ :Link observable criteria and verification plan;
+ :Hand bounded requirement to analysis;
+else (no)
+ :Record policy question and next action;
+ :Keep dependent enforcement blocked;
+endif
+:Record candidate evidence when checks occur;
 stop
 @enduml
