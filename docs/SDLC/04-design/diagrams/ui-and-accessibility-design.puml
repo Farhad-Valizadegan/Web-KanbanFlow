@@ -1,9 +1,19 @@
 @startuml
-title KanbanFlow UI and Accessibility Design
+title KanbanFlow UI and Accessibility Review Workflow
 start
-:Identify journey and shared UI patterns;
-:Specify themes labels focus and keyboard behavior;
-:Design loading empty and error states;
-:Verify representative interactions and record gaps;
+:Select journey, candidate, and shared/feature controls;
+:Inspect current semantics, theme, keyboard, and focus behavior;
+:Specify normal, pending, empty, and error interactions;
+:Review labels, navigation, dialogs, and movement paths;
+:Verify themes, narrow/zoom layout, and reduced motion;
+:Record keyboard and applicable assistive-tool observations;
+if (Material interaction gap found?) then (yes)
+ :Create scoped defect and acceptance case;
+ :Change affected shared/feature behavior;
+ :Recheck representative consumers;
+else (no)
+ :Record assessed coverage and limitations;
+endif
+:Keep observed evidence separate from conformance claims;
 stop
 @enduml
