@@ -1,9 +1,16 @@
 @startuml
-title KanbanFlow Analysis Guide
+title KanbanFlow Evidence-Based Analysis
 start
-:Identify requirement and baseline;
-:Trace actual behavior and affected boundaries;
-:Assess hypotheses and compatibility;
-:Hand bounded findings to design;
+:Bound requirement and record baseline conditions;
+:Reproduce or inspect targeted source;
+:Trace access, data, and recovery boundaries;
+:Test discriminating hypotheses where feasible;
+if (Cause or approach supported?) then (yes)
+ :Assess impact and compare bounded options;
+ :Record design handoff and verification plan;
+else (no)
+ :Record uncertainty and next investigation;
+endif
+:Preserve dependencies and changed evidence;
 stop
 @enduml
