@@ -1,10 +1,19 @@
 @startuml
-title Sprint Metrics and Evidence
-rectangle "Actual records" as N0
-rectangle "Defined measures" as N1
-rectangle "Review context" as N2
-rectangle "Planning improvement" as N3
-N0 --> N1
-N1 --> N2
-N2 --> N3
+title KanbanFlow Sprint Metrics and Evidence
+start
+:Agree purpose, definitions, and observation window;
+:Collect actual backlog, progress, and verification records;
+if (Required data available?) then (yes)
+ :Calculate measures with counts and units;
+ :Explain scope changes and sample limitations;
+else (no)
+ :Record unknown values and collection gaps;
+endif
+:Review goal outcomes and recurring blockers;
+:Agree planning or process improvements;
+note right
+No contributor ranking or invented velocity.
+Historical counts do not verify new work.
+end note
+stop
 @enduml
