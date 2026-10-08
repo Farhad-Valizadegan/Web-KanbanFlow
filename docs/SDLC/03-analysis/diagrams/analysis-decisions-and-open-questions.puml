@@ -1,9 +1,16 @@
 @startuml
-title KanbanFlow Analysis Decisions and Open Questions
+title KanbanFlow Analysis Question and Decision Lifecycle
 start
-:Record question and evidence;
-:Compare options and dependencies;
-:Record actual decision or unresolved next action;
-:Preserve follow-up and superseded context;
+:Classify question and record baseline evidence;
+:Assess hypotheses, options, and dependencies;
+if (Required evidence and agreement available?) then (yes)
+ :Record actual finding or owning decision;
+ :Link bounded design and verification follow-up;
+else (no)
+ :Keep unresolved or blocked state explicit;
+ :Record next discriminating check or decision action;
+endif
+:Preserve remaining uncertainty and superseded context;
+:Reassess when new evidence changes the decision;
 stop
 @enduml
