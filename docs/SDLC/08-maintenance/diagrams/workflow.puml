@@ -1,11 +1,14 @@
 @startuml
-title KanbanFlow Maintenance
-rectangle "Inputs and context" as I
-rectangle "Maintenance work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Maintenance Phase
+start
+:Collect reproducible report and current identity;
+:Prioritize risk and define acceptance cases;
+:Implement scoped correction and verify behavior;
+if (Affected criteria verified?) then (yes)
+:Record outcome, residual issues, and follow-up;
+else (no)
+:Keep issue open and investigate remaining gaps;
+endif
+:Update backlog and source-linked guidance;
+stop
 @enduml

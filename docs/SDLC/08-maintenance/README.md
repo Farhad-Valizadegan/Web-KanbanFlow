@@ -1,34 +1,47 @@
-# Maintenance
+# KanbanFlow Maintenance
 
-## Purpose and activities
+## Purpose and status
 
-Collect reproducible defects and user feedback, prioritize risks, and maintain dependencies and documentation. Verify changes before release. Track the manager remove/re-add loophole until the policy is decided and enforcement is tested.
+Maintenance converts observed defects, user feedback, operational signals, and dependency changes into scoped, verified improvements. This catalog defines working procedures; it does not establish an active monitoring service, on-call rota, incident response agreement, or completed production operation.
 
-## Completion evidence
+## Document catalog
 
-A maintained backlog, current known issues, scoped fixes, and release evidence. Historical release claims stay separate from current verification.
+| Document | Responsibility |
+| --- | --- |
+| [Maintenance](maintenance.md) | Intake, prioritization, verification, and closure. |
+| [Dependency and change management](dependency-and-change-management.md) | Controlled upgrades, compatibility, and delivery evidence. |
+| [Incident triage](incident-triage.md) | Evidence collection, impact assessment, containment, and diagnosis. |
+| [Monitoring and incident response](monitoring-and-incident-response.md) | Signals, response workflow, recovery, and follow-up. |
 
-## Related guidance
+The screenshot abbreviates two filenames; this catalog uses their full descriptive names. Every document includes PlantUML source and a rendered diagram.
 
-- [Supporting documentation](../../Releases/README.md)
-- [SDLC index](../README.md)
+## Inputs and outcomes
 
-## PlantUML workflow
+Inputs include reproducible reports, actual target/candidate identity, safe diagnostics, known issues, and agreed acceptance criteria. Outcomes include a maintained backlog, scoped fixes with verification, documented operational decisions, updated guidance, and visible residual risks.
 
-![Maintenance workflow](diagrams/workflow.png)
+Keep the manager remove/re-add issue open until policy is decided and enforcement is verified. Source publication alone does not close an operational incident or prove deployment.
 
-[Editable source](diagrams/workflow.puml)
+See [quality and risk plan](../../Project-Management/quality-and-risk-plan.md), [testing](../06-testing/README.md), [deployment](../07-deployment/README.md), [releases](../../Releases/README.md), and [SDLC index](../README.md).
+
+## PlantUML diagram
+
+![KanbanFlow Maintenance Phase](diagrams/workflow.png)
+
+[Editable PlantUML source](diagrams/workflow.puml)
 
 ```plantuml
 @startuml
-title KanbanFlow Maintenance
-rectangle "Inputs and context" as I
-rectangle "Maintenance work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Maintenance Phase
+start
+:Collect reproducible report and current identity;
+:Prioritize risk and define acceptance cases;
+:Implement scoped correction and verify behavior;
+if (Affected criteria verified?) then (yes)
+:Record outcome, residual issues, and follow-up;
+else (no)
+:Keep issue open and investigate remaining gaps;
+endif
+:Update backlog and source-linked guidance;
+stop
 @enduml
 ```

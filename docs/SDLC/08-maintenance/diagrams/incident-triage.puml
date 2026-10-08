@@ -1,0 +1,14 @@
+@startuml
+title KanbanFlow incident triage
+start
+:Record symptoms, target, and safe diagnostics;
+:Assess impact and authorized containment;
+:Choose evidence-based correction or recovery;
+if (Affected criteria verified?) then (yes)
+:Record outcome, residual issues, and follow-up;
+else (no)
+:Keep issue open and investigate remaining gaps;
+endif
+:Update backlog and source-linked guidance;
+stop
+@enduml
