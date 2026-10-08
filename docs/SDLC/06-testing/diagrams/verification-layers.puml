@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow verification layers
+start
+:Identify property requiring evidence;
+:Choose appropriate verification layers;
+:Collect candidate-specific observations;
+:State demonstrated scope and remaining limits;
+stop
+@enduml

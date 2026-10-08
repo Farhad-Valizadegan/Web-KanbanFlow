@@ -1,11 +1,9 @@
 @startuml
-title KanbanFlow Testing
-rectangle "Inputs and context" as I
-rectangle "Testing work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Testing Phase
+start
+:Identify candidate and risk-based acceptance cases;
+:Prepare isolated verification environment;
+:Execute relevant checks and capture failures;
+:Assess evidence and disclose remaining gaps;
+stop
 @enduml

@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow documentation review 2026 10 08
+start
+:Inspect baseline and documentation references;
+:Validate links and diagram source identity;
+:Inspect rendered previews and patch formatting;
+:Report documentation scope and runtime exclusions;
+stop
+@enduml

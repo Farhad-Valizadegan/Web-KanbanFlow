@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow manual acceptance checklist
+start
+:Record browser, actor, fixture, and candidate;
+:Perform journey and failure scenarios;
+:Observe focus, themes, and persisted state;
+:Capture results and reproducible defects;
+stop
+@enduml

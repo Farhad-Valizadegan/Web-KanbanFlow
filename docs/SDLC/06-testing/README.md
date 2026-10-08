@@ -1,34 +1,44 @@
-# Testing
+# KanbanFlow Testing
 
-## Purpose and activities
+## Purpose and evidence rules
 
-Run relevant backend tests, frontend lint, and production build. Current CI runs backend tests and frontend lint/build on main pushes and pull requests into main. Backend tests use in-memory SQLite; MySQL contention and browser usability require separate checks.
+Testing assesses a named candidate against explicit acceptance criteria. Keep source inspection, static checks, automated execution, browser observations, and operational verification separate. A checklist or test file is not evidence of a passing run.
 
-## Completion evidence
+## Document catalog
 
-Evidence tied to the tested commit and environment, including failures and unverified boundaries. Do not infer usability or MySQL concurrency correctness from build or SQLite success.
+| Document | Purpose |
+| --- | --- |
+| [Test strategy](test-strategy.md) | Scope, priorities, environments, and completion decisions. |
+| [Testing](testing.md) | Repeatable execution and failure investigation. |
+| [Automated test inventory](automated-test-inventory.md) | Existing suites, configured checks, and coverage limits. |
+| [Manual acceptance checklist](manual-acceptance-checklist.md) | Browser journeys and failure-path observations. |
+| [Security regression matrix](security-regression-matrix.md) | Actors, boundaries, and denial cases. |
+| [Verification layers](verification-layers.md) | What each evidence layer can establish. |
+| [Verification record template](verification-record-template.md) | Candidate-specific result capture. |
+| [Documentation review — 2026-10-08](documentation-review-2026-10-08.md) | Scope and limits of this documentation review. |
 
-## Related guidance
+The screenshot truncates the documentation-review filename; this catalog uses the current review date rather than inventing a historical record.
 
-- [Supporting documentation](../../Project-Management/quality-and-risk-plan.md)
-- [SDLC index](../README.md)
+## Entry and exit conditions
 
-## PlantUML workflow
+Start with an identifiable candidate, agreed acceptance cases, isolated data, and the relevant requirements/design. Finish with actual results, reproducible defects, unverified boundaries, and an explicit readiness outcome. Failed or blocked checks remain visible. Release or deployment readiness depends on the affected scope, not a universal count of passing tests.
 
-![Testing workflow](diagrams/workflow.png)
+See [implementation](../05-implementation/README.md), [requirements](../02-requirements/README.md), [quality and risk plan](../../Project-Management/quality-and-risk-plan.md), and [release verification](../../Releases/verification-template.md).
 
-[Editable source](diagrams/workflow.puml)
+## PlantUML diagram
+
+![KanbanFlow Testing Phase](diagrams/workflow.png)
+
+[Editable PlantUML source](diagrams/workflow.puml)
 
 ```plantuml
 @startuml
-title KanbanFlow Testing
-rectangle "Inputs and context" as I
-rectangle "Testing work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Testing Phase
+start
+:Identify candidate and risk-based acceptance cases;
+:Prepare isolated verification environment;
+:Execute relevant checks and capture failures;
+:Assess evidence and disclose remaining gaps;
+stop
 @enduml
 ```

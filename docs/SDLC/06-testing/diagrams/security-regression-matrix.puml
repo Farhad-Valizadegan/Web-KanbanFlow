@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow security regression matrix
+start
+:Select actors and resource boundaries;
+:Attempt direct and indirect unauthorized paths;
+:Inspect response exposure and persisted effects;
+:Record failures and unresolved policy gaps;
+stop
+@enduml

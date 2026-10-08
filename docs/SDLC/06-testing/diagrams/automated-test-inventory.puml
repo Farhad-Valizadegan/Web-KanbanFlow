@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow automated test inventory
+start
+:Inspect suites and configured commands;
+:Map assertions to affected requirements;
+:Identify uncovered behavior and environment limits;
+:Record actual execution separately;
+stop
+@enduml

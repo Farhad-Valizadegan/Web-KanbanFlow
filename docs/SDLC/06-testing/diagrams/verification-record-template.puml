@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow verification record template
+start
+:Identify candidate, scope, and environment;
+:Record expected and actual check outcomes;
+:Link failures, evidence, and corrected candidates;
+:Assess readiness with explicit limitations;
+stop
+@enduml

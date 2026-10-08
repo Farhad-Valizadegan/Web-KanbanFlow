@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow testing
+start
+:Identify candidate and risk-based acceptance cases;
+:Prepare isolated verification environment;
+:Execute relevant checks and capture failures;
+:Assess evidence and disclose remaining gaps;
+stop
+@enduml
