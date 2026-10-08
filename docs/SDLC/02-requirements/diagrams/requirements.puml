@@ -1,9 +1,16 @@
 @startuml
-title KanbanFlow Requirements Specification Guide
+title KanbanFlow Requirement Specification and Traceability
 start
-:Identify need and scope;
-:Specify behavior and constraints;
-:Link decisions and acceptance;
-:Review and hand off to analysis;
+:Record need, scope, and current evidence;
+:Specify behavior, constraints, and failure paths;
+:Link policy, dependencies, and acceptance criteria;
+if (Essential decisions available?) then (yes)
+ :Record actual agreement and analysis handoff;
+else (no)
+ :Record unresolved questions and next actions;
+ :Keep dependent implementation blocked;
+endif
+:Link implementation and checks when they exist;
+:Preserve decisions and reassess material changes;
 stop
 @enduml
