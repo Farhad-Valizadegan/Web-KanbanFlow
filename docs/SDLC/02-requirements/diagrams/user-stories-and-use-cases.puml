@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow User Stories and Use Cases
+start
+:Describe actor need and benefit;
+:Define preconditions and main flow;
+:Include alternatives and postconditions;
+:Link criteria and backlog;
+stop
+@enduml

@@ -4,6 +4,16 @@ Requirements translate a user need and agreed planning scope into observable beh
 
 This guide defines a working process and reusable record. It does not establish that every requirement is agreed, implemented, tested, or deployed. Iterate when analysis or new evidence reveals ambiguity.
 
+## Guides in this folder
+
+- [KanbanFlow Requirements Specification Guide](requirements.md)
+- [KanbanFlow Functional Requirements](functional-requirements.md)
+- [KanbanFlow Non-functional Requirements](non-functional-requirements.md)
+- [KanbanFlow Roles and Use Cases](roles-and-use-cases.md)
+- [KanbanFlow Security and Privacy Requirements](security-and-privacy-requirements.md)
+- [KanbanFlow User Stories and Use Cases](user-stories-and-use-cases.md)
+- [KanbanFlow Validation and Acceptance Criteria](validation-and-acceptance-criteria.md)
+
 ## Inputs
 
 | Input | Contribution |

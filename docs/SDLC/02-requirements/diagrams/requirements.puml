@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Requirements Specification Guide
+start
+:Identify need and scope;
+:Specify behavior and constraints;
+:Link decisions and acceptance;
+:Review and hand off to analysis;
+stop
+@enduml

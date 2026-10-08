@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Validation and Acceptance Criteria
+start
+:Define observable criterion;
+:Specify validation and failure boundaries;
+:Execute relevant candidate checks;
+:Record result and remaining gaps;
+stop
+@enduml

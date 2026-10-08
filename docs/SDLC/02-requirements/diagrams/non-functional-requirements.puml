@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Non-functional Requirements
+start
+:Identify quality boundary;
+:Agree observable criterion and environment;
+:Measure with stated limitations;
+:Review outcome or evidence gap;
+stop
+@enduml

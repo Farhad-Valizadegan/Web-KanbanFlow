@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Security and Privacy Requirements
+start
+:Identify data and access boundary;
+:Specify session and authorization rules;
+:Record unresolved policy risks;
+:Plan isolated checks and evidence;
+stop
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Roles and Use Cases
+start
+:Identify actor and current membership;
+:Assess resource visibility and policy;
+:Specify allowed and rejected actions;
+:Verify direct and aggregate boundaries;
+stop
+@enduml

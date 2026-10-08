@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Functional Requirements
+start
+:Identify actor and resource;
+:Define trigger and accepted outcome;
+:Specify rejection and persisted state;
+:Link acceptance evidence;
+stop
+@enduml
