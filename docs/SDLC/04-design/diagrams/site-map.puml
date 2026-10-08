@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Site Map
+start
+:Home and guest login or registration;
+:Protected dashboard;
+:Workspace then project;
+:Board and task interactions;
+stop
+@enduml

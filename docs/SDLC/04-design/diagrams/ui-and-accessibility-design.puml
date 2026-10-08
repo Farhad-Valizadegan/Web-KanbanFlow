@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow UI and Accessibility Design
+start
+:Identify journey and shared UI patterns;
+:Specify themes labels focus and keyboard behavior;
+:Design loading empty and error states;
+:Verify representative interactions and record gaps;
+stop
+@enduml

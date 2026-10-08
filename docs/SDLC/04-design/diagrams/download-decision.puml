@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Download Decision
+start
+:Propose artifact and audience;
+:Define authorization filtering and lifecycle;
+:Approve explicit contract and acceptance cases;
+:Implement and verify before claiming support;
+stop
+@enduml

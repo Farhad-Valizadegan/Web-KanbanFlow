@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Authorization Decision Flow
+start
+:Resolve actor and nested resource ancestry;
+:Evaluate current visibility and operation policy;
+:Reject denied requests without mutation;
+:Execute allowed operation and verify persisted state;
+stop
+@enduml

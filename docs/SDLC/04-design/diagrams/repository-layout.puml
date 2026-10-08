@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Repository Layout
+start
+:Frontend pages features and shared components;
+:Backend routes controllers policies and models;
+:Database migrations and tests;
+:Documentation and verification references;
+stop
+@enduml

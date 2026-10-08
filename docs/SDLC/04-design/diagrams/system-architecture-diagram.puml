@@ -1,0 +1,18 @@
+@startuml
+title KanbanFlow System Boundaries
+node Browser {
+ component "React application" as UI
+ component "Axios / Query state" as Client
+ UI --> Client
+}
+node "Laravel application" {
+ component "Session and API routes" as Routes
+ component "Controllers / Validation / Policies" as Controls
+ component "Eloquent persistence" as Models
+ Routes --> Controls
+ Controls --> Models
+}
+database "Application database" as DB
+Client --> Routes : HTTP credentials / XSRF
+Models --> DB : Resources and notifications
+@enduml

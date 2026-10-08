@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow File Storage and Update Design
+start
+:Define proposed attachment ownership and lifecycle;
+:Specify validation access and storage boundary;
+:Design update failure and cleanup behavior;
+:Verify approved feature before publication;
+stop
+@enduml

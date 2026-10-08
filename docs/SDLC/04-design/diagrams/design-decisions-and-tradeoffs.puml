@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Design Decisions and Tradeoffs
+start
+:Identify material design question;
+:Compare alternatives and constraints;
+:Record actual decision and consequences;
+:Link implementation and verification evidence;
+stop
+@enduml

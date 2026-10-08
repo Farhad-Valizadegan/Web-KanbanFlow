@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Error Handling Design
+start
+:Classify failure at its boundary;
+:Present safe actionable feedback;
+:Offer applicable recovery;
+:Verify visible and persisted state;
+stop
+@enduml

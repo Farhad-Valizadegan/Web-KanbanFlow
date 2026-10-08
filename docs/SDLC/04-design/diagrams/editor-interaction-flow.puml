@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Editor Interaction Flow
+start
+:Load current resource and permission context;
+:Edit fields and submit request;
+:Handle accepted rejected or uncertain result;
+:Verify authoritative state and recovery;
+stop
+@enduml

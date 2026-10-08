@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow PDF Rendering Design
+start
+:Define proposed report and visible data scope;
+:Specify safe rendering and artifact lifecycle;
+:Choose implementation through recorded decision;
+:Verify output and authorization before release;
+stop
+@enduml

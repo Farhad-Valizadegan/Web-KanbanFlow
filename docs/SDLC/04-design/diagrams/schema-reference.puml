@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Schema Reference
+start
+:Read migration schema and foreign keys;
+:Compare model fields relationships and casts;
+:Specify compatible data change and recovery;
+:Verify migration and persisted constraints;
+stop
+@enduml

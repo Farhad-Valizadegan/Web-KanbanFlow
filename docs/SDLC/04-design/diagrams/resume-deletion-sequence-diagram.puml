@@ -1,0 +1,19 @@
+@startuml
+title KanbanFlow resume deletion sequence diagram
+actor Actor
+participant "Client interface" as UI
+participant "Actual or proposed endpoint" as API
+participant "Applicable authorization" as Policy
+Actor -> UI : Request operation
+UI -> API : Submit request
+API -> Policy : Check identity and authority
+Policy --> API : Decision
+alt Allowed under applicable contract
+ API --> UI : Defined result
+ UI --> Actor : Verify state
+else Denied or unavailable
+ API --> UI : Safe failure
+ UI --> Actor : Recovery
+end
+note over Actor, API : KanbanFlow resource interaction, not a resume/CV entity.
+@enduml

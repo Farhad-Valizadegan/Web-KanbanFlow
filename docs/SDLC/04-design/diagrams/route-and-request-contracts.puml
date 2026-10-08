@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Route and Request Contracts
+start
+:Match frontend operation to backend route;
+:Specify request ancestry fields and actor;
+:Trace validation authorization and response;
+:Verify success and failure compatibility;
+stop
+@enduml

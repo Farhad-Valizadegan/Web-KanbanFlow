@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Authentication and Authorization
+start
+:Resolve session and CSRF state;
+:Authenticate identity;
+:Check current resource access and operation policy;
+:Return authorized result or applicable failure;
+stop
+@enduml

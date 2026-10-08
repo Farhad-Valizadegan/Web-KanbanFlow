@@ -1,0 +1,18 @@
+@startuml
+title KanbanFlow Component Responsibilities
+component "Route pages" as Pages
+component "Auth guards / Layout / Theme / UI" as Shared
+component "Feature components" as Features
+component "API helpers / Query state" as API
+component "Laravel routes / Controllers" as Server
+component "Validation / Policies" as Rules
+component "Eloquent models" as Models
+database Database as DB
+Pages --> Shared
+Pages --> Features
+Features --> API
+API --> Server : HTTP session requests
+Server --> Rules
+Server --> Models
+Models --> DB
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+title KanbanFlow Design Guide
+start
+:Read requirements and analysis;
+:Specify interface data and permission boundaries;
+:Review errors accessibility and operational implications;
+:Link acceptance cases and decision record;
+stop
+@enduml

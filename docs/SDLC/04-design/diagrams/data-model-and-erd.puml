@@ -1,0 +1,26 @@
+@startuml
+title KanbanFlow Conceptual Entity Relationships
+hide methods
+entity User
+entity Workspace
+entity workspace_user
+entity Project
+entity Board
+entity Column
+entity Task
+entity TaskComment
+entity ActivityLog
+User -- Workspace : owner_id
+User -- workspace_user : member
+Workspace -- workspace_user : membership role
+Workspace -- Project : contains
+Project -- Board : contains
+Board -- Column : contains
+Column -- Task : contains
+Task -- TaskComment : contains
+User -- Task : creator / optional assignee
+User -- TaskComment : author
+Workspace -- ActivityLog : scope
+User -- ActivityLog : actor
+note bottom : Migrations define physical keys and delete behavior.
+@enduml
