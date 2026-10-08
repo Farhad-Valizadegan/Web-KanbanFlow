@@ -1,19 +1,34 @@
 @startuml
-title KanbanFlow public access sequence diagram
-actor Actor
-participant "Client interface" as UI
-participant "Actual or proposed endpoint" as API
-participant "Applicable authorization" as Policy
-Actor -> UI : Request operation
-UI -> API : Submit request
-API -> Policy : Check identity and authority
-Policy --> API : Decision
-alt Allowed under applicable contract
- API --> UI : Defined result
- UI --> Actor : Verify state
-else Denied or unavailable
- API --> UI : Safe failure
- UI --> Actor : Recovery
+title KanbanFlow Public Entry and Protected Resource Boundary
+actor Visitor
+participant "React routes / GuestRoute" as UI
+participant "Laravel auth / API middleware" as API
+participant "Resource controller / Policies" as Rules
+Visitor -> UI : Open login/register page
+UI -> API : GET /api/user with available session
+alt Valid authenticated session
+ API --> UI : Current user
+ UI --> Visitor : Redirect to dashboard
+else Axios 401
+ API --> UI : Unauthenticated response
+ UI --> Visitor : Guest authentication form
+else Other lookup failure
+ API --> UI : Failure or no response
+ UI --> Visitor : Connection retry state
 end
-note over Actor, API : Public entry pages do not allow anonymous resource API access.
+Visitor -> API : Direct protected resource request
+alt No valid identity
+ API --> Visitor : Authentication failure; no protected result
+else Identity established
+ API -> Rules : Check ancestry, visibility, and operation authority
+ Rules --> API : Allowed or denied
+ API --> Visitor : Applicable authorized result or failure
+end
+Visitor -> API : GET /api/health
+API --> Visitor : Status and configured application name
+note over Visitor, Rules
+Public entry pages do not grant anonymous resource access.
+Public sharing is a separate unimplemented proposal.
+Health response does not prove all dependencies healthy.
+end note
 @enduml
