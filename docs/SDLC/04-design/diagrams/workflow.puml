@@ -1,11 +1,18 @@
 @startuml
-title KanbanFlow Design
-rectangle "Inputs and context" as I
-rectangle "Design work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Design Review and Handoff
+start
+:Read requirements, analysis, and candidate source;
+:Separate current behavior from proposed change;
+:Specify UI, request, authority, and data boundaries;
+:Define failure states and operational implications;
+:Link decisions and acceptance cases;
+if (Unresolved material design question?) then (yes)
+ :Record dependency and revise affected design;
+ :Keep unresolved status visible;
+else (no)
+ :Review scope, contracts, and diagram consistency;
+ :Hand design to implementation and testing;
+endif
+:Record actual verification separately from design readiness;
+stop
 @enduml

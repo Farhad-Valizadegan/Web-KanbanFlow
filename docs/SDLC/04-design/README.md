@@ -4,7 +4,7 @@
 
 This catalog connects requirements and analysis to frontend, API, authorization, data, and operational design. Documents distinguish source-observed behavior from proposed capabilities; documentation completion does not establish runtime verification.
 
-The supplied image contains truncated names. This catalog uses descriptive full names for those topics. Retained resume filenames refer to KanbanFlow resource interactions. File, PDF, password-change, and public-sharing extensions are explicitly scoped as proposals where no current endpoint is established.
+Retained `resume-*` filenames refer to KanbanFlow resource interactions, not a resume/CV feature. File storage, downloads, PDF rendering, password change, and public resource sharing are proposed extensions where no current endpoint is established. Public entry pages are distinct from anonymous access to protected resources.
 
 ## Design catalog
 
@@ -33,6 +33,60 @@ The supplied image contains truncated names. This catalog uses descriptive full 
 | [System Architecture Diagram](system-architecture-diagram.md) | React browser and configured HTTP client |
 | [UI and Accessibility Design](ui-and-accessibility-design.md) | Identify journey and shared UI patterns |
 
+## Inputs and design boundaries
+
+Use the [requirements catalog](../02-requirements/README.md) for intended behavior and acceptance constraints, and [analysis](../03-analysis/README.md) for domain rules, data flows, threats, and unresolved questions. Compare both with the candidate source before describing a control as implemented.
+
+The design follows the workspace → project → board → column → task hierarchy. The React client presents interactions; Laravel endpoints enforce current authorization, validation, and domain constraints. Migrations define physical schema. Client route guards, diagrams, and policy declarations alone do not establish an endpoint's complete behavior.
+
+## Choosing a starting document
+
+| Change or question | Start here | Cross-check |
+| --- | --- | --- |
+| System or component boundary | [Architecture](system-architecture-diagram.md), [components](component-diagram.md) | Routes, repository layout, and actual deployment configuration |
+| Identity or resource access | [Authentication](authentication-and-authorization.md), [authorization flow](authorization-decision-flow.md) | Current membership, private visibility, nested ancestry, and threat model |
+| Data or migration change | [Data model](data-model-and-erd.md), [schema](schema-reference.md) | Migrations, existing rows, domain rules, and recovery plan |
+| Form, navigation, or task interaction | [Editor flow](editor-interaction-flow.md), [site map](site-map.md), [UI/accessibility](ui-and-accessibility-design.md) | Request contract, errors, themes, keyboard behavior, and persisted state |
+| Mutation or deletion | [Update sequence](resume-update-sequence-diagram.md), [deletion sequence](resume-deletion-sequence-diagram.md) | Actual controller path, transactions, soft deletion, and ordering effects |
+| New extension | Relevant file/PDF/download/password topic | Scope approval, decision register, route/schema changes, and acceptance cases |
+
+## Required design record
+
+For a scoped change, record the following before treating the design as ready for implementation:
+
+- Requirement or backlog reference, actor, operation, and expected outcome.
+- Current source behavior and candidate commit, separated from the proposed change.
+- Affected UI components, routes, request/response contracts, policies, and persisted resources.
+- Loading, empty, success, validation, denied-access, unavailable-resource, and uncertain-response behavior where applicable.
+- Theme, keyboard, focus, and announcement expectations for affected interactions.
+- Data migration, transaction, contention, backup, and rollback implications where applicable.
+- Material alternatives, actual decision status, acceptance cases, and unresolved dependencies.
+
+Do not invent an owner, approved decision, runtime measurement, or completed check. Capture missing evidence explicitly and link the responsible work item when one exists.
+
+## Completion and handoff criteria
+
+| Criterion | Review evidence |
+| --- | --- |
+| Scope is explicit | Existing behavior, proposed change, and excluded capabilities are distinguishable |
+| Interfaces agree | Client calls and endpoint contracts align; failures and nested identifiers are specified |
+| Authority is enforced | Actual server path applies the required visibility and mutation checks |
+| Data consequences are understood | Constraints, concurrency, deletion, migration, and recovery impacts are documented as applicable |
+| Interaction is reviewable | Normal and failure states include theme and keyboard expectations |
+| Decisions are traceable | Alternatives, selected direction, remaining questions, and references are recorded |
+| Documentation is consistent | Relative links resolve; embedded PlantUML matches its source; preview renders |
+| Verification is planned | Relevant positive/negative cases and environment limitations are identified |
+
+Passing a design review authorizes neither a claim that implementation passes tests nor a deployment. Hand the scoped package to [implementation](../05-implementation/README.md), connect its acceptance cases to [testing](../06-testing/README.md), and record actual results with the [verification template](../../Releases/verification-template.md). Source rollback does not restore deleted data; SQLite checks do not establish MySQL contention behavior.
+
+## Maintenance and diagram conventions
+
+Update related design documents when authentication, membership, private visibility, nested contracts, schema, component boundaries, or interaction behavior changes. Revisit proposed extensions when a concrete requirement is approved; retain their proposed status until implementation evidence exists.
+
+Each topic contains an embedded PlantUML block, an editable `.puml` file, and a PNG preview under `diagrams/`. Keep the block and source identical, regenerate the preview after a source change, and inspect its readability. Conceptual entity diagrams are not complete physical schema specifications; proposed sequence diagrams are not proof of existing endpoints.
+
+Use [documentation traceability](../../Project-Management/documentation-traceability.md) and the [diagram guide](../../diagram-guide.md) to keep changes connected to their source and evidence.
+
 ## Review sequence
 
 1. Establish the requirement and current source behavior.
@@ -58,14 +112,21 @@ The membership remove/re-add authority issue remains DEC-003/PB-001. A diagram o
 
 ```plantuml
 @startuml
-title KanbanFlow Design
-rectangle "Inputs and context" as I
-rectangle "Design work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Design Review and Handoff
+start
+:Read requirements, analysis, and candidate source;
+:Separate current behavior from proposed change;
+:Specify UI, request, authority, and data boundaries;
+:Define failure states and operational implications;
+:Link decisions and acceptance cases;
+if (Unresolved material design question?) then (yes)
+ :Record dependency and revise affected design;
+ :Keep unresolved status visible;
+else (no)
+ :Review scope, contracts, and diagram consistency;
+ :Hand design to implementation and testing;
+endif
+:Record actual verification separately from design readiness;
+stop
 @enduml
 ```
