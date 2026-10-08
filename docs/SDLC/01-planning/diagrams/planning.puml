@@ -1,12 +1,16 @@
 @startuml
-title KanbanFlow Planning Decisions
+title KanbanFlow Planning Decisions and Handoff
 start
 :Define problem, outcome, and scope;
-:Assess risks, dependencies, and evidence needs;
-if (Essential conditions understood?) then (yes)
- :Record actual agreement and requirements handoff;
+:Compare options and assess feasibility;
+:Record assumptions, risks, and evidence needs;
+if (Required decisions and conditions available?) then (yes)
+ :Record actual agreement for bounded next step;
+ :Hand off criteria and dependencies to requirements;
 else (no)
- :Record blockers and bounded next action;
+ :Record refine, blocked, or defer decision;
+ :Identify next action or bounded investigation;
 endif
+:Reassess when scope or evidence changes;
 stop
 @enduml

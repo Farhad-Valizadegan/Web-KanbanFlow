@@ -41,7 +41,7 @@ Assumptions and evidence needed:
 Verification approach and authorized environment:
 Actual capacity or sizing basis, if used:
 Agreed owner and scope-decision responsibility:
-Decision: proceed / refine / blocked, with reason:
+Decision: proceed / refine / blocked / defer, with reason:
 Next action and review point:
 ```
 
@@ -64,6 +64,75 @@ Before proceeding, check that the outcome, boundaries, criteria, dependencies, a
 
 Planning completion means the agreed planning outputs exist. It does not mean the product change is Done or released. Required gaps remain visible rather than being treated as success.
 
+## Evaluate options and feasibility
+
+Compare plausible approaches before committing dependent work. Include retaining current behavior or deferring the change when those are viable. Use evidence and explicit trade-offs rather than inventing numerical scores.
+
+| Option | Expected user benefit | Dependencies | Permission/data impact | Verification cost | Main uncertainty |
+| --- | --- | --- | --- | --- | --- |
+| Actual proposed option | Observable benefit | Required conditions | Assessed impact | Actual basis or unknown | Evidence still needed |
+
+Record why the chosen approach fits the intended outcome and constraints. Material architecture or policy choices belong in the decision register; this planning record links to them. Technical analysis can refine an approach without silently changing its agreed user outcome.
+
+Assess feasibility across implementation, review, verification, and configuration. An available coding environment does not imply available browser, database, or operational evidence. Where resource needs are unknown, define a bounded investigation instead of claiming a delivery estimate.
+
+## Track assumptions and risks
+
+Distinguish a known constraint, an uncertain assumption, a risk, and a blocking dependency. An assumption needs validation; a blocker prevents a required next step. Record actual ownership where agreed.
+
+| Reference | Type | Condition and evidence | Impact if wrong/unresolved | Validation or mitigation | Owner | Review trigger |
+| --- | --- | --- | --- | --- | --- | --- |
+| Local reference | Assumption / risk / constraint / dependency | Actual observation or hypothesis | Affected outcome | Concrete action | Agreed person or unassigned | Agreed event/date or pending |
+
+Do not mark a risk resolved simply because a mitigation is proposed. Link the result when the action occurs. Reassess when policy, environment, scope, or evidence changes. An unresolved risk outside the selected scope remains tracked with its impact rather than disappearing from the record.
+
+## Plan evidence by affected boundary
+
+| Boundary | Planning questions |
+| --- | --- |
+| Access and membership | Which actors and current/removed memberships must be checked? Can direct and aggregate responses expose restricted data? |
+| User interaction | Which keyboard, focus, responsive, and failure-feedback scenarios matter? |
+| Persistence and movement | What must remain correct after rejection, reload, or stale requests? |
+| Database concurrency | Does the change affect locks, WIP limits, or position allocation? Is an isolated MySQL check needed? |
+| Configuration and compatibility | Which actual hosts, origins, dependencies, or data formats affect the outcome? |
+| Documentation | Which factual sources, relative links, and diagram previews need review? |
+
+Use the [verification template](../../Releases/verification-template.md) for eventual results. At planning time, name expected checks and environment dependencies, leaving execution pending. Historical suite totals, SQLite regressions, and build success each have limits; none substitutes for evidence at a different affected boundary.
+
+## Record the planning decision
+
+| Decision | Meaning | Next step |
+| --- | --- | --- |
+| Proceed | Bounded next-phase work has sufficiently clear scope and required decisions | Link outputs to requirements or refinement |
+| Refine | Scope, criteria, or feasibility need clarification | Assign a specific question or split the work |
+| Blocked | A condition prevents the required next step | Record dependency, impact, and next action |
+| Defer | Work is deliberately outside current selection | Preserve rationale and a reconsideration trigger if agreed |
+
+Proceed applies to the recorded next step, not every downstream phase. A bounded investigation may proceed while dependent implementation remains blocked. Record the actual decision date, responsible person, rationale, and source references. Pending agreement remains pending; elapsed time is not approval.
+
+## Requirements handoff checklist
+
+- User problem, affected actors, and intended outcome are explicit.
+- Included behavior and exclusions are bounded.
+- Success and relevant failure criteria are observable.
+- Essential policy decisions are recorded or block dependent work.
+- Assumptions, risks, and environment needs have clear next actions.
+- Proposed work links to the product backlog and owning decisions.
+- Planned checks remain distinct from actual evidence.
+- The next-phase scope and actual agreement are understandable.
+
+Hand these outputs to requirements while preserving remaining uncertainty. Requirements work elaborates behavior and constraints; planning does not need to fabricate a finished design or commit a schedule in order to hand off bounded work.
+
+## Scope changes and follow-up
+
+| Observation date | Changed condition or scope | Reason/evidence | Effect on outcome | Actual decision | Next action |
+| --- | --- | --- | --- | --- | --- |
+| Actual date | Actual change | Source reference | Explicit impact | Agreement or pending | Concrete action |
+
+Keep earlier context and label later corrections. If a change alters acceptance criteria, capacity, or a required permission rule, update the relevant owning record and reassess readiness. Do not silently turn an unrelated request into selected implementation scope.
+
+Planning, sprint selection, item completion, publication, and deployment remain separate decisions. Follow [release guidance](../../Releases/README.md) for actual delivery work; the planning decision alone establishes no production readiness or recovery guarantee.
+
 ## Changes and maintenance
 
 Reassess the plan when scope, evidence, policy, or dependencies change. Preserve material decisions and their impact. Update the owning documentation instead of maintaining conflicting copies. Keep credentials and personal account details out of records.
@@ -78,15 +147,19 @@ See the [planning overview](project-planning-overview.md), [planning index](READ
 
 ```plantuml
 @startuml
-title KanbanFlow Planning Decisions
+title KanbanFlow Planning Decisions and Handoff
 start
 :Define problem, outcome, and scope;
-:Assess risks, dependencies, and evidence needs;
-if (Essential conditions understood?) then (yes)
- :Record actual agreement and requirements handoff;
+:Compare options and assess feasibility;
+:Record assumptions, risks, and evidence needs;
+if (Required decisions and conditions available?) then (yes)
+ :Record actual agreement for bounded next step;
+ :Hand off criteria and dependencies to requirements;
 else (no)
- :Record blockers and bounded next action;
+ :Record refine, blocked, or defer decision;
+ :Identify next action or bounded investigation;
 endif
+:Reassess when scope or evidence changes;
 stop
 @enduml
 ```
