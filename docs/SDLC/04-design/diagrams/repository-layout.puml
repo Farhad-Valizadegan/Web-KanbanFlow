@@ -1,9 +1,27 @@
 @startuml
-title KanbanFlow Repository Layout
-start
-:Frontend pages features and shared components;
-:Backend routes controllers policies and models;
-:Database migrations and tests;
-:Documentation and verification references;
-stop
+title KanbanFlow Repository Responsibility Map
+rectangle "Web-KanbanFlow" as Root
+package "frontend/" as Front {
+ rectangle "src/pages and App composition" as Pages
+ rectangle "src/features" as Features
+ rectangle "src/components and src/api" as Shared
+ rectangle "Scripts / Lockfile / Build config" as FrontConfig
+}
+package "backend/" as Back {
+ rectangle "routes and app/Http" as Routes
+ rectangle "Policies / Models / Services / Notifications" as Domain
+ rectangle "database and tests" as DataTests
+ rectangle "bootstrap / config / manifests" as BackConfig
+}
+rectangle "docs/ - lifecycle, decisions, releases, diagrams" as Docs
+rectangle ".github/workflows/ci.yml" as CI
+rectangle "README / CHANGELOG / ignore rules" as Meta
+Root --> Front
+Root --> Back
+Root --> Docs
+Root --> CI
+Root --> Meta
+CI ..> FrontConfig : frontend lint/build
+CI ..> DataTests : backend tests
+note bottom of Root : Source map; not a deployment topology.
 @enduml
