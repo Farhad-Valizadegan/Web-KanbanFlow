@@ -1,9 +1,20 @@
 @startuml
-title KanbanFlow Validation and Acceptance Criteria
+title KanbanFlow Validation and Acceptance Decision
 start
-:Define observable criterion;
-:Specify validation and failure boundaries;
-:Execute relevant candidate checks;
-:Record result and remaining gaps;
+:Link criterion to need and actual policy;
+:Define actor, input, success, and failure conditions;
+:Identify candidate and required environment;
+if (Check executable?) then (yes)
+ :Perform relevant scenario and capture observations;
+ if (Expected outcome demonstrated?) then (yes)
+  :Record Pass within stated scope;
+ else (no)
+  :Record Fail and unmet criterion;
+ endif
+else (no)
+ :Record Blocked or Not run with next action;
+endif
+:Review required gaps and completion criteria;
+:Reassess evidence after material changes;
 stop
 @enduml
