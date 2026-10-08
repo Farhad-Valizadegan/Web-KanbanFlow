@@ -1,9 +1,30 @@
 @startuml
-title KanbanFlow Route and Request Contracts
-start
-:Match frontend operation to backend route;
-:Specify request ancestry fields and actor;
-:Trace validation authorization and response;
-:Verify success and failure compatibility;
-stop
+title KanbanFlow Request Contract Trace
+actor User
+participant "Route page / Feature" as UI
+participant "Helper / Types / Axios" as Client
+participant "Route / Middleware" as Routes
+participant "Controller / Policy / Validation" as API
+database "Persistence and side effects" as DB
+User -> UI : Perform scoped operation
+UI -> Client : Inputs and resource identifiers
+Client -> Routes : Actual method/path/payload with session state
+Routes -> API : Resolve authenticated endpoint
+API -> API : Check ancestry, authority, input, domain rules
+alt Allowed and valid
+ API -> DB : Execute actual endpoint behavior
+ DB --> API : Result
+ API --> Client : Endpoint-specific status and envelope
+ Client --> UI : Extract agreed data/result
+ UI --> User : Feedback and affected query refresh
+else Rejected or unavailable
+ API --> Client : Actual failure contract
+ Client --> UI : Applicable error
+ UI --> User : Safe recovery
+end
+note over User, DB
+Navigation routes and API routes are distinct.
+No universal envelope, retry, or transaction contract implied.
+Uncertain responses require authoritative-state investigation.
+end note
 @enduml
