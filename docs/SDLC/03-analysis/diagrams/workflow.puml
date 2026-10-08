@@ -1,11 +1,15 @@
 @startuml
-title KanbanFlow Analysis
-rectangle "Inputs and context" as I
-rectangle "Analysis work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Analysis Phase and Design Handoff
+start
+:Identify requirement, baseline, and observed behavior;
+:Trace source, access, data, and failure boundaries;
+:Assess hypotheses, options, and compatibility;
+if (Evidence sufficient for bounded approach?) then (yes)
+ :Record findings, rationale, and verification plan;
+ :Hand scoped approach to design;
+else (no)
+ :Record uncertainty, blocker, and next investigation;
+endif
+:Preserve decisions and reassess changed evidence;
+stop
 @enduml
