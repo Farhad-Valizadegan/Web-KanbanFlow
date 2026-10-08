@@ -1,26 +1,90 @@
 @startuml
-title KanbanFlow Conceptual Entity Relationships
+title KanbanFlow Core ERD - Selected Keys and Relationships
 hide methods
-entity User
-entity Workspace
-entity workspace_user
-entity Project
-entity Board
-entity Column
-entity Task
-entity TaskComment
-entity ActivityLog
-User -- Workspace : owner_id
-User -- workspace_user : member
-Workspace -- workspace_user : membership role
-Workspace -- Project : contains
-Project -- Board : contains
-Board -- Column : contains
-Column -- Task : contains
-Task -- TaskComment : contains
-User -- Task : creator / optional assignee
-User -- TaskComment : author
-Workspace -- ActivityLog : scope
-User -- ActivityLog : actor
-note bottom : Migrations define physical keys and delete behavior.
+hide circle
+entity "users" as U {
+ * id : PK
+}
+entity "workspaces" as W {
+ * id : PK
+ * owner_id : FK users
+ slug : unique
+ deleted_at : nullable
+}
+entity "workspace_user" as M {
+ * id : PK
+ * workspace_id : FK
+ * user_id : FK
+ role
+ unique(workspace_id, user_id)
+}
+entity "projects" as P {
+ * id : PK
+ * workspace_id : FK
+ * created_by : FK users
+ unique(workspace_id, slug)
+ deleted_at : nullable
+}
+entity "boards" as B {
+ * id : PK
+ * project_id : FK
+ * created_by : FK users
+ visibility / position
+ unique(project_id, slug)
+ deleted_at : nullable
+}
+entity "columns" as C {
+ * id : PK
+ * board_id : FK
+ position
+ wip_limit : nullable
+ deleted_at : nullable
+}
+entity "tasks" as T {
+ * id : PK
+ * column_id : FK
+ * created_by : FK users
+ assigned_to : nullable FK users
+ position / priority
+ completed_at : nullable
+ deleted_at : nullable
+}
+entity "task_comments" as TC {
+ * id : PK
+ * task_id : FK
+ * user_id : FK
+ body
+ deleted_at : nullable
+}
+entity "activity_logs" as A {
+ * id : PK
+ * workspace_id : FK
+ user_id : nullable FK
+ subject_type
+ subject_id : nullable metadata
+}
+entity "notifications" as N {
+ * id : UUID PK
+ notifiable_type / notifiable_id
+ data
+ read_at : nullable
+}
+U ||--o{ W : owns
+U ||--o{ M : member
+W ||--o{ M : membership
+W ||--o{ P : contains
+P ||--o{ B : contains
+B ||--o{ C : contains
+C ||--o{ T : contains
+T ||--o{ TC : contains
+U ||--o{ P : creates
+U ||--o{ B : creates
+U ||--o{ T : creates
+U |o--o{ T : optional assignee
+U ||--o{ TC : authors
+W ||--o{ A : scope
+U |o--o{ A : optional actor
+U .. N : logical recipient association, not FK
+note bottom of A : Subject metadata has no subject foreign key.
+note bottom of N : Polymorphic recipient; no declared users FK.
 @enduml
