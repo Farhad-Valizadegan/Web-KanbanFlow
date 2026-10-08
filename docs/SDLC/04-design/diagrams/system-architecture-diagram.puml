@@ -1,18 +1,29 @@
 @startuml
-title KanbanFlow System Boundaries
-node Browser {
- component "React application" as UI
- component "Axios / Query state" as Client
+title KanbanFlow Runtime and Trust Boundaries
+node "Browser" {
+ component "React routes / Features / Shared UI" as UI
+ component "Query state / API helpers / Axios" as Client
+ rectangle "Browser-local theme preference" as Theme
  UI --> Client
+ UI --> Theme
+}
+node "Frontend delivery - environment-specific" {
+ artifact "Vite build / Static application assets" as Bundle
 }
 node "Laravel application" {
- component "Session and API routes" as Routes
- component "Controllers / Validation / Policies" as Controls
- component "Eloquent persistence" as Models
+ component "Session / API routes and middleware" as Routes
+ component "Controllers / Validation / Policies / Visibility" as Controls
+ component "Eloquent / Transaction paths" as Models
+ component "ActivityLogger / Assignment notification" as Effects
  Routes --> Controls
  Controls --> Models
+ Controls --> Effects : where invoked
 }
-database "Application database" as DB
-Client --> Routes : HTTP credentials / XSRF
-Models --> DB : Resources and notifications
+database "Application database - verify actual engine/schema" as DB
+Bundle --> UI : load application
+Client --> Routes : configured HTTP origin / credentials / XSRF
+Models --> DB : resource persistence
+Effects --> DB : activity / database notification records
+note bottom of DB : MySQL contention and recovery need environment-specific checks.
+note bottom of Routes : Public health is distinct from authenticated resource authority.
 @enduml
