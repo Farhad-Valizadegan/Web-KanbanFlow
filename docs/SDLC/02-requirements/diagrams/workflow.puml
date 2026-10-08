@@ -1,11 +1,16 @@
 @startuml
-title KanbanFlow Requirements
-rectangle "Inputs and context" as I
-rectangle "Requirements work" as W
-rectangle "Review evidence" as R
-rectangle "Phase outputs" as O
-I --> W
-W --> R
-R --> O
-R --> W : unresolved questions
+title KanbanFlow Requirements Review and Handoff
+start
+:Identify user need, actors, and agreed scope;
+:Specify observable success and failure behavior;
+:Link policy, constraints, and verification approach;
+if (Essential ambiguity resolved?) then (yes)
+ :Record actual requirements agreement;
+ :Hand bounded requirements to analysis;
+else (no)
+ :Record unresolved question and next action;
+ :Keep dependent implementation blocked;
+endif
+:Reassess changes with traceability intact;
+stop
 @enduml
