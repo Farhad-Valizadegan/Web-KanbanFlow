@@ -1,9 +1,22 @@
 @startuml
-title KanbanFlow Design Guide
+title KanbanFlow Scoped Design Workflow
 start
-:Read requirements and analysis;
-:Specify interface data and permission boundaries;
-:Review errors accessibility and operational implications;
-:Link acceptance cases and decision record;
+:Read scoped requirement and candidate baseline;
+:Trace actor, interaction, endpoint, and persistence;
+:Specify intended behavior and exclusions;
+:Design authority, validation, failures, and recovery;
+:Review UI, data, compatibility, and operational consequences;
+if (Material decision unresolved?) then (yes)
+ :Record open question and dependent scope;
+else (no)
+ :Record actual decision and design consequences;
+endif
+:Prepare design package, diagrams, and acceptance cases;
+if (Required design gates satisfied?) then (yes)
+ :Hand scoped package to implementation and testing;
+ :Record candidate-specific checks and remaining gaps;
+else (no)
+ :Revise affected design and preserve unresolved status;
+endif
 stop
 @enduml
