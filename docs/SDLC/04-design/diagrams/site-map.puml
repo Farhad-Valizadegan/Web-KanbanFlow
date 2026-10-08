@@ -1,9 +1,30 @@
 @startuml
-title KanbanFlow Site Map
-start
-:Home and guest login or registration;
-:Protected dashboard;
-:Workspace then project;
-:Board and task interactions;
-stop
+title KanbanFlow Browser Site Map and Access Boundaries
+rectangle "Home /" as Home
+package "GuestRoute" {
+ rectangle "Login /login" as Login
+ rectangle "Register /register" as Register
+}
+package "ProtectedRoute" {
+ rectangle "Dashboard /dashboard" as Dashboard
+ rectangle "Workspace /workspaces/:workspaceId" as Workspace
+ rectangle "Project /workspaces/:workspaceId/projects/:projectId" as Project
+ rectangle "Board .../boards/:boardId" as Board
+}
+rectangle "Unmatched route / NotFoundPage" as Missing
+rectangle "Board feature interactions: Columns / Tasks / Comments" as Tasks
+Home --> Login
+Home --> Register
+Login ..> Dashboard : valid session redirects
+Register ..> Dashboard : valid session redirects
+Dashboard --> Workspace : resource journey
+Workspace --> Project
+Project --> Board
+Board --> Tasks : within page
+Workspace ..> Dashboard : breadcrumb
+Project ..> Workspace : breadcrumb
+Board ..> Project : breadcrumb
+Missing --> Dashboard : recovery action
+note bottom of Tasks : Feature interaction does not establish a standalone task URL.
+note bottom of Dashboard : Backend independently checks current resource authority.
 @enduml
