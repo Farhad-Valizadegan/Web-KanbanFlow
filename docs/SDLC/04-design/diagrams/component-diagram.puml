@@ -1,18 +1,38 @@
 @startuml
-title KanbanFlow Component Responsibilities
-component "Route pages" as Pages
-component "Auth guards / Layout / Theme / UI" as Shared
-component "Feature components" as Features
-component "API helpers / Query state" as API
-component "Laravel routes / Controllers" as Server
-component "Validation / Policies" as Rules
-component "Eloquent models" as Models
-database Database as DB
-Pages --> Shared
-Pages --> Features
-Features --> API
-API --> Server : HTTP session requests
-Server --> Rules
-Server --> Models
+title KanbanFlow Logical Component Dependencies
+top to bottom direction
+package "React frontend" {
+ component "App composition / Router / Providers" as App
+ component "Route pages" as Pages
+ component "Layout / Theme / UI / Auth guards" as Shared
+ component "Feature interactions" as Features
+ component "TanStack Query state" as Query
+ component "API helpers / Axios client" as Client
+ App --> Pages
+ App --> Shared
+ Pages --> Shared
+ Pages --> Features
+ Features --> Query
+ Features --> Client
+}
+package "Laravel backend" {
+ component "Routes / Session middleware" as Routes
+ component "Controllers / Request validation" as Controllers
+ component "Policies / Visibility scopes" as Policies
+ component "Eloquent models" as Models
+ component "ActivityLogger" as Logger
+ component "TaskAssignedNotification" as Notifications
+ Routes --> Controllers
+ Controllers --> Policies
+ Controllers --> Models
+ Controllers --> Logger : where invoked
+ Controllers --> Notifications : where invoked
+ Logger --> Models
+}
+database "Application records" as DB
+Client --> Routes : HTTP / credentials / XSRF
 Models --> DB
+Notifications --> DB : database notification channel
+note bottom of Query : Query freshness is not real-time synchronization.
+note bottom of Controllers : Conceptual dependencies, not execution or transaction order.
 @enduml
