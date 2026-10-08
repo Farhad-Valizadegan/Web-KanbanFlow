@@ -1,9 +1,16 @@
 @startuml
-title KanbanFlow Business Rules Catalog
+title KanbanFlow Business Rule Analysis and Verification
 start
-:Identify rule and source;
-:Assess actors and accepted or rejected behavior;
-:Record open policy dependency;
-:Link acceptance and follow-up;
+:Identify rule, owning need, and source baseline;
+:Assess actor, resource, accepted and rejected paths;
+:Record exceptions and known policy gaps;
+if (Required policy agreed?) then (yes)
+ :Link change impact and acceptance checks;
+ :Record candidate evidence when executed;
+else (no)
+ :Record next decision or bounded investigation;
+ :Keep dependent enforcement blocked;
+endif
+:Preserve superseded rules and residual gaps;
 stop
 @enduml
