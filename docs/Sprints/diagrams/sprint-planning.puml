@@ -1,12 +1,17 @@
 @startuml
-title Sprint Planning
-rectangle "Refined backlog" as N0
-rectangle "Agree goal" as N1
-rectangle "Select items" as N2
-rectangle "Confirm capacity" as N3
-rectangle "Sprint plan" as N4
-N0 --> N1
-N1 --> N2
-N2 --> N3
-N3 --> N4
+title KanbanFlow Sprint Planning
+start
+:Review refined backlog, risks, and prior evidence;
+:Agree goal, participants, dates, and actual capacity;
+:Assess candidate readiness and dependencies;
+if (Selected scope feasible and ready?) then (yes)
+ :Record criteria, owners, checks, and exclusions;
+ :Record actual planning agreement;
+ :Create linked sprint record and backlog;
+else (no)
+ :Reduce scope, refine, or define bounded investigation;
+ :Record blockers and next planning action;
+endif
+:Reassess material scope changes during execution;
+stop
 @enduml
