@@ -1,12 +1,24 @@
 @startuml
-title KanbanFlow Conceptual Data Flow
-rectangle Browser as B
-rectangle "Authenticated API boundary" as A
-rectangle "Validation, access, and domain operation" as O
-database "Application database" as D
-B --> A : request
-A --> O : guarded operation
-O --> D : scoped read or mutation
-D --> O : records
-O --> B : result or rejection
+title KanbanFlow Conceptual Request and Data Flow
+rectangle "Browser interface and query state" as B
+rectangle "Feature API / shared client" as C
+rectangle "Session, validation, ancestry, and access" as A
+rectangle "Scoped domain read or mutation" as O
+database "Application records" as D
+rectangle "Relevant derived state and cache refresh" as R
+rectangle "Error feedback and applicable rollback" as F
+B --> C : action or read
+C --> A : credentialed request
+A --> O : permitted operation
+O --> D : query or accepted change
+D --> O : stored state
+O --> R : affected state only
+R --> B : accepted result / refresh
+A --> F : rejected request
+O --> F : domain rejection
+F --> B : recovery feedback
+note bottom of B
+Theme preference is browser-local.
+Arrows do not establish automatic real-time sync.
+end note
 @enduml
