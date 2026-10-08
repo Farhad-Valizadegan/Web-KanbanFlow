@@ -1,9 +1,37 @@
 @startuml
-title KanbanFlow Authorization Decision Flow
+title KanbanFlow Resource Authorization Decision Flow
 start
-:Resolve actor and nested resource ancestry;
-:Evaluate current visibility and operation policy;
-:Reject denied requests without mutation;
-:Execute allowed operation and verify persisted state;
+:Identify endpoint, actor, operation, and resource chain;
+if (Identity established by middleware?) then (yes)
+ :Resolve resource binding and applicable ancestry checks;
+ if (Resources available and correctly related?) then (yes)
+  :Trace actual endpoint visibility and authority checks;
+  if (Required visibility satisfied?) then (yes)
+   if (Operation-specific authority satisfied?) then (yes)
+    :Apply input validation and domain rules;
+    if (Request valid?) then (yes)
+     :Execute endpoint persistence behavior;
+     :Verify returned and persisted state;
+    else (no)
+     :Return validation/domain failure;
+    endif
+   else (no)
+    :Deny protected operation;
+   endif
+  else (no)
+   :Deny restricted access;
+  endif
+ else (no)
+  :Return applicable unavailable-resource response;
+ endif
+else (no)
+ :Return authentication failure and applicable recovery;
+endif
+:Record endpoint-specific evidence and limitations;
 stop
+note right
+Conceptual review flow; actual ordering varies by endpoint.
+Current membership and ancestry matter.
+DEC-003/PB-001 remains open.
+end note
 @enduml
