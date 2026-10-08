@@ -1,9 +1,22 @@
 @startuml
-title KanbanFlow PDF Rendering Design
+title KanbanFlow Proposed PDF Report Pipeline
 start
-:Define proposed report and visible data scope;
-:Specify safe rendering and artifact lifecycle;
-:Choose implementation through recorded decision;
-:Verify output and authorization before release;
+:Define report, audience, fields, snapshot, and limits;
+:Record renderer and delivery decisions;
+if (Concrete approved capability scope?) then (yes)
+ :Implement request identity, ancestry, and export authority;
+ :Select authorized report projection;
+ :Render with bounded resources and approved assets;
+ if (Usable complete PDF produced?) then (yes)
+  :Apply authorized delivery and artifact lifecycle;
+  :Inspect representative pages and verify text/data;
+  :Check denied access, revocation, failures, and cleanup;
+  :Record actual candidate evidence and limitations;
+ else (no)
+  :Report safe failure and reconcile partial artifacts;
+ endif
+else (no)
+ :Keep design proposal open; no PDF support claimed;
+endif
 stop
 @enduml
