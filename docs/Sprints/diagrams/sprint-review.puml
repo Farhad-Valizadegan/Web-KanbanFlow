@@ -1,12 +1,19 @@
 @startuml
-title Sprint Review Template
-rectangle "Sprint goal" as N0
-rectangle "Demonstrate outcomes" as N1
-rectangle "Review evidence" as N2
-rectangle "Record feedback" as N3
-rectangle "Update backlog" as N4
-N0 --> N1
-N1 --> N2
-N2 --> N3
-N3 --> N4
+title KanbanFlow Sprint Review
+start
+:Restate agreed goal and final selected scope;
+:Demonstrate outcomes on identified revisions;
+:Review acceptance evidence and limitations;
+if (Required outcome demonstrated?) then (yes)
+ :Record criterion result and completion assessment;
+else (no)
+ :Record unmet criterion and unfinished work;
+endif
+:Capture actual feedback and agreed decisions;
+:Link follow-up work and update sprint record;
+note right
+Review does not establish deployment
+or automatically authorize publication.
+end note
+stop
 @enduml
