@@ -1,9 +1,17 @@
 @startuml
-title KanbanFlow Data Classification and Lifecycle
+title KanbanFlow Data Classification and Lifecycle Analysis
 start
-:Identify data and purpose;
-:Trace storage, access, and derived data;
-:Assess lifecycle and recovery questions;
-:Record actual policy or pending decision;
+:Identify data, purpose, and handling class;
+:Trace storage, access, and derived exposure;
+:Distinguish revocation, soft deletion, and physical deletion;
+:Assess retention, export, and recovery questions;
+if (Policy and source effects established?) then (yes)
+ :Plan relevant isolated lifecycle checks;
+ :Record candidate evidence and compatibility limits;
+else (no)
+ :Record unknown policy or source dependency;
+ :Keep affected lifecycle claim unverified;
+endif
+:Review evidence for sensitive content;
 stop
 @enduml
