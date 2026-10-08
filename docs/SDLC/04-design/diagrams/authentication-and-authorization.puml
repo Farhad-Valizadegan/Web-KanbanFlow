@@ -1,9 +1,31 @@
 @startuml
-title KanbanFlow Authentication and Authorization
-start
-:Resolve session and CSRF state;
-:Authenticate identity;
-:Check current resource access and operation policy;
-:Return authorized result or applicable failure;
-stop
+title KanbanFlow Session and Resource Authorization
+actor User
+participant "React / Axios" as Client
+participant "Laravel session routes" as Auth
+participant "Authenticated API" as API
+participant "Ancestry / Visibility / Policies" as Rules
+User -> Client : Submit login
+Client -> Auth : GET /sanctum/csrf-cookie
+Auth --> Client : CSRF cookie state
+Client -> Auth : POST /login with credentials and XSRF
+Auth -> Auth : Validate, throttle, attempt authentication
+alt Successful login
+ Auth -> Auth : Regenerate session
+ Auth --> Client : User and message
+ Client -> API : GET /api/user with session
+ API --> Client : Authenticated identity
+ Client -> API : Resource request
+ API -> Rules : Current actor, ancestry, visibility, operation
+ alt Authorized
+  Rules --> API : Allow
+  API --> Client : Validated operation result
+ else Denied or unavailable
+  Rules --> API : Reject
+  API --> Client : Applicable failure
+ end
+else Invalid or throttled
+ Auth --> Client : Validation or throttle feedback
+end
+note over Client, Rules : Client guards aid navigation; server checks enforce access.
 @enduml
