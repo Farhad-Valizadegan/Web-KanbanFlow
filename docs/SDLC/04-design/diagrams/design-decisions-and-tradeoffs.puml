@@ -1,9 +1,23 @@
 @startuml
-title KanbanFlow Design Decisions and Tradeoffs
+title KanbanFlow Design Tradeoff and Decision Review
 start
-:Identify material design question;
-:Compare alternatives and constraints;
-:Record actual decision and consequences;
-:Link implementation and verification evidence;
+:Identify material question and requirement;
+:Inspect candidate baseline and constraints;
+:Compare viable options against common criteria;
+:Record evidence, consequences, and unknowns;
+if (Actual outcome agreed and recorded?) then (yes)
+ :Link stable decision and implementation scope;
+ :Specify compatibility, recovery, and acceptance cases;
+ :Implement scoped outcome;
+ :Verify candidate-specific behavior;
+ if (Required evidence demonstrates outcome?) then (yes)
+  :Record implemented outcome and residual gaps;
+ else (no)
+  :Keep implementation or verification gap visible;
+ endif
+else (no)
+ :Keep decision open and record dependencies;
+endif
+:Revisit on changed constraints or contrary evidence;
 stop
 @enduml
