@@ -1,10 +1,16 @@
 @startuml
-title Sprint Record Template
-rectangle "Goal and baseline" as N0
-rectangle "Scope" as N1
-rectangle "Execution evidence" as N2
-rectangle "Closure" as N3
-N0 --> N1
-N1 --> N2
-N2 --> N3
+title KanbanFlow Sprint Record Lifecycle
+start
+:Record agreed identity, goal, and baseline;
+:Link selected scope, criteria, and dependencies;
+:Append observed progress, changes, and blockers;
+:Record exact revisions and verification results;
+:Review demonstrated and unfinished outcomes;
+:Record retrospective actions and next steps;
+:Close record with actual outcome and evidence;
+note right
+Release and deployment records remain separate.
+Unknown fields stay pending.
+end note
+stop
 @enduml
