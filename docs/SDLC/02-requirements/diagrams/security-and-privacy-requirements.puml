@@ -1,9 +1,16 @@
 @startuml
-title KanbanFlow Security and Privacy Requirements
+title KanbanFlow Security and Privacy Requirement Assessment
 start
-:Identify data and access boundary;
-:Specify session and authorization rules;
-:Record unresolved policy risks;
-:Plan isolated checks and evidence;
+:Identify actors, data, and trust boundaries;
+:Specify authorization, revocation, and misuse scenarios;
+if (Essential policy and environment available?) then (yes)
+ :Plan and execute relevant isolated checks;
+ :Record candidate results and residual risks;
+else (no)
+ :Record missing decision or verification dependency;
+ :Keep affected enforcement or evidence pending;
+endif
+:Review records for sensitive data;
+:Reassess material changes before completion;
 stop
 @enduml
