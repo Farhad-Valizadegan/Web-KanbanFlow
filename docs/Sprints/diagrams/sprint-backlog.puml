@@ -1,12 +1,26 @@
 @startuml
-title Sprint Backlog Template
-rectangle "Ready" as N0
-rectangle "In progress" as N1
-rectangle "In review" as N2
-rectangle "Verified" as N3
-rectangle "Done" as N4
-N0 --> N1
-N1 --> N2
-N2 --> N3
-N3 --> N4
+title KanbanFlow Sprint Backlog Item States
+state Proposed
+state Ready
+state "In progress" as Progress
+state Blocked
+state "In review" as Review
+state Verified
+state Done
+[*] --> Proposed
+Proposed --> Ready : readiness criteria met
+Ready --> Progress : selected and started
+Progress --> Blocked : dependency prevents progress
+Blocked --> Progress : resolved and ready to resume
+Progress --> Review : candidate and evidence available
+Review --> Progress : changes required
+Review --> Verified : relevant checks demonstrated
+Verified --> Done : completion criteria met
+Verified --> Progress : evidence invalidated
+Done --> Progress : reopened with recorded reason
+note right of Ready
+Ready does not mean selected.
+Policy blockers may arise before work starts.
+Record the actual state and dependency.
+end note
 @enduml
