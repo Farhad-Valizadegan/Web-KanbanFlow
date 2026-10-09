@@ -1,9 +1,19 @@
 @startuml
-title KanbanFlow Testing Phase
+title KanbanFlow Testing Phase and Evidence Handoff
 start
-:Identify candidate and risk-based acceptance cases;
-:Prepare isolated verification environment;
-:Execute relevant checks and capture failures;
-:Assess evidence and disclose remaining gaps;
+:Identify candidate, affected criteria, and risks;
+:Inspect coverage and choose appropriate verification layers;
+:Prepare isolated environment and safe fixtures;
+:Execute relevant checks and record actual observations;
+if (Failure or material unverified criterion?) then (yes)
+ :Preserve evidence and disclose impact or gap;
+ :Return scoped correction or policy question;
+ :Recheck changed candidate when available;
+else (no)
+ :Record demonstrated scope and environment limits;
+endif
+:Assess readiness with open issues visible;
+:Link verification, defects, and delivery identity;
+:Hand off release or deployment only within assessed scope;
 stop
 @enduml
