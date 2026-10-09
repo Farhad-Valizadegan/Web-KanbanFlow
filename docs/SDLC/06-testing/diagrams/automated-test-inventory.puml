@@ -1,9 +1,17 @@
 @startuml
-title KanbanFlow automated test inventory
+title KanbanFlow Automated Coverage Inventory and Execution Evidence
 start
-:Inspect suites and configured commands;
-:Map assertions to affected requirements;
-:Identify uncovered behavior and environment limits;
-:Record actual execution separately;
+:Identify candidate test sources and configured commands;
+:Inspect methods, assertions, fixtures, and environment;
+:Map source scenarios to affected requirements and risks;
+:Record dated source inventory without passing claims;
+if (Relevant automated coverage available?) then (yes)
+ :Select and execute appropriate checks when verification is required;
+ :Record actual results against candidate and environment;
+else (no)
+ :Specify meaningful missing coverage or another verification layer;
+endif
+:Retain failures and unverified browser or engine boundaries;
+:Update inventory and link separate verification record;
 stop
 @enduml
