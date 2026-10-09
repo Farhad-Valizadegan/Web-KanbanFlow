@@ -1,14 +1,17 @@
 @startuml
-title KanbanFlow maintenance
+title KanbanFlow Maintenance Correction and Scoped Closure
 start
-:Collect reproducible report and current identity;
-:Prioritize risk and define acceptance cases;
-:Implement scoped correction and verify behavior;
-if (Affected criteria verified?) then (yes)
-:Record outcome, residual issues, and follow-up;
+:Capture report, identity, impact, and safe reproduction;
+:Diagnose actual boundary and resolve material policy questions;
+:Define acceptance and implement scoped correction;
+:Verify affected behavior, persistence, and shared consumers;
+if (Required criteria demonstrated?) then (yes)
+ :Publish intended candidate through authorized delivery;
+ :Observe target changes separately when applicable;
+ :Record scoped closure, residual issues, and follow-up;
 else (no)
-:Keep issue open and investigate remaining gaps;
+ :Keep failure/gap visible and recheck corrected candidate;
 endif
-:Update backlog and source-linked guidance;
+:Update backlog, status, and source-linked guidance;
 stop
 @enduml
