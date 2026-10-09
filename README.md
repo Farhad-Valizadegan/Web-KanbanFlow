@@ -1,233 +1,67 @@
 # KanbanFlow
 
-A full-stack Kanban project management system built with Laravel, React, TypeScript, MySQL, Tailwind CSS, and dnd-kit.
+KanbanFlow is a web application for organizing collaborative work into workspaces, projects, boards, columns, and tasks. It combines a Laravel API with a React and TypeScript interface, MySQL persistence, and Laravel Sanctum session authentication.
 
-KanbanFlow provides authenticated workspace collaboration, project management, interactive Kanban boards, task assignment, drag-and-drop ordering, Work in Progress limits, role-based authorization, comments, activity tracking, notifications, and workspace analytics.
+The repository is named **Web-KanbanFlow**; the application name is **KanbanFlow**.
 
-## Version
+## Start here
 
-Current version:
+- [Run the local demo](#run-the-local-demo)
+- [Features](#features)
+- [Verification](#verification)
+- [Documentation](docs/README.md)
+- [Release history](docs/Releases/README.md) and [changelog](CHANGELOG.md)
+- [Known limitations](#known-limitations)
 
-```text
-Version 1.1.0
-```
+## Version and status
 
-Development status:
+The frontend package declares version **1.1.0**. Consult release records and Git tags for published versions; a package version does not identify the source running on a server.
 
-```text
-Feature complete
-Backend tests passing
-Frontend lint passing
-Frontend production build passing
-GitHub Actions configured for pushes and pull requests
-```
-
-Patch-release changes and known issues are documented in [CHANGELOG.md](CHANGELOG.md).
+Workspace collaboration, Kanban workflows, comments, notifications, analytics, and light/dark themes are implemented. Verification results belong to a particular commit and environment. This README does not certify a current passing CI run or production deployment.
 
 ## Features
 
-### Authentication
+| Area | Available behavior |
+| --- | --- |
+| Authentication | Registration, login, logout, session authentication, validation, and protected pages. |
+| Workspaces | Workspace management, membership, and owner/manager/member/viewer roles. |
+| Projects | Project management, workspace-scoped slugs, statuses, optional dates, and soft deletion. |
+| Boards | Workspace/private visibility, ordered boards, drag-and-drop reordering, detailed and compact views. |
+| Columns | Ordered workflow columns and optional active-task Work in Progress (WIP) limits. |
+| Tasks | Priorities, descriptions, due dates, assignment, completion, ordering, and movement between columns. |
+| Collaboration | Task comments, author controls, moderation, and workspace activity feeds/filtering. |
+| Notifications | Assignment notifications, unread counts/filtering, read/delete actions, and recipient isolation. |
+| Analytics | Workspace/project/task summaries, priority counts, overdue/upcoming work, and assigned-to-me views. |
+| Interface | Shared navigation, loading/error states, optimistic movement with rollback, and light/dark appearance preferences. |
 
-- User registration
-- User login and logout
-- Laravel Sanctum SPA authentication
-- Authenticated-user endpoint
-- Persistent sessions
-- Protected frontend routes
-- Protected dashboard
-- Backend and frontend validation
+Active tasks count toward column WIP limits. Completed tasks do not; reopening a task must respect available capacity. Dedicated movement endpoints handle ordering rather than ordinary task updates.
 
-### Workspace Management
+## Technology and prerequisites
 
-- Create, view, update, and delete workspaces
-- Workspace ownership
-- Workspace member management
-- Add and remove members
-- Change member roles
-- Workspace-scoped authorization
-- Owner, manager, member, and viewer roles
+| Component | Baseline |
+| --- | --- |
+| Backend | Laravel 13, Sanctum 4, PHP manifest requirement `^8.3`; CI uses PHP 8.4. |
+| Database | MySQL for the documented local setup; backend tests use SQLite. |
+| Frontend | React 19, TypeScript 6, Vite 8, Tailwind CSS 4. |
+| Client libraries | Axios, TanStack Query, React Router, React Hook Form, Zod, and dnd-kit. |
+| Tools | Composer 2, Node.js 24 (CI baseline), npm, and Git. |
 
-### Project Management
+Use the committed lockfiles for exact dependency versions. Installed PHP must satisfy all locked packages and required extensions, including the MySQL PDO driver for the local database. See the [dependency baseline](docs/SDLC/05-implementation/dependency-baseline.md).
 
-- Create, view, update, and delete projects
-- Workspace-scoped project slugs
-- Active, completed, and archived statuses
-- Optional start and due dates
-- Soft deletion
-- Soft-delete slug collision protection
+On Windows, XAMPP can supply MySQL and a compatible PHP installation. Check `php -v`: an older bundled PHP may need upgrading. The demo below runs the API and frontend in separate terminals.
 
-### Kanban Boards
+## Run the local demo
 
-- Create, view, update, and delete boards
-- Project-scoped board slugs
-- Workspace and private board visibility
-- Soft deletion
-- Board position ordering
-- Drag-and-drop board reordering
-- Detailed board mode
-- Compact overview mode
-- Per-board view preference stored locally
+These steps initialize a **new local installation**. For an existing installation, preserve its environment file, application key, and database; follow the [upgrade and rollback guide](docs/Releases/upgrade-and-rollback.md).
 
-### Workflow Columns
-
-- Create, view, update, and delete columns
-- Column position ordering
-- Drag-and-drop column reordering
-- Optional Work in Progress limits
-- Active-task WIP enforcement
-- Completed-task WIP handling
-
-### Task Management
-
-- Create, view, update, and delete tasks
-- Low, medium, high, and urgent priorities
-- Optional descriptions and due dates
-- Task assignment and reassignment
-- Task unassignment
-- Open and completed states
-- Task position ordering
-- Drag-and-drop ordering within columns
-- Drag-and-drop movement between columns
-- Destination-column validation
-- Optimistic frontend updates
-- Rollback after failed movement
-
-### Collaboration
-
-- Task comment creation, listing, editing, and deletion
-- Comment authorship and timestamps
-- Comment authorization and moderation
-- Comment soft deletion
-- Workspace activity logging
-- Structured activity metadata
-- Activity filtering
-- Workspace activity feed
-
-### Notifications
-
-- Database notifications
-- Task assignment notifications
-- Task reassignment notifications
-- Self-assignment notification prevention
-- Duplicate notification prevention
-- Notification listing
-- Unread-only filtering
-- Unread notification count
-- Mark one notification as read
-- Mark all notifications as read
-- Delete notifications
-- Authenticated-user notification isolation
-- Automatic frontend polling
-
-### Workspace Analytics
-
-- Workspace summary statistics
-- Project status counts
-- Task status counts
-- Task priority counts
-- Overdue-task tracking
-- Due-today tracking
-- Upcoming tasks
-- Tasks assigned to the authenticated user
-- Workspace-scoped analytics authorization
-
-## Technology Stack
-
-### Backend
-
-- PHP 8.4
-- Laravel 13
-- Laravel Sanctum 4
-- MySQL
-- PHPUnit 12
-
-### Frontend
-
-- React 19
-- TypeScript 6
-- Vite 8
-- Tailwind CSS 4
-- Axios
-- TanStack Query
-- React Router
-- React Hook Form
-- Zod
-- dnd-kit
-
-### Development and Automation
-
-- Git
-- GitHub
-- GitHub Actions
-- Composer
-- npm
-- ESLint
-- Laravel Pint
-
-## Project Structure
-
-```text
-Web-KanbanFlow/
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── backend/
-│   ├── app/
-│   ├── bootstrap/
-│   ├── config/
-│   ├── database/
-│   ├── routes/
-│   ├── tests/
-│   ├── .env.example
-│   └── composer.json
-├── docs/
-│   ├── Project-Definition/
-│   ├── Project-Management/
-│   │   └── Milestones/
-│   ├── Releases/
-│   ├── SDLC/
-│   ├── Sprints/
-│   ├── diagram-guide.md
-│   └── README.md
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   ├── .env.example
-│   └── package.json
-└── README.md
-```
-
-## Prerequisites
-
-Install the following software before running the application:
-
-- PHP 8.3 or later
-- Composer 2
-- MySQL 8 or MariaDB
-- Node.js 24
-- npm
-- Git
-
-For Windows development, XAMPP can provide PHP and MySQL.
-
-## Installation
-
-### 1. Clone the Repository
+### 1. Get the source and create the database
 
 ```bash
 git clone https://github.com/Farhad-Valizadegan/Web-KanbanFlow.git
 cd Web-KanbanFlow
 ```
 
-### 2. Create the Database
-
-Start MySQL and create a database named:
-
-```text
-kanbanflow
-```
-
-Example SQL:
+Start MySQL, then create the database using your database administration tool:
 
 ```sql
 CREATE DATABASE kanbanflow
@@ -235,508 +69,172 @@ CREATE DATABASE kanbanflow
     COLLATE utf8mb4_unicode_ci;
 ```
 
-### 3. Configure the Backend
+### 2. Configure the backend
 
-Enter the backend directory:
+From the repository root:
 
 ```bash
 cd backend
-```
-
-Install PHP dependencies:
-
-```bash
 composer install
 ```
 
-Create the local environment file.
-
-Windows PowerShell:
+Copy the example configuration in PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Linux or macOS:
+On Linux/macOS, use `cp .env.example .env`. Edit the new `.env` to match your local database credentials and these development origins:
 
-```bash
-cp .env.example .env
-```
-
-Generate the Laravel application key:
-
-```bash
-php artisan key:generate
-```
-
-The default local database configuration is:
-
-```env
+```dotenv
+APP_URL=http://localhost:8000
+FRONTEND_URL=http://localhost:5173
+SANCTUM_STATEFUL_DOMAINS=localhost:5173,localhost:8000
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=kanbanflow
-DB_USERNAME=root
-DB_PASSWORD=
+DB_USERNAME=your_local_database_user
+DB_PASSWORD=your_local_database_password
 ```
 
-Update these values in `backend/.env` if your local MySQL configuration is different.
+The example file uses local `root` credentials with an empty password; adjust them for your installation. Keep actual credentials out of Git.
 
-Run the database migrations:
+Generate the key once for this new installation and create the schema:
 
 ```bash
+php artisan key:generate
 php artisan migrate
+php artisan serve --host=localhost --port=8000
 ```
 
-### 4. Configure the Frontend
+Leave this terminal running. The example configuration uses database-backed sessions, cache, and queues, so migrations and database access are required for normal application use.
 
-Return to the repository root and enter the frontend directory:
+### 3. Configure and start the frontend
+
+Open a second terminal at the repository root:
 
 ```bash
-cd ../frontend
+cd frontend
+npm ci
 ```
 
-Install JavaScript dependencies:
-
-```bash
-npm install
-```
-
-Create the frontend environment file.
-
-Windows PowerShell:
+Copy its example configuration in PowerShell:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Linux or macOS:
+On Linux/macOS, use `cp .env.example .env`. Confirm the frontend setting:
 
-```bash
-cp .env.example .env
-```
-
-The frontend API URL should be:
-
-```env
+```dotenv
 VITE_API_URL=http://localhost:8000
 ```
 
-## Running the Application
-
-The backend and frontend must run in separate terminals.
-
-### Backend Server
-
-From the `backend` directory:
+Start the interface:
 
 ```bash
-php artisan serve
+npm run dev -- --host localhost --port 5173 --strictPort
 ```
 
-The backend will be available at:
+Open [the local demo](http://localhost:5173). Both terminals and MySQL must remain running.
+
+### 4. Create an account and explore
+
+Choose **Register** and create your own account. Then create a workspace, a project, a board, columns, and tasks. Try assigning a task, moving it between columns, setting a WIP limit, adding a comment, and switching appearance modes.
+
+There is no universal demo username/password created by the installation steps. Existing installations retain their own accounts. Running the database seeder is not required for this walkthrough, and the interface currently has no password-recovery flow.
+
+### Troubleshooting
+
+| Symptom | Check |
+| --- | --- |
+| Frontend cannot reach the API | Keep the backend terminal running; confirm `VITE_API_URL` and restart Vite after editing it. |
+| Login/session or CSRF failures | Use `localhost` consistently; check frontend/backend origins and Sanctum stateful domains. Inspect the failed request before changing credentials. |
+| Database/session/cache errors | Start MySQL, verify database credentials, and run pending migrations. |
+| Port already in use | Stop the conflicting service or update the affected ports and origin configuration together. |
+| Configuration change appears ignored | Run `php artisan optimize:clear` from `backend` and restart affected development servers. |
+| Build/dependency installation fails | Check PHP/Node versions and lockfile requirements against the dependency baseline. |
+
+Do not use `php artisan migrate:fresh` to troubleshoot an existing database: it drops tables and their data.
+
+## Repository layout
 
 ```text
-http://localhost:8000
+Web-KanbanFlow/
+├── .github/workflows/ci.yml
+├── backend/                 Laravel API, migrations, policies, and tests
+├── frontend/                React application and frontend tooling
+├── docs/
+│   ├── Project-Definition/
+│   ├── Project-Management/
+│   │   └── Milestones/
+│   ├── Releases/
+│   ├── SDLC/                Eight lifecycle phases
+│   ├── Sprints/
+│   ├── diagram-guide.md
+│   └── README.md
+├── CHANGELOG.md
+└── README.md
 ```
 
-### Frontend Development Server
+See the [repository layout reference](docs/SDLC/04-design/repository-layout.md) and [system architecture](docs/SDLC/04-design/system-architecture-diagram.md), including its PlantUML source and rendered diagram.
 
-From the `frontend` directory:
+## Verification
 
-```bash
-npm run dev
-```
-
-The frontend will normally be available at:
-
-```text
-http://localhost:5173
-```
-
-Open the frontend URL in your browser.
-
-## Backend Commands
-
-Run the complete backend test suite:
+Run backend checks from `backend`:
 
 ```bash
 php artisan test
 ```
 
-Clear Laravel configuration and application caches:
-
-```bash
-php artisan optimize:clear
-```
-
-Run pending migrations:
-
-```bash
-php artisan migrate
-```
-
-Rebuild the database for local development:
-
-```bash
-php artisan migrate:fresh
-```
-
-Format backend code:
-
-```bash
-vendor/bin/pint
-```
-
-## Frontend Commands
-
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Run ESLint:
+Run frontend checks from `frontend`:
 
 ```bash
 npm run lint
-```
-
-Create a production build:
-
-```bash
 npm run build
 ```
 
-Preview the production build locally:
+`npm run preview` serves a built frontend for local inspection; it still needs the API and compatible authentication configuration. It is not a production deployment procedure.
 
-```bash
-npm run preview
-```
+The [CI workflow](.github/workflows/ci.yml) configures backend tests on PHP 8.4 and frontend lint/build on Node.js 24 for pushes and pull requests targeting `main`. Check [GitHub Actions](https://github.com/Farhad-Valizadegan/Web-KanbanFlow/actions) for results tied to the relevant commit.
 
-## Testing
+Backend SQLite tests do not establish MySQL locking or contention behavior. Frontend lint/build do not verify browser journeys or accessibility; there is currently no frontend behavioral-test script. Use the [manual acceptance checklist](docs/SDLC/06-testing/manual-acceptance-checklist.md), [automated test inventory](docs/SDLC/06-testing/automated-test-inventory.md), and [verification record template](docs/SDLC/06-testing/verification-record-template.md) to record actual results and limitations.
 
-### Backend Verification
+## Authorization and data boundaries
 
-The complete backend suite currently contains:
+Workspace membership governs access. Owners and managers manage resources within endpoint-specific restrictions; members and viewers can read permitted data. Private boards also restrict visibility. Comment actions depend on authorship, current board access, and moderation rules. Notifications belong to their authenticated recipient.
 
-```text
-160 tests passed
-459 assertions passed
-```
+Nested-resource checks protect workspace/project/board/column/task relationships. Actual controller and policy paths determine authority; a policy method alone does not establish that every endpoint invokes it. See [authentication and authorization](docs/SDLC/04-design/authentication-and-authorization.md) and the [security regression matrix](docs/SDLC/06-testing/security-regression-matrix.md).
 
-Verified areas include:
+## Known limitations
 
-- Authentication
-- Workspace management
-- Workspace membership
-- Project management
-- Board management
-- Column management
-- Task management
-- Board, column, and task movement
-- WIP-limit enforcement
-- Soft-delete slug protection
-- Position normalization
-- Task comments
-- Activity logging
-- Task assignment notifications
-- Notification authorization
-- Notification ownership isolation
-- Workspace analytics authorization
-- Workspace analytics scoping
-- Upcoming-task ordering
-- Assigned-to-me filtering
+- **DEC-003/PB-001 remains open:** manager remove/re-add membership behavior can indirectly escalate roles. Follow the [decision register](docs/Project-Management/decision-register.md) and [product backlog](docs/Project-Management/product-backlog.md) for remediation scope.
+- Attachment uploads, PDF/export, public sharing, and password-change/recovery flows are proposed documentation topics, not implemented application endpoints.
+- Soft deletion does not establish a general descendant restore or permanent-erasure workflow.
+- Production hosting, operational monitoring, backup schedules, and recovery targets require target-specific setup and verification.
 
-### Frontend Verification
+## Documentation
 
-The frontend verification currently reports:
+| Section | Purpose |
+| --- | --- |
+| [Project Definition](docs/Project-Definition/README.md) | Problem, goals, scope, stakeholders, constraints, and success criteria. |
+| [Project Management](docs/Project-Management/README.md) | Backlog, decisions, roadmap, quality/risk, traceability, and milestones. |
+| [SDLC](docs/SDLC/README.md) | Planning, requirements, analysis, design, implementation, testing, deployment, and maintenance. |
+| [Sprints](docs/Sprints/README.md) | Planning, readiness/completion criteria, progress, review, and retrospective records. |
+| [Releases](docs/Releases/README.md) | Release history, preparation, verification, upgrades, and rollback. |
+| [Diagram guide](docs/diagram-guide.md) | Maintain PlantUML sources and rendered previews together. |
 
-```text
-ESLint passed
-TypeScript build passed
-Vite production build passed
-242 modules transformed
-```
+Historical milestones and release records preserve their original scope. Use current candidate/environment evidence when assessing readiness.
 
-Route-based code splitting reduced the largest JavaScript bundle from:
+## Contributing changes
 
-```text
-556.69 kB
-159.69 kB gzip
-```
-
-to:
-
-```text
-314.40 kB
-101.94 kB gzip
-```
-
-The previous Vite large-chunk warning is no longer reported.
-
-## Continuous Integration
-
-GitHub Actions configuration is located at:
-
-```text
-.github/workflows/ci.yml
-```
-
-The workflow runs automatically for:
-
-- Pull requests targeting `main`
-- Pushes to `main`
-
-It contains two independent jobs.
-
-### Backend Tests
-
-The backend job:
-
-- Runs on Ubuntu
-- Uses PHP 8.4
-- Installs Composer 2
-- Enables SQLite extensions
-- Restores cached Composer dependencies
-- Installs locked dependencies
-- Creates the Laravel environment file
-- Generates an application key
-- Runs the complete backend test suite
-
-### Frontend Build and Lint
-
-The frontend job:
-
-- Runs on Ubuntu
-- Uses Node.js 24
-- Restores cached npm dependencies
-- Installs dependencies with `npm ci`
-- Runs ESLint
-- Runs the TypeScript and Vite production build
-
-Both GitHub Actions jobs currently pass.
-
-## Authorization Model
-
-Workspace access is controlled through four roles:
-
-- `owner`
-- `manager`
-- `member`
-- `viewer`
-
-General permissions:
-
-- Owners can fully manage workspaces, members, projects, boards, columns, and tasks.
-- Managers can manage projects, boards, columns, tasks, and workspace members within policy restrictions.
-- Members and viewers can access permitted workspace data but cannot perform protected management operations.
-- Comment authors can modify their own comments according to policy rules.
-- Workspace owners and managers can moderate comments.
-- Notifications are private to their authenticated recipient.
-- Workspace analytics are available only to workspace members.
-
-Nested-resource validation prevents records from one workspace, project, board, column, task, or comment from being accessed through a mismatched route.
-
-## Ordering Model
-
-Boards, columns, and tasks use dedicated movement endpoints.
-
-Standard update endpoints do not accept position changes.
-
-Ordering behavior includes:
-
-- One-based positions
-- Position clamping
-- Sequential position normalization
-- Database transactions
-- Row locking during reorder operations
-- Protection against duplicate positions
-- Optimistic frontend updates
-- Query invalidation after successful movement
-- Cache restoration after failed movement
-
-## Work in Progress Limits
-
-Columns can optionally define a Work in Progress limit.
-
-The backend enforces the following rules:
-
-- Active tasks cannot be created when a column is full.
-- Active tasks cannot be moved into a full column.
-- Completed tasks do not count toward the active WIP total.
-- A completed task cannot be reopened when doing so would exceed the limit.
-- WIP limits must be positive whole numbers.
-
-## Frontend Architecture
-
-The frontend uses route-based lazy loading.
-
-The following pages are loaded dynamically:
-
-- Home page
-- Login page
-- Registration page
-- Dashboard page
-- Workspace page
-- Project page
-- Board page
-
-React `Suspense` displays a loading state while route modules are downloaded.
-
-TanStack Query manages:
-
-- Server-state caching
-- Queries and mutations
-- Cache invalidation
-- Optimistic updates
-- Rollback after failed operations
-
-## Milestones
-
-### Milestone 1 – Project Foundation
-
-Status: Completed
-
-- Laravel backend
-- React and TypeScript frontend
-- MySQL integration
-- Laravel Sanctum
-- Tailwind CSS
-- Axios
-- TanStack Query
-- React Router
-- Frontend and backend environment configuration
-- CORS configuration
-- Frontend-to-backend health check
-- Git repository setup
-
-### Milestone 2 – Authentication
-
-Status: Completed
-
-- Registration
-- Login
-- Logout
-- Session persistence
-- Protected routes
-- Protected dashboard
-- Authentication validation and tests
-
-### Milestone 3 – Workspace and Project Management
-
-Status: Completed
-
-- Workspace CRUD
-- Workspace membership
-- Role management
-- Workspace authorization
-- Project CRUD
-- Project statuses and dates
-- Project soft deletion
-- Backend and frontend integration
-
-### Milestone 4 – Kanban Boards and Tasks
-
-Status: Completed
-
-- Board CRUD and ordering
-- Column CRUD and ordering
-- Task CRUD and ordering
-- Drag-and-drop interactions
-- WIP limits
-- Detailed and overview board modes
-- Optimistic updates and rollback
-
-### Milestone 5 – Collaboration and Activity Tracking
-
-Status: Completed
-
-- Task comments
-- Comment authorization
-- Comment moderation
-- Activity logging
-- Activity filtering
-- Workspace activity feed
-
-Detailed documentation:
-
-- [Milestone 5](docs/Project-Management/Milestones/MILESTONE_5.md)
-
-### Milestone 6 – Notifications
-
-Status: Completed
-
-- Assignment and reassignment notifications
-- Notification listing
-- Unread filtering and counts
-- Mark-as-read operations
-- Notification deletion
-- Notification ownership isolation
-- Dashboard notification panel
-
-Detailed documentation:
-
-- [Milestone 6](docs/Project-Management/Milestones/MILESTONE_6.md)
-
-### Milestone 7 – Workspace Analytics and Task Assignment
-
-Status: Completed
-
-- Workspace statistics
-- Project, task, and priority counts
-- Overdue and due-today tracking
-- Upcoming tasks
-- Assigned-to-me tasks
-- Task assignment, reassignment, and unassignment
-- Analytics dashboard
-
-Detailed documentation:
-
-- [Milestone 7](docs/Project-Management/Milestones/MILESTONE_7.md)
-
-### Milestone 8 – Production Readiness and Continuous Integration
-
-Status: Completed
-
-- GitHub Actions workflow
-- Automated backend tests
-- Automated frontend lint and build
-- Composer and npm dependency caching
-- Route-based code splitting
-- Reduced frontend bundle size
-- Successful local and remote CI verification
-
-Detailed documentation:
-
-- [Milestone 8](docs/Project-Management/Milestones/MILESTONE_8.md)
-
-## Milestone Completion
-
-All planned Version 1.0.0 milestones are complete:
-
-- Milestone 1 – Project Foundation
-- Milestone 2 – Authentication
-- Milestone 3 – Workspace and Project Management
-- Milestone 4 – Kanban Boards and Tasks
-- Milestone 5 – Collaboration and Activity Tracking
-- Milestone 6 – Notifications
-- Milestone 7 – Workspace Analytics and Task Assignment
-- Milestone 8 – Production Readiness and Continuous Integration
-
-## Security
-
-- Laravel Sanctum protects authenticated API endpoints.
-- Laravel policies enforce resource authorization.
-- Request validation protects API input.
-- Nested-route ownership is validated.
-- Passwords are securely hashed by Laravel.
-- Notification records are isolated by authenticated recipient.
-- Environment files containing secrets are excluded from Git.
-- Example environment files contain no private credentials.
+Start with the [development workflow](docs/SDLC/05-implementation/development-workflow.md). Keep changes scoped, update affected documentation and diagrams, run relevant checks, and describe the observed results and remaining gaps. Use the [release pipeline](docs/Project-Management/release-pipeline.md) for publication; publishing source and deploying a running application are separate operations.
 
 ## License
 
 Copyright © 2026 Farhad Valizadegan. All rights reserved.
 
 This repository and its source code are provided solely for portfolio review. No permission is granted to copy, use, modify, distribute, publish, sublicense, sell, or create derivative works from any part of this project without the author's prior written permission.
+
+The backend Composer manifest currently declares `MIT`, which conflicts with the repository terms above. This metadata discrepancy remains unresolved; this README update preserves the author's existing terms.
