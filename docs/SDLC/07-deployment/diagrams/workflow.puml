@@ -1,15 +1,21 @@
 @startuml
-title KanbanFlow Deployment Phase
+title KanbanFlow Deployment Readiness and Operational Handoff
 start
-:Identify target, candidate, and authorization;
-:Assess compatibility and recovery evidence;
-:Apply reviewed source, assets, and changes;
-:Observe smoke checks and persisted state;
-if (Checks meet agreed criteria?) then (yes)
-:Record acceptance and residual limitations;
+:Identify target, current/desired identities, and authorized scope;
+:Review verification, compatibility, configuration, and recovery evidence;
+if (Required readiness evidence available?) then (yes)
+ :Apply assessed source, assets, configuration, and migrations;
+ :Observe running identity, smoke journeys, and persisted state;
+ if (Material failure or acceptance gap?) then (yes)
+  :Contain failure and preserve diagnostics;
+  :Assess forward correction or compatible recovery;
+  :Reverify resulting runtime and disclose residual impact;
+ else (no)
+  :Record observed acceptance and limitations;
+ endif
 else (no)
-:Contain failure and assess correction or recovery;
-:Reverify resulting candidate and state;
+ :Record blocker and obtain required evidence before rollout;
 endif
+:Link operation results and maintenance follow-up;
 stop
 @enduml
