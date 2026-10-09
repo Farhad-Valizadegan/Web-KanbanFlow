@@ -1,15 +1,21 @@
 @startuml
-title KanbanFlow backup and recovery runbook
+title KanbanFlow Backup Readiness and Verified Recovery
 start
-:Identify recovery scope and agreed objectives;
-:Verify backup, recovery point, and compatibility;
-:Perform authorized restore with side-effect controls;
-:Verify data and application journeys;
-if (Checks meet agreed criteria?) then (yes)
-:Record acceptance and residual limitations;
+:Identify actual target, scope, objectives, and authorized operators;
+:Select consistent backup procedure and protected artifacts;
+:Record capture results and integrity metadata;
+:Identify recovery point, destination, and compatible runtime/key;
+if (Restore prerequisites verified?) then (yes)
+ :Apply assessed restore with side-effect controls;
+ :Observe data, files, authority, services, and application journeys;
+ if (Recovery criteria demonstrated?) then (yes)
+  :Record acceptance, measured outcomes, and residual limits;
+ else (no)
+  :Preserve failure evidence and reassess recovery;
+ endif
 else (no)
-:Contain failure and assess correction or recovery;
-:Reverify resulting candidate and state;
+ :Stop and record missing evidence or unresolved compatibility;
 endif
+:Retain protected recovery points and maintenance follow-up;
 stop
 @enduml
