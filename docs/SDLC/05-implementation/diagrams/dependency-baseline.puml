@@ -1,9 +1,21 @@
 @startuml
-title KanbanFlow dependency baseline
+title KanbanFlow Dependency Baseline and Upgrade Verification
 start
-:Inspect manifests, lockfiles, and target runtime;
-:Explain proposed dependency change;
-:Review resolution and lifecycle scripts;
-:Verify affected behavior and record baseline;
+:Identify candidate manifests, lockfiles, and actual target;
+:Inspect resolved versions, engines, scripts, and plugins;
+if (Dependency change requested?) then (yes)
+ :Explain reason and assess compatibility/advisory evidence;
+ :Review scoped manifest and lockfile changes;
+else (no)
+ :Retain committed resolution for reproducible installation;
+endif
+:Install intended baseline in the assessed environment;
+if (Platform and installation checks pass?) then (yes)
+ :Run relevant checks and affected behavior scenarios;
+ :Record actual results, limits, and recovery combination;
+else (no)
+ :Diagnose mismatch and retain failure evidence;
+endif
+:Update baseline documentation when configuration changes;
 stop
 @enduml
