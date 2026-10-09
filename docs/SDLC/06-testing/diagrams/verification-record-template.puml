@@ -1,9 +1,16 @@
 @startuml
-title KanbanFlow verification record template
+title KanbanFlow Candidate-Specific Verification Record
 start
-:Identify candidate, scope, and environment;
-:Record expected and actual check outcomes;
-:Link failures, evidence, and corrected candidates;
-:Assess readiness with explicit limitations;
+:Identify candidate, criteria, environment, and fixtures;
+:Record actual expected/observed results and evidence;
+if (Failure or blocked/unexecuted criterion?) then (yes)
+ :Retain result state, cause, impact, and next action;
+ :Link corrected candidate and recheck only when performed;
+else (no)
+ :Record scoped pass without broader claims;
+endif
+:Capture exclusions, cleanup, CI status, and open issues;
+:Review identity, evidence consistency, and secret handling;
+:State assessment and separate actual delivery/runtime events;
 stop
 @enduml
