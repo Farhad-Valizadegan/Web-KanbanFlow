@@ -1,9 +1,22 @@
 @startuml
-title KanbanFlow implementation
+title KanbanFlow Scoped Implementation and Acceptance
 start
-:Trace client, route, authority, and data contract;
-:Implement normal and failure behavior;
-:Check ancestry, integrity, and shared consumers;
-:Record acceptance evidence and remaining gaps;
+:Identify requirement, actor, outcome, and exclusions;
+:Trace actual client, request, authority, and data boundaries;
+if (Material policy or contract unresolved?) then (yes)
+ :Record decision dependency before implementing affected scope;
+else (no)
+ :Specify accepted, denied, invalid, stale, and failure cases;
+ :Implement scoped behavior and meaningful regression coverage;
+ :Review integrity, side effects, and shared consumers;
+ :Run relevant checks and record candidate/environment limits;
+ if (Affected criteria demonstrated?) then (yes)
+  :Review final diff and update source-linked guidance;
+  :Hand off candidate through authorized change delivery;
+ else (no)
+  :Retain failure evidence and correct or disclose gaps;
+ endif
+endif
+:Keep open issues and operational boundaries visible;
 stop
 @enduml
