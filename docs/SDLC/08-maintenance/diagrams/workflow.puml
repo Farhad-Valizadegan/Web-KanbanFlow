@@ -1,14 +1,17 @@
 @startuml
-title KanbanFlow Maintenance Phase
+title KanbanFlow Maintenance Intake and Evidence-Based Closure
 start
-:Collect reproducible report and current identity;
-:Prioritize risk and define acceptance cases;
-:Implement scoped correction and verify behavior;
-if (Affected criteria verified?) then (yes)
-:Record outcome, residual issues, and follow-up;
+:Capture report, actual identity, safe evidence, and impact;
+:Classify defect, environment issue, incident, or change request;
+:Prioritize risk and resolve material policy dependencies;
+:Diagnose actual cause and implement scoped correction;
+:Verify affected criteria and record candidate/environment limits;
+if (Closure evidence sufficient?) then (yes)
+ :Record delivery and any separately observed runtime outcome;
+ :Close assessed scope with residual issues and follow-up;
 else (no)
-:Keep issue open and investigate remaining gaps;
+ :Keep issue open and identify required next evidence;
 endif
-:Update backlog and source-linked guidance;
+:Update backlog, traceability, and source-linked guidance;
 stop
 @enduml
