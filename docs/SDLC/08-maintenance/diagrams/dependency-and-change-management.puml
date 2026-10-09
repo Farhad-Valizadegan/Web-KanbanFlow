@@ -1,14 +1,21 @@
 @startuml
-title KanbanFlow dependency and change management
+title KanbanFlow Dependency and Maintenance Change Gates
 start
-:Identify baseline and reason for change;
-:Assess dependencies, contracts, and compatibility;
-:Implement scoped change and relevant verification;
-if (Affected criteria verified?) then (yes)
-:Record outcome, residual issues, and follow-up;
+:Identify baseline, change type, reason, and affected scope;
+:Assess resolution, runtime, contracts, data, and recovery;
+if (Material compatibility or policy unresolved?) then (yes)
+ :Record dependency and resolve before affected change;
 else (no)
-:Keep issue open and investigate remaining gaps;
+ :Implement scoped change and review manifest/source diff;
+ :Verify installation and affected behavior in appropriate layers;
+ if (Required criteria demonstrated?) then (yes)
+  :Record readiness and publish authorized source changes;
+  :Assess separate release/runtime operation when requested;
+ else (no)
+  :Retain failures or gaps and recheck corrected candidate;
+ endif
 endif
-:Update backlog and source-linked guidance;
+:Record actual outcomes, residual risks, and follow-up;
+:Update status and guidance without rewriting historical results;
 stop
 @enduml
