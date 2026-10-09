@@ -23,6 +23,62 @@ Referenced test files are in [backend feature tests](../../../backend/tests/Feat
 
 Record actor role/current membership, fixture ancestry, request/status, response exposure, and persisted side effects. A denial code alone is insufficient if state or related listings leaked. Repeat relevant cases after removal, visibility changes, and deletion where the changed behavior demands it.
 
+## Candidate and fixture preparation
+
+Record exact source/assets identity, effective configuration, database/browser context, and the affected request contracts. Prepare isolated owner, manager, member, viewer, outsider, and removed-member accounts. Use two workspaces with distinct resource trees, a private board, a workspace-visible board, comments by different authors, and notifications belonging to different users.
+
+Capture initial records, roles, positions, and WIP counts before mutation cases. Use controlled direct API requests as well as client journeys; hidden buttons do not establish authorization. Restrict testing to authorized environments and avoid exposing real credentials, cookies, tokens, or private content in shared artifacts.
+
+## Repeatable regression cases
+
+These IDs identify planned checks. Read the actual invoked controllers/middleware/policies before setting exact expected status codes; rejection type depends on the boundary. No row is marked passed by this document.
+
+| ID | Action | Evidence and acceptance property |
+| --- | --- | --- |
+| SEC-001 | Request protected endpoints as guest and after logout using the real SPA session path. | Authentication boundary holds; record actual response and absence of protected data or mutation. |
+| SEC-002 | Exercise relevant SPA mutations with missing/invalid CSRF and unrelated-origin context. | Record actual middleware/browser behavior; framework authenticated fixtures alone do not prove real cookie/origin behavior. |
+| SEC-003 | Read another workspace's data and update/delete workspace as a non-owner. | Membership/ownership boundaries hold and rejected requests leave records unchanged. |
+| SEC-004 | Change roles as manager/member and attempt owner-role removal/change. | Direct owner/current-role protections hold; verify state as well as response. |
+| SEC-005 | Remove and re-add a member with a different role as manager. | Document the indirect escalation path and DEC-003 impact; future acceptance depends on an agreed policy and implemented fix. Do not claim the current issue resolved. |
+| SEC-006 | Substitute a valid project/board/column/task/comment ID into another parent path. | Nested ancestry is enforced, no cross-resource mutation occurs, and response content does not expose hidden data. |
+| SEC-007 | Inspect private-board detail, list, tasks, analytics, and activity as regular member/viewer/outsider. | Affected visibility paths do not leak private titles, descriptions, counts, or activity content outside applicable access. |
+| SEC-008 | Read a private board as creator and separately attempt mutation as an otherwise non-privileged actor. | Read visibility is assessed separately from mutation authority; current board mutation endpoints invoke project update authority. |
+| SEC-009 | Call board/column/task mutations directly as denied actors. | Server authority holds independently of client controls; no accepted-looking side effects occur on rejection. |
+| SEC-010 | Assign a task to a non-member or move it to a column on another board. | Domain validation and destination ancestry reject invalid changes; inspect persisted assignment/source/destination. |
+| SEC-011 | Exceed active-task WIP by create/move/reopen; assess stale source and competing operations. | Relevant integrity/rejection rules hold; engine-specific concurrency needs separate MySQL evidence. |
+| SEC-012 | Edit/delete comments as other author, moderator, and removed author; substitute wrong task ancestry. | Current access, operation-specific authorship/moderation, and ancestry are enforced. |
+| SEC-013 | List/read/delete another user's notification or run read-all as a different user. | Response and stored notification state remain isolated to the authorized user. |
+| SEC-014 | Inspect private task activity after relevant deletion or visibility/membership changes. | Changed data/access state does not unintentionally reveal previously hidden content. |
+| SEC-015 | Repeat controlled failed login attempts with isolated account/IP context. | Observe configured throttling and recovery without disrupting shared users; record actual limit responses. |
+
+Use [automated inventory](automated-test-inventory.md) to locate existing assertions, and [manual acceptance](manual-acceptance-checklist.md) for user-visible recovery. A test name or configured limit is not fresh execution evidence.
+
+## Positive controls and state transitions
+
+Pair denials with an allowed request using the intended actor so an unrelated service failure is not mistaken for correct enforcement. Record actual authority rather than granting extra permissions to make a control pass. Repeat affected checks after membership removal, role changes, private/workspace visibility changes, soft deletion, or session revocation when relevant.
+
+For comments, editing and deletion have different author/moderator rules; inspect the actual endpoint rather than applying one policy universally. For private boards, review downstream listings and summaries as well as detail endpoints. Workspace visibility metadata does not establish anonymous public access.
+
+## Persistence and side-effect checks
+
+Record pre/post domain records, assignments, ordering, relevant WIP counts, notifications, and activity for attempted mutations. Rejection alone is insufficient if writes or private response data occurred. Refresh/read through the authoritative API after a client failure; optimistic state is not proof of accepted persistence.
+
+SQLite API tests can assess their executed assertions, but do not establish MySQL transaction scheduling, production queues, or real browser session configuration. Avoid assuming rollback of source also restores data or removes already delivered side effects.
+
+## Results and defect handling
+
+| Case ID | Candidate/actor/fixture | Expected | Actual response and state | State | Evidence / next action |
+| --- | --- | --- | --- | --- | --- |
+| SEC-001 | To be recorded | Protected boundary assessed | Not observed | Not run | Execute when in scope. |
+
+Use Pass, Fail, Blocked, Not run, or justified Not applicable in a [verification record](verification-record-template.md). Capture reproducible unauthorized read/write behavior, affected scope, safe evidence, and corrective acceptance cases. Preserve the failing candidate and identify corrected-candidate verification separately.
+
+Material confidentiality or integrity failures remain visible in readiness decisions. A known defect is not closed by documentation, a hidden button, or unrelated passing tests. DEC-003 closure requires an explicit policy outcome plus direct and indirect enforcement evidence.
+
+## Assessment limits
+
+This matrix does not constitute a penetration test, advisory audit, infrastructure/TLS review, security certification, or complete attack-surface assessment. Planned routes for files/PDF/public sharing/password changes require their own implementation-specific threat and regression cases if introduced. Assess actual target configuration and dependencies separately with dated evidence.
+
 ## Coverage limits and handoff
 
 Public sharing, attachment downloads, PDF delivery, and password-change designs are not established routes in this baseline; do not invent successful security tests for them. Dependency advisories, infrastructure configuration, and browser security need their own dated evidence. Link reproducible failures and unverified cases in the [verification record](verification-record-template.md).
@@ -35,12 +91,21 @@ Public sharing, attachment downloads, PDF delivery, and password-change designs 
 
 ```plantuml
 @startuml
-title KanbanFlow security regression matrix
+title KanbanFlow Security Regression and Evidence Assessment
 start
-:Select actors and resource boundaries;
-:Attempt direct and indirect unauthorized paths;
-:Inspect response exposure and persisted effects;
-:Record failures and unresolved policy gaps;
+:Identify candidate, authorized scope, actors, and resource trees;
+:Trace invoked authority and define expected boundaries;
+:Run allowed controls and direct/indirect denial cases;
+:Inspect response exposure, persisted state, and side effects;
+:Repeat affected access-state transitions;
+if (Boundary failure or unresolved policy?) then (yes)
+ :Preserve safe reproduction and impact evidence;
+ :Track defect or decision and corrective acceptance cases;
+else (no)
+ :Record scoped observations and environment limits;
+endif
+:Keep unexecuted cases and engine/browser gaps explicit;
+:Link candidate-specific verification and readiness outcome;
 stop
 @enduml
 ```

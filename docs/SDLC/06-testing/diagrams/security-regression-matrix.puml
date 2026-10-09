@@ -1,9 +1,18 @@
 @startuml
-title KanbanFlow security regression matrix
+title KanbanFlow Security Regression and Evidence Assessment
 start
-:Select actors and resource boundaries;
-:Attempt direct and indirect unauthorized paths;
-:Inspect response exposure and persisted effects;
-:Record failures and unresolved policy gaps;
+:Identify candidate, authorized scope, actors, and resource trees;
+:Trace invoked authority and define expected boundaries;
+:Run allowed controls and direct/indirect denial cases;
+:Inspect response exposure, persisted state, and side effects;
+:Repeat affected access-state transitions;
+if (Boundary failure or unresolved policy?) then (yes)
+ :Preserve safe reproduction and impact evidence;
+ :Track defect or decision and corrective acceptance cases;
+else (no)
+ :Record scoped observations and environment limits;
+endif
+:Keep unexecuted cases and engine/browser gaps explicit;
+:Link candidate-specific verification and readiness outcome;
 stop
 @enduml
