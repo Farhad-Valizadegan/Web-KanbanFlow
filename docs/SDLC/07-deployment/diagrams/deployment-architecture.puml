@@ -1,20 +1,33 @@
 @startuml
-title KanbanFlow Deployment Components - Target To Be Established
-actor Browser
-rectangle "Frontend assets\nReact / Vite build" as UI
-rectangle "HTTP server / PHP runtime" as HTTP
-rectangle "Laravel API" as API
-database "Application database\nMySQL local example" as DB
-rectangle "Configured storage" as FS
-rectangle "Background services\nwhere required" as BG
-Browser --> UI : load client
-Browser --> HTTP : authenticated API requests
-HTTP --> API
-API --> DB
-API --> FS
-BG --> DB
-note bottom of API
-Actual hosts, service controls, and
-production topology are not established.
+title KanbanFlow Deployment Boundaries - Actual Target To Be Recorded
+left to right direction
+actor "Browser\nSPA session / CSRF" as B
+package "Public HTTP surfaces" {
+ rectangle "Static frontend build\nmatching source / API configuration" as UI
+ rectangle "HTTP / PHP entry\nbackend/public" as HTTP
+}
+package "Application boundary" {
+ rectangle "Laravel API\nauthentication / ancestry / authority" as API
+ rectangle "Background services\nonly where configured and required" as BG
+}
+package "Persistent / protected state" {
+ database "Actual database\ndomain + selected service tables" as DB
+ rectangle "Configured storage\nactual private/public/external use" as FS
+ rectangle "Protected configuration\nestablished key / secrets" as CFG
+}
+rectangle "Recovery artifacts\ncoordinated point + compatible runtime" as REC
+B --> UI : load matching assets
+B --> HTTP : session-aware API requests
+HTTP --> API : preserve routes / responses
+API --> DB : validated persistence
+API --> FS : actual storage use
+CFG ..> API : target settings
+BG --> DB : relevant work only
+REC ..> DB : assessed restore scope
+REC ..> FS : required files
+REC ..> CFG : protected recovery
+note bottom of HTTP
+Hosts, TLS/proxy, service supervision,
+and production topology remain target-specific.
 end note
 @enduml
