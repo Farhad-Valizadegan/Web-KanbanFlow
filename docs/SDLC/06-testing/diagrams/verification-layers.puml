@@ -1,9 +1,17 @@
 @startuml
-title KanbanFlow verification layers
+title KanbanFlow Verification Layers and Claim Boundaries
 start
-:Identify property requiring evidence;
-:Choose appropriate verification layers;
-:Collect candidate-specific observations;
-:State demonstrated scope and remaining limits;
+:Define property, criterion, candidate, and environment;
+:Trace actual source contract and affected state;
+:Select complementary layers capable of checking the claim;
+:Collect actual observations with identity and fixtures;
+if (Results conflict or required evidence missing?) then (yes)
+ :Retain failures and blocked/unexecuted boundaries;
+ :Diagnose cause and select scoped correction or next layer;
+else (no)
+ :Record demonstrated property within observed scope;
+endif
+:Keep historical and corrected-candidate results distinct;
+:Assess readiness and report residual limitations;
 stop
 @enduml
