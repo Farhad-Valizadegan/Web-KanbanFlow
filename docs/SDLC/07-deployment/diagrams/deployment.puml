@@ -1,15 +1,22 @@
 @startuml
-title KanbanFlow deployment
+title KanbanFlow Deployment Execution and Acceptance
 start
-:Identify target, candidate, and authorization;
-:Assess compatibility and recovery evidence;
-:Apply reviewed source, assets, and changes;
-:Observe smoke checks and persisted state;
-if (Checks meet agreed criteria?) then (yes)
-:Record acceptance and residual limitations;
+:Record actual target, current/desired identity, and authorized scope;
+:Assess compatibility, rehearsal, recovery, and smoke criteria;
+if (Required readiness established?) then (yes)
+ :Apply agreed traffic/service controls;
+ :Apply assessed source, assets, configuration, and migrations;
+ :Observe identity, sessions, authority, data, and affected journeys;
+ if (Material failure or smoke gap?) then (yes)
+  :Contain failure and preserve diagnostics/state;
+  :Assess correction or compatible rollback/restore;
+  :Reverify resulting runtime and record residual impact;
+ else (no)
+  :Record observed acceptance and remaining limits;
+ endif
 else (no)
-:Contain failure and assess correction or recovery;
-:Reverify resulting candidate and state;
+ :Record blocker before runtime changes;
 endif
+:Capture operation evidence and maintenance follow-up;
 stop
 @enduml
