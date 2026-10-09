@@ -1,15 +1,19 @@
 @startuml
-title KanbanFlow environment and configuration
+title KanbanFlow Effective Environment and Configuration Change
 start
-:Inspect actual target and configuration;
-:Align hosts, session, runtime, and services;
-:Apply assessed settings and matching assets;
-:Verify real browser and database behavior;
-if (Checks meet agreed criteria?) then (yes)
-:Record acceptance and residual limitations;
+:Identify actual target, source/assets, and effective settings;
+:Separate public build values from protected backend secrets;
+:Assess URL/session/runtime/data/service dependencies;
+:Preserve compatible configuration and established key;
+:Apply assessed settings through target procedure;
+:Rebuild/reload relevant assets, cache, and services;
+:Observe database requests and real browser sessions/journeys;
+if (Expected behavior demonstrated?) then (yes)
+ :Record actual settings context and scope-specific results;
 else (no)
-:Contain failure and assess correction or recovery;
-:Reverify resulting candidate and state;
+ :Retain diagnostics and diagnose effective configuration;
+ :Select scoped correction or compatible recovery;
 endif
+:Update guidance and disclose remaining limits;
 stop
 @enduml
