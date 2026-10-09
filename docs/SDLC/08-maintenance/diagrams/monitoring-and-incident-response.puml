@@ -1,14 +1,20 @@
 @startuml
-title KanbanFlow monitoring and incident response
+title KanbanFlow Monitoring Signal and Incident Response Evidence
 start
-:Observe agreed signal in actual environment;
-:Triage impact and preserve evidence;
-:Apply authorized correction or recovery;
-if (Affected criteria verified?) then (yes)
-:Record outcome, residual issues, and follow-up;
-else (no)
-:Keep issue open and investigate remaining gaps;
+:Define actual target, signal source, rule, and responsibility;
+:Observe report/signal and retain safe context;
+:Confirm impact, unknowns, and telemetry limits;
+if (Ongoing harmful access or writes?) then (yes)
+ :Assess authorized containment and record outcome;
 endif
-:Update backlog and source-linked guidance;
+:Diagnose boundary and select assessed correction/recovery;
+:Record intervention and resulting runtime/data identity;
+:Verify affected journeys, authority, persistence, and services;
+if (Acceptance demonstrated?) then (yes)
+ :Record outcome, residual impact, and communication actually performed;
+else (no)
+ :Keep incident/gaps open with next evidence required;
+endif
+:Link verification and improve signals/runbooks through follow-up;
 stop
 @enduml
