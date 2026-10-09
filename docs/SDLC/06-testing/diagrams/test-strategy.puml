@@ -1,9 +1,18 @@
 @startuml
-title KanbanFlow test strategy
+title KanbanFlow Risk-Based Test Strategy and Readiness
 start
-:Identify candidate and risk-based acceptance cases;
-:Prepare isolated verification environment;
-:Execute relevant checks and capture failures;
-:Assess evidence and disclose remaining gaps;
+:Identify candidate, criteria, affected boundaries, and exclusions;
+:Assess actors, state transitions, failures, and impact;
+:Select appropriate verification layers and isolated fixtures;
+:Run targeted risk cases, required checks, and affected journeys;
+if (Failure or missing required evidence?) then (yes)
+ :Retain failure or gap with candidate and environment;
+ :Correct scoped issue or diagnose blocked verification;
+ :Reassess changed candidate and affected consumers;
+else (no)
+ :Record demonstrated criteria and residual limits;
+endif
+:Assess scope-specific readiness with open issues visible;
+:Link evidence and hand off relevant release or maintenance work;
 stop
 @enduml
