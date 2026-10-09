@@ -1,15 +1,23 @@
 @startuml
-title KanbanFlow release and upgrade runbook
+title KanbanFlow Release and Upgrade Readiness Gates
 start
-:Identify target, candidate, and authorization;
-:Assess compatibility and recovery evidence;
-:Apply reviewed source, assets, and changes;
-:Observe smoke checks and persisted state;
-if (Checks meet agreed criteria?) then (yes)
-:Record acceptance and residual limitations;
+:Identify operation, actual target, candidate, and authorized scope;
+:Assess verification, runtime, schema, configuration, and recovery;
+if (Required gates satisfied?) then (yes)
+ :Record any separately requested source/tag publication;
+ :Apply assessed runtime/service changes when authorized;
+ :Observe running identity and scoped smoke criteria;
+ if (Material failure or acceptance gap?) then (yes)
+  :Contain and preserve resulting state/diagnostics;
+  :Assess forward correction or compatible rollback/restore;
+  :Reverify corrected runtime and disclose residual impact;
+ else (no)
+  :Record observed acceptance and remaining limits;
+ endif
 else (no)
-:Contain failure and assess correction or recovery;
-:Reverify resulting candidate and state;
+ :Keep operation pending with explicit missing evidence;
 endif
+:Record distinct publication/runtime/recovery outcomes;
+:Link closeout and maintenance follow-up;
 stop
 @enduml
