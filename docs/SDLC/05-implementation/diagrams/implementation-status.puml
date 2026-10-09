@@ -1,9 +1,20 @@
 @startuml
-title KanbanFlow implementation status
+title KanbanFlow Implementation Status and Evidence Assessment
 start
-:Inspect source-backed capability;
-:Separate implemented, proposed, and open issues;
-:Attach candidate and actual verification evidence;
-:Update status and release linkage;
+:Identify capability, criterion, and candidate;
+:Trace routes, authority, data, and client consumers;
+if (Implementation established?) then (yes)
+ :Record implemented scope and known boundaries;
+ if (Actual candidate verification available?) then (yes)
+  :Record demonstrated criteria and environment limits;
+ else (no)
+  :Mark relevant criteria pending verification;
+ endif
+else (no)
+ :Keep capability proposed or unresolved;
+endif
+:Retain open defects and policy dependencies;
+:Link release and deployed identity only when evidenced;
+:Update traceability without rewriting historical results;
 stop
 @enduml
