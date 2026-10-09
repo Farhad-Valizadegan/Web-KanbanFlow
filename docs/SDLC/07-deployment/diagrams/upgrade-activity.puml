@@ -1,15 +1,21 @@
 @startuml
-title KanbanFlow upgrade activity
+title KanbanFlow Upgrade Activity and Recovery Decisions
 start
-:Identify target, candidate, and authorization;
-:Assess compatibility and recovery evidence;
-:Apply reviewed source, assets, and changes;
-:Observe smoke checks and persisted state;
-if (Checks meet agreed criteria?) then (yes)
-:Record acceptance and residual limitations;
+:Identify current/desired identities, target, and authorized scope;
+:Assess candidate evidence, compatibility, and recovery gates;
+if (Readiness gates satisfied?) then (yes)
+ :Apply agreed controls and assessed runtime changes;
+ :Observe resulting identity, sessions, authority, and data;
+ if (Apply and smoke criteria met?) then (yes)
+  :Record acceptance and residual limitations;
+ else (no)
+  :Contain failure and preserve current state/diagnostics;
+  :Choose assessed forward correction, rollback, or restore;
+  :Reverify resulting runtime and record impact/loss;
+ endif
 else (no)
-:Contain failure and assess correction or recovery;
-:Reverify resulting candidate and state;
+ :Keep operation pending and resolve missing evidence;
 endif
+:Record actual outcome and maintenance handoff;
 stop
 @enduml
