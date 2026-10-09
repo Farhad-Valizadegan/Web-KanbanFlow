@@ -1,15 +1,24 @@
 @startuml
-title KanbanFlow backup recovery activity
+title KanbanFlow Recovery Activity with Decision Gates
 start
-:Identify recovery scope and agreed objectives;
-:Verify backup, recovery point, and compatibility;
-:Perform authorized restore with side-effect controls;
-:Verify data and application journeys;
-if (Checks meet agreed criteria?) then (yes)
-:Record acceptance and residual limitations;
+:Identify rehearsal or incident scope, target, and authorization;
+:Select coordinated recovery point and required artifacts;
+if (Identity, integrity, and access verified?) then (yes)
+ :Assess runtime/schema/key compatibility and lost writes;
+ if (Restore scope and prerequisites confirmed?) then (yes)
+  :Apply assessed restore with service/side-effect controls;
+  :Validate data, files, sessions, authority, and journeys;
+  if (Acceptance criteria demonstrated?) then (yes)
+   :Record actual outcomes, residual loss, and acceptance;
+  else (no)
+   :Preserve failed observations and assess further correction;
+  endif
+ else (no)
+  :Stop and resolve compatibility or scope uncertainty;
+ endif
 else (no)
-:Contain failure and assess correction or recovery;
-:Reverify resulting candidate and state;
+ :Retain failure and reassess recovery point or procedure;
 endif
+:Link evidence and maintenance follow-up;
 stop
 @enduml
