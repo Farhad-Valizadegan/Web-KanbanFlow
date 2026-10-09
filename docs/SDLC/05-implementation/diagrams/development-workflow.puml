@@ -1,9 +1,20 @@
 @startuml
-title KanbanFlow development workflow
+title KanbanFlow Local Development and Verification Workflow
 start
-:Inspect checkout and preserve existing work;
-:Prepare locked dependencies and local configuration;
-:Develop and verify scoped behavior;
-:Review diff and deliver candidate;
+:Define task, acceptance cases, and source baseline;
+:Inspect checkout and preserve unrelated work;
+:Prepare assessed runtime, locked dependencies, and isolated data;
+:Align local URLs, sessions, and actual service identity;
+:Trace affected client, API authority, and persistence;
+:Implement scoped behavior and relevant regression coverage;
+:Run appropriate checks and observe affected journeys;
+if (Material check fails?) then (yes)
+ :Capture reproduction and diagnose actual cause;
+ :Correct scoped issue and recheck candidate;
+else (no)
+ :Record demonstrated acceptance and evidence limits;
+endif
+:Review final diff and update source-linked documentation;
+:Hand off candidate and remaining issues for authorized delivery;
 stop
 @enduml

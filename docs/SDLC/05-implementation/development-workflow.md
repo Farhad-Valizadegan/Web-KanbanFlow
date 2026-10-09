@@ -20,6 +20,59 @@ Start the backend and frontend using their documented commands. Confirm API reac
 4. Check normal, denied, invalid, stale, and failed paths as relevant.
 5. Update affected documentation and inspect the complete diff.
 
+## Establish the task and baseline
+
+Record the requirement/backlog reference, intended actor, trigger, expected result, affected journeys, and exclusions. Inspect current source instead of assuming a design proposal is implemented. Consult [implementation status](implementation-status.md), [request contracts](../04-design/route-and-request-contracts.md), and [decision register](../../Project-Management/decision-register.md) for known boundaries.
+
+Identify the starting commit, intended branch/remote, and existing staged, unstaged, or untracked work. A clean checkout is not required to begin a scoped task, but unrelated changes must stay identifiable and preserved. If remote integration or conflicts alter behavior, recheck the affected candidate before delivery.
+
+## First setup versus existing installation
+
+| Situation | Appropriate preparation |
+| --- | --- |
+| New isolated installation | Follow the project setup guide, create local environment files, provision an isolated database, and review key generation/migrations before execution. |
+| Existing working installation | Preserve its key, credentials, data, and local settings; apply only required dependency/configuration/migration changes. |
+| Test environment | Inspect PHPUnit settings and confirm isolation; do not point destructive fixture/reset operations at shared data. |
+| Runtime mismatch | Inspect actual PHP/Node executables, extensions, and lockfile platform/engine requirements; correct the mismatch rather than bypassing checks. |
+
+Use [dependency baseline](dependency-baseline.md) for declared and locked versions. Commands run from `backend/` and `frontend/` affect different package contexts; backend framework tooling is not the application frontend.
+
+## Local application checks
+
+Run `php artisan serve` from `backend/` and `npm run dev` from `frontend/` for the documented local development pattern, with the configured database available. Use actual URLs printed by the tools and align environment settings if a default port is unavailable. Do not assume an existing service uses the intended checkout merely because its port responds.
+
+Confirm the frontend calls the expected API, complete a real authenticated journey, and verify one accepted data change after refresh using isolated fixtures. Local development servers and frontend preview are not a production deployment procedure. Keep service logs and browser diagnostics safe for sharing.
+
+## Trace the change before editing
+
+| Change | Sources and behavior to inspect |
+| --- | --- |
+| API behavior | Route, nested ancestry, invoked controller/policy, validation, response shape, and client consumers. |
+| Ordering/WIP | Movement endpoint, transactions/locks, source/destination, stale state, active versus completed tasks, and failed optimistic recovery. |
+| Shared UI | Component consumers, labels, pending/error states, keyboard/focus, supported themes, and layout. |
+| Membership/visibility | Direct and indirect server paths plus downstream lists, analytics, activity, and comments. |
+| Schema/dependencies | Existing records, runtime/lockfile compatibility, migration consequences, and recovery baseline. |
+
+DEC-003 remains unresolved for manager removal/re-addition role changes. Do not silently choose a policy through a local fix or infer server enforcement from hidden UI actions.
+
+## Failure diagnosis
+
+| Symptom | Investigate before changing code |
+| --- | --- |
+| Login failure | API response, actual origin, CSRF/cookies, session settings, database reachability, and credential validation. |
+| Client cannot reach API | Build-time API URL, process/port, host consistency, CORS, and transport errors. |
+| Missing or forbidden resource | Current membership/role, private visibility, nested identity, and soft-delete state. |
+| Failed move or stale UI | Conflict/validation response, persisted state, cache recovery, and current source/destination. |
+| Install/build failure | Actual tool versions, lockfile consistency, platform requirements, and relevant error output. |
+
+Record reproducible steps and distinguish observed causes from hypotheses. Preserve original failure evidence and verify the corrected candidate. Avoid password resets, broad permission changes, or destructive database resets as an unsupported diagnosis shortcut.
+
+## Evidence and handoff
+
+Use [verification records](../06-testing/verification-record-template.md) to capture the candidate, commands/scenarios, environment, expected/actual results, failures, and Not run boundaries. Start with targeted relevant checks, then complete the required suites/static/build checks. Broaden testing when changed behavior or unresolved risk warrants it.
+
+Inspect the final staged diff and documentation links/diagrams before committing. Use [change delivery](change-delivery.md) for publication and local/remote identity checks. Record remaining work and how to reproduce any unresolved issue so another developer can continue without guessing. Runtime deployment and data recovery follow their separately assessed [deployment procedures](../07-deployment/README.md).
+
 ## Verification commands and limits
 
 | Working directory | Command | What it checks |
@@ -41,12 +94,23 @@ Record actual commands, candidate commit, environment, results, and remaining ga
 
 ```plantuml
 @startuml
-title KanbanFlow development workflow
+title KanbanFlow Local Development and Verification Workflow
 start
-:Inspect checkout and preserve existing work;
-:Prepare locked dependencies and local configuration;
-:Develop and verify scoped behavior;
-:Review diff and deliver candidate;
+:Define task, acceptance cases, and source baseline;
+:Inspect checkout and preserve unrelated work;
+:Prepare assessed runtime, locked dependencies, and isolated data;
+:Align local URLs, sessions, and actual service identity;
+:Trace affected client, API authority, and persistence;
+:Implement scoped behavior and relevant regression coverage;
+:Run appropriate checks and observe affected journeys;
+if (Material check fails?) then (yes)
+ :Capture reproduction and diagnose actual cause;
+ :Correct scoped issue and recheck candidate;
+else (no)
+ :Record demonstrated acceptance and evidence limits;
+endif
+:Review final diff and update source-linked documentation;
+:Hand off candidate and remaining issues for authorized delivery;
 stop
 @enduml
 ```
