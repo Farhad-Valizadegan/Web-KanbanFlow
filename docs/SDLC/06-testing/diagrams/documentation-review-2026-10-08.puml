@@ -1,9 +1,17 @@
 @startuml
-title KanbanFlow documentation review 2026 10 08
+title KanbanFlow Historical Documentation Review and Dated Amendment
 start
-:Inspect baseline and documentation references;
-:Validate links and diagram source identity;
-:Inspect rendered previews and patch formatting;
-:Report documentation scope and runtime exclusions;
+:Identify original date, baseline, and delivery commit;
+:Preserve original scope and runtime exclusions;
+:Identify later amendment baseline and changed artifacts;
+:Check local links and embedded/editable diagram agreement;
+:Render and inspect previews; check intended patch formatting;
+if (Documentation check fails?) then (yes)
+ :Correct scoped artifact and repeat affected check;
+else (no)
+ :Record scoped documentation observations;
+endif
+:Publish amendment and identify resulting commit;
+:Keep product defects and unexecuted runtime checks visible;
 stop
 @enduml
