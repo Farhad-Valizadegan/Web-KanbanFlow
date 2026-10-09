@@ -1,9 +1,19 @@
 @startuml
-title KanbanFlow testing
+title KanbanFlow Testing Execution and Failure Recheck
 start
-:Identify candidate and risk-based acceptance cases;
-:Prepare isolated verification environment;
-:Execute relevant checks and capture failures;
-:Assess evidence and disclose remaining gaps;
+:Record candidate, criteria, actual environment, and isolation;
+:Inspect configuration, dependencies, and safe evidence capture;
+:Run selected targeted and required checks;
+:Observe affected browser, authority, and persisted-state cases;
+if (Check fails or cannot execute?) then (yes)
+ :Preserve candidate-specific failure or blockage;
+ :Diagnose environment or scoped product cause;
+ :Recheck corrected candidate and affected consumers;
+else (no)
+ :Record observed pass and verification-layer limits;
+endif
+:Validate changed documentation and final patch;
+:Record open issues, exclusions, and scope-specific outcome;
+:Hand off correction or authorized delivery with evidence;
 stop
 @enduml
