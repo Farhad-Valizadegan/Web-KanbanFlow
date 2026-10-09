@@ -1,9 +1,25 @@
 @startuml
-title KanbanFlow change delivery
+title KanbanFlow Change Delivery and Synchronization
 start
-:Review final diff and evidence;
-:Stage intended paths and commit;
-:Push authorized branch and fetch;
-:Compare identities and report delivery state;
+:Identify scope, branch, remote, and candidate;
+:Review final diff and actual verification evidence;
+if (Material failure or unverified acceptance?) then (yes)
+ :Retain failure evidence and correct or record gap;
+else (no)
+ :Stage intended paths, inspect, and commit;
+ :Fetch and assess remote history;
+ if (Integration required?) then (yes)
+  :Preserve work, resolve history, and reverify changes;
+ endif
+ :Push within authorized scope;
+ :Fetch and compare intended commit identities;
+ if (Remote publication confirmed?) then (yes)
+  :Report commit and separate working-tree status;
+ else (no)
+  :Retain local commit and report publication blocker;
+ endif
+endif
+:Record CI status only when inspected;
+:Hand off any separately requested release or deployment;
 stop
 @enduml
