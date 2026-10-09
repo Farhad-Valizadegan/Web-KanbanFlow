@@ -1,9 +1,18 @@
 @startuml
-title KanbanFlow manual acceptance checklist
+title KanbanFlow Manual Acceptance and Observed Results
 start
-:Record browser, actor, fixture, and candidate;
-:Perform journey and failure scenarios;
-:Observe focus, themes, and persisted state;
-:Capture results and reproducible defects;
+:Identify candidate, affected scenarios, and actual browser context;
+:Prepare isolated actors, resource trees, and initial state;
+:Perform normal, denied, invalid, and failure journeys;
+:Inspect feedback, focus, themes, and relevant side effects;
+:Refresh and observe authoritative persisted state;
+if (Expected criterion met?) then (yes)
+ :Record scoped pass and actual evidence;
+else (no)
+ :Record failure, blockage, or unexecuted criterion explicitly;
+ :Capture reproduction and corrected-candidate follow-up;
+endif
+:Restore controlled fixtures and record exclusions;
+:Assess scoped completion with open issues visible;
 stop
 @enduml
