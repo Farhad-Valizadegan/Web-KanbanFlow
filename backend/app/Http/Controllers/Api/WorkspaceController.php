@@ -62,19 +62,14 @@ class WorkspaceController extends Controller
             ): Workspace {
                 $workspace =
                     Workspace::query()->create([
-                        'owner_id' =>
-                            $request->user()->id,
-                        'name' =>
-                            $validated['name'],
-                        'slug' =>
-                            $this->generateUniqueSlug(
-                                $validated['name']
-                            ),
-                        'description' =>
-                            $validated['description']
+                        'owner_id' => $request->user()->id,
+                        'name' => $validated['name'],
+                        'slug' => $this->generateUniqueSlug(
+                            $validated['name']
+                        ),
+                        'description' => $validated['description']
                                 ?? null,
-                        'visibility' =>
-                            $validated['visibility']
+                        'visibility' => $validated['visibility']
                                 ?? 'private',
                     ]);
 
@@ -94,8 +89,7 @@ class WorkspaceController extends Controller
         );
 
         return response()->json([
-            'message' =>
-                'Workspace created successfully.',
+            'message' => 'Workspace created successfully.',
             'data' => $workspace,
         ], 201);
     }
@@ -176,8 +170,7 @@ class WorkspaceController extends Controller
         );
 
         return response()->json([
-            'message' =>
-                'Workspace updated successfully.',
+            'message' => 'Workspace updated successfully.',
             'data' => $workspace,
         ]);
     }
@@ -197,8 +190,7 @@ class WorkspaceController extends Controller
         $workspace->delete();
 
         return response()->json([
-            'message' =>
-                'Workspace deleted successfully.',
+            'message' => 'Workspace deleted successfully.',
         ]);
     }
 
@@ -223,10 +215,9 @@ class WorkspaceController extends Controller
             Workspace::withTrashed()
                 ->when(
                     $ignoreWorkspaceId !== null,
-                    fn ($query) =>
-                        $query->whereKeyNot(
-                            $ignoreWorkspaceId
-                        )
+                    fn ($query) => $query->whereKeyNot(
+                        $ignoreWorkspaceId
+                    )
                 )
                 ->where(
                     'slug',

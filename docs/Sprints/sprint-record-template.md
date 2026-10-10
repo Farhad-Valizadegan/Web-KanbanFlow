@@ -1,5 +1,7 @@
 # KanbanFlow Sprint Record Template
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Use this template as the summary record for an agreed sprint. It connects the goal, selected scope, observed execution, verification, and closure without duplicating every detailed backlog or progress entry.
 
 This file is a reusable template, not an actual sprint or completion record. Placeholder values do not establish dates, ownership, review attendance, capacity, or outcomes. Create a dedicated record only after planning agreement, following the [sprint index](README.md).

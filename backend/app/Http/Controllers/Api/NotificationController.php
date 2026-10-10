@@ -47,11 +47,10 @@ class NotificationController extends Controller
         return response()->json([
             'data' => $notifications,
             'meta' => [
-                'unread_count' =>
-                    $request
-                        ->user()
-                        ->unreadNotifications()
-                        ->count(),
+                'unread_count' => $request
+                    ->user()
+                    ->unreadNotifications()
+                    ->count(),
             ],
         ]);
     }
@@ -61,11 +60,10 @@ class NotificationController extends Controller
     ): JsonResponse {
         return response()->json([
             'data' => [
-                'unread_count' =>
-                    $request
-                        ->user()
-                        ->unreadNotifications()
-                        ->count(),
+                'unread_count' => $request
+                    ->user()
+                    ->unreadNotifications()
+                    ->count(),
             ],
         ]);
     }
@@ -91,10 +89,8 @@ class NotificationController extends Controller
         $databaseNotification->refresh();
 
         return response()->json([
-            'message' =>
-                'Notification marked as read.',
-            'data' =>
-                $databaseNotification,
+            'message' => 'Notification marked as read.',
+            'data' => $databaseNotification,
         ]);
     }
 
@@ -109,8 +105,7 @@ class NotificationController extends Controller
             ]);
 
         return response()->json([
-            'message' =>
-                'All notifications marked as read.',
+            'message' => 'All notifications marked as read.',
         ]);
     }
 
@@ -127,8 +122,7 @@ class NotificationController extends Controller
         $databaseNotification->delete();
 
         return response()->json([
-            'message' =>
-                'Notification deleted successfully.',
+            'message' => 'Notification deleted successfully.',
         ]);
     }
 

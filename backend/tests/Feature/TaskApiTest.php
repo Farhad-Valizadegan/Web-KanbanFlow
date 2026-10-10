@@ -384,8 +384,7 @@ class TaskApiTest extends TestCase
             [
                 'title' => 'Updated Task',
                 'priority' => 'urgent',
-                'completed_at' =>
-                    '2026-07-19 18:00:00',
+                'completed_at' => '2026-07-19 18:00:00',
             ]
         );
 
@@ -1007,6 +1006,7 @@ class TaskApiTest extends TestCase
             'position' => 1,
         ]);
     }
+
     private function createWorkspaceFor(
         User $owner
     ): Workspace {
@@ -1076,9 +1076,9 @@ class TaskApiTest extends TestCase
         Column $column
     ): string {
         return "/api/workspaces/{$workspace->id}"
-            . "/projects/{$project->id}"
-            . "/boards/{$board->id}"
-            . "/columns/{$column->id}/tasks";
+            ."/projects/{$project->id}"
+            ."/boards/{$board->id}"
+            ."/columns/{$column->id}/tasks";
     }
 
     private function taskUrl(
@@ -1093,7 +1093,7 @@ class TaskApiTest extends TestCase
             $project,
             $board,
             $column
-        ) . "/{$task->id}";
+        )."/{$task->id}";
     }
 
     private function moveTaskUrl(
@@ -1109,6 +1109,6 @@ class TaskApiTest extends TestCase
             $board,
             $column,
             $task
-        ) . '/move';
+        ).'/move';
     }
 }

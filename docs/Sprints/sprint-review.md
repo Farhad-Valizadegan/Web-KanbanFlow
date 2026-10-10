@@ -1,5 +1,7 @@
 # KanbanFlow Sprint Review Template
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Use the sprint review to compare demonstrated outcomes with the agreed goal and acceptance criteria, discuss actual feedback, and identify next actions. Assess the final selected scope alongside material changes made during execution.
 
 This is a reusable guide and template, not an actual review, sign-off, or deployment record. Do not infer attendance, customer feedback, acceptance, or completed work from commits alone. The [retrospective](sprint-retrospective.md) separately examines the working process.

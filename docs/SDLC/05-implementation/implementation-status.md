@@ -1,5 +1,7 @@
 # KanbanFlow Implementation Status
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Reading this status
 
 This is a source-backed capability inventory, not a fresh acceptance run or deployment report. The project and frontend metadata identify version 1.1.0. Historical release records remain historical; subsequent documentation commits do not certify application behavior or create a new tagged release.

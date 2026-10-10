@@ -1,5 +1,11 @@
 # KanbanFlow Unreleased Changes
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
+## Snapshot superseded by v1.1.1
+
+The accumulated changes below and the 2026-10-10 QA corrections are included in [v1.1.1](v1.1.1.md). The inventory below preserves the earlier snapshot and is not the current unreleased queue.
+
 ## Baseline and snapshot identity
 
 The latest published GitHub release checked for this update is [v1.1.0](v1.1.0.md), published on 2026-10-07. Its source tag resolves to af22a01afc05c40447d69c4f15a088daecf33597.

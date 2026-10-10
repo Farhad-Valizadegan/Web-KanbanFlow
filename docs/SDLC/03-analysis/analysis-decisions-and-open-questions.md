@@ -1,5 +1,7 @@
 # KanbanFlow Analysis Decisions and Open Questions
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Record analysis findings, competing explanations, and decisions without turning an assumption into an established rule. This guide is a reusable register, not actual sign-off or completed investigation evidence.
 
 ## Decision and question register

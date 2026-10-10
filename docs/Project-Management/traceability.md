@@ -1,5 +1,7 @@
 # KanbanFlow Feature Traceability
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and distinction
 
 Feature traceability links a user need and acceptance criteria to decisions, backlog items, source changes, verification, and published delivery. It supports impact analysis and helps expose missing evidence.

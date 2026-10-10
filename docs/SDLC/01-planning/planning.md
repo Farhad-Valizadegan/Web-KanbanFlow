@@ -1,5 +1,7 @@
 # KanbanFlow Planning
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Use this guide to turn a product need into bounded, reviewable work before requirements and implementation proceed. Planning records intentions and decisions; it does not establish completed development, staffing, dates, or production readiness.
 
 ## Inputs

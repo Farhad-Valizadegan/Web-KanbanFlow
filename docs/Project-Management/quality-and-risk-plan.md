@@ -1,5 +1,7 @@
 # KanbanFlow Quality and Risk Plan
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and status
 
 This plan defines how to choose verification proportional to the affected behavior and risk. It connects engineering checks, user journeys, authorization, data integrity, documentation, and operational readiness.

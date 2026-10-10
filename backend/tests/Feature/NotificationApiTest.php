@@ -44,8 +44,7 @@ class NotificationApiTest extends TestCase
             ),
             [
                 'title' => 'Implement notifications',
-                'description' =>
-                    'Create assignment notifications.',
+                'description' => 'Create assignment notifications.',
                 'priority' => 'high',
                 'assigned_to' => $assignee->id,
             ]
@@ -235,8 +234,7 @@ class NotificationApiTest extends TestCase
         $task = Task::factory()->create([
             'column_id' => $column->id,
             'created_by' => $owner->id,
-            'assigned_to' =>
-                $firstAssignee->id,
+            'assigned_to' => $firstAssignee->id,
             'title' => 'Reassigned task',
             'priority' => 'medium',
             'position' => 1,
@@ -253,8 +251,7 @@ class NotificationApiTest extends TestCase
                 $task
             ),
             [
-                'assigned_to' =>
-                    $secondAssignee->id,
+                'assigned_to' => $secondAssignee->id,
             ]
         );
 
@@ -411,8 +408,7 @@ class NotificationApiTest extends TestCase
             $this->createDatabaseNotification(
                 $user,
                 [
-                    'message' =>
-                        'You were assigned a task.',
+                    'message' => 'You were assigned a task.',
                 ]
             );
 
@@ -470,8 +466,7 @@ class NotificationApiTest extends TestCase
         $this->createDatabaseNotification(
             $user,
             [
-                'message' =>
-                    'Older notification.',
+                'message' => 'Older notification.',
             ],
             now()->subMinute()
         );
@@ -480,8 +475,7 @@ class NotificationApiTest extends TestCase
             $this->createDatabaseNotification(
                 $user,
                 [
-                    'message' =>
-                        'Latest notification.',
+                    'message' => 'Latest notification.',
                 ],
                 now()
             );
@@ -508,16 +502,14 @@ class NotificationApiTest extends TestCase
         $this->createDatabaseNotification(
             $user,
             [
-                'message' =>
-                    'Unread notification.',
+                'message' => 'Unread notification.',
             ]
         );
 
         $this->createDatabaseNotification(
             $user,
             [
-                'message' =>
-                    'Read notification.',
+                'message' => 'Read notification.',
             ],
             now()->subMinute(),
             now()
@@ -810,14 +802,12 @@ class NotificationApiTest extends TestCase
 
         $project =
             Project::factory()->create([
-                'workspace_id' =>
-                    $workspace->id,
+                'workspace_id' => $workspace->id,
             ]);
 
         $board =
             Board::factory()->create([
-                'project_id' =>
-                    $project->id,
+                'project_id' => $project->id,
                 'position' => 1,
             ]);
 
@@ -845,26 +835,19 @@ class NotificationApiTest extends TestCase
     ): DatabaseNotification {
         return DatabaseNotification::query()->create([
             'id' => (string) Str::uuid(),
-            'type' =>
-                TaskAssignedNotification::class,
-            'notifiable_type' =>
-                User::class,
-            'notifiable_id' =>
-                $user->id,
+            'type' => TaskAssignedNotification::class,
+            'notifiable_type' => User::class,
+            'notifiable_id' => $user->id,
             'data' => array_merge(
                 [
-                    'type' =>
-                        'task_assigned',
-                    'message' =>
-                        'Test notification.',
+                    'type' => 'task_assigned',
+                    'message' => 'Test notification.',
                 ],
                 $data
             ),
             'read_at' => $readAt,
-            'created_at' =>
-                $createdAt ?? now(),
-            'updated_at' =>
-                $createdAt ?? now(),
+            'created_at' => $createdAt ?? now(),
+            'updated_at' => $createdAt ?? now(),
         ]);
     }
 
@@ -875,10 +858,10 @@ class NotificationApiTest extends TestCase
         Column $column
     ): string {
         return "/api/workspaces/{$workspace->id}"
-            . "/projects/{$project->id}"
-            . "/boards/{$board->id}"
-            . "/columns/{$column->id}"
-            . '/tasks';
+            ."/projects/{$project->id}"
+            ."/boards/{$board->id}"
+            ."/columns/{$column->id}"
+            .'/tasks';
     }
 
     private function taskUrl(
@@ -893,6 +876,6 @@ class NotificationApiTest extends TestCase
             $project,
             $board,
             $column
-        ) . "/{$task->id}";
+        )."/{$task->id}";
     }
 }

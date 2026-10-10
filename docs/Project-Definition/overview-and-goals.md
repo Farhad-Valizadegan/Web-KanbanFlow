@@ -1,5 +1,7 @@
 # KanbanFlow Overview and Goals
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Product overview
 
 KanbanFlow is a full-stack, browser-based project management application. It organizes collaborative work into workspaces, projects, boards, workflow columns, and tasks so users can inspect ownership and progress in a shared place.

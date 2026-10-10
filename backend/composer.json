@@ -9,7 +9,7 @@
         "project-management",
         "laravel"
     ],
-    "license": "MIT",
+    "license": "proprietary",
     "require": {
         "php": "^8.3",
         "laravel/framework": "^13.8",

@@ -1,5 +1,7 @@
 # KanbanFlow Decision Register
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and evidence rules
 
 This register records material product and implementation choices and keeps unresolved questions visible. It distinguishes observed implementation from an explicit approval record.
@@ -12,7 +14,7 @@ The entries below are grounded in repository behavior and release documentation.
 | --- | --- | --- | --- |
 | DEC-001 | Product name KanbanFlow; repository/folder name Web-KanbanFlow | Implemented | [Project README](../../README.md) and [v1.0.2 record](../Releases/v1.0.2.md). |
 | DEC-002 | Light, Dark, and System themes with browser-local preference | Implemented | [v1.1.0 record](../Releases/v1.1.0.md) and [frontend theme implementation](../../frontend/src/components/theme/). |
-| DEC-003 | Manager membership operations and indirect role changes | Open | [Known issue history](../../CHANGELOG.md) and [PB-001](product-backlog.md). |
+| DEC-003 | Manager membership operations and indirect role changes | Implemented | [Known issue history](../../CHANGELOG.md) and [PB-001](product-backlog.md). |
 
 IDs are stable references. Add new decisions when there is a material question or outcome to record; do not turn every ordinary implementation detail into a policy record.
 
@@ -50,35 +52,15 @@ Implemented. New view styling should remain compatible with all supported theme 
 
 ## DEC-003 — Manager membership policy
 
-### Problem
+### Outcome — 2026-10-10
 
-Managers can bypass intended owner-only role changes by removing and re-adding a member with a different role. Direct role restrictions alone do not close the indirect path.
+Membership additions, removals, and role updates are owner-only. Managers retain project/board management and permitted activity visibility through a separate `manageProjects` permission. This closes the remove/re-add route as well as direct role changes.
 
-### Questions requiring agreement
+The user requested all QA findings be fixed. The conservative owner-only option was selected and communicated before implementation. It reduces manager autonomy without introducing membership-history storage. Any future delegation needs an explicit safe policy and regression coverage.
 
-- Which members may managers add or remove?
-- Which roles may managers assign when adding members?
-- How should removal/re-addition preserve owner-only restrictions?
-- What owner and current-membership protections must be enforced?
+### Evidence and state
 
-### Options for consideration
-
-| Option | Expected direction | Consequences to evaluate |
-| --- | --- | --- |
-| Owners manage membership exclusively | Reserve add/remove and role assignment to owners. | Simpler administration boundary; reduces manager autonomy. |
-| Managers have constrained membership operations | Define an explicit permitted subset, potentially limited to viewer membership. | More delegation; requires precise direct and indirect enforcement. |
-
-These are candidate directions, not approved policy. The exact permitted operations must be explicitly agreed rather than inferred from role names.
-
-### Required closure evidence
-
-Record the selected rule and its actual authorization evidence. Enforce it in backend membership paths and verify direct role updates, removal, re-addition, denied users, current membership, and relevant owner protections. Update frontend feedback and documentation as affected.
-
-Use [backlog refinement](backlog-refinement.md) and [PB-001](product-backlog.md) to scope the implementation. Until closure, owners should manage membership.
-
-### State
-
-Open. No chosen option, approver, deadline, or completed fix is recorded.
+Implemented locally. Three regression checks failed against the prior behavior; the corrected membership suite and complete backend suite pass. Existing owner operations, owner protection, manager project creation, and broader authorization tests remain passing. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md). Publication and production deployment are separate states.
 
 ## Decision states
 

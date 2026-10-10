@@ -1,5 +1,7 @@
 # Milestone 7 — Workspace Analytics and Task Assignment
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Historical status and source identity
 
 **Recorded status: Completed.** The original milestone record states completion after PR #35 merged. Local Git history confirms 1e85e85 as the task-assignee frontend merge commit.

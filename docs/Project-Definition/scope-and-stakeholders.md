@@ -1,5 +1,7 @@
 # KanbanFlow Scope and Stakeholders
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose
 
 This document defines the current working product boundary and the people who use, maintain, or operate KanbanFlow. It separates delivered capabilities, stakeholder responsibilities, exclusions, and unresolved policy decisions.

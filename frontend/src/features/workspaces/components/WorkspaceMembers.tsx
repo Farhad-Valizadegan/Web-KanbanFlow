@@ -26,7 +26,7 @@ function WorkspaceMembers({
     workspace,
 }: WorkspaceMembersProps) {
     const queryClient = useQueryClient();
-    const { canManage, isOwner } = useWorkspacePermissions(workspace.id);
+    const { isOwner } = useWorkspacePermissions(workspace.id);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     function onError(error: AxiosError<{ message?: string; errors?: Record<string, string[]> }>) {
         setErrorMessage(error.response?.status === 403
@@ -111,7 +111,7 @@ function WorkspaceMembers({
                     </h2>
 
                     <p className="mt-1 text-sm text-slate-400">
-                        Add members and manage their workspace roles.
+                        Only the workspace owner can add or remove members and change their roles.
                     </p>
                 </div>
 
@@ -152,7 +152,7 @@ function WorkspaceMembers({
 
                     <button
                         type="submit"
-                        disabled={!canManage || addMemberMutation.isPending ||
+                        disabled={!isOwner || addMemberMutation.isPending ||
                             email.trim() === ''
                         }
                         className="border border-blue-500 bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -227,7 +227,7 @@ function WorkspaceMembers({
 
                                         <button
                                             type="button"
-                                            disabled={!canManage || removeMemberMutation.isPending
+                                            disabled={!isOwner || removeMemberMutation.isPending
                                             }
                                             onClick={() =>
                                                 removeMemberMutation.mutate(

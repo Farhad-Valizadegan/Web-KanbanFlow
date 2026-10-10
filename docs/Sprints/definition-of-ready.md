@@ -1,5 +1,7 @@
 # KanbanFlow Definition of Ready
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 An item is Ready for sprint selection when its user problem, intended outcome, scope, acceptance criteria, dependencies, and verification approach are sufficiently clear to begin the agreed work. Readiness reduces avoidable uncertainty; it does not require every implementation detail to be designed in advance.
 
 This is a planning gate, not a claim that current backlog candidates already meet it. Ready does not mean selected, implemented, verified, released, or deployed. Use the [Definition of Done](definition-of-done.md) to assess completion after work occurs.

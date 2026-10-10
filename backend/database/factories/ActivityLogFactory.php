@@ -17,43 +17,36 @@ class ActivityLogFactory extends Factory
     public function definition(): array
     {
         return [
-            'workspace_id' =>
-                Workspace::factory(),
+            'workspace_id' => Workspace::factory(),
 
-            'user_id' =>
-                User::factory(),
+            'user_id' => User::factory(),
 
-            'action' =>
-                fake()->randomElement([
-                    'created',
-                    'updated',
-                    'moved',
-                    'deleted',
-                    'commented',
-                ]),
+            'action' => fake()->randomElement([
+                'created',
+                'updated',
+                'moved',
+                'deleted',
+                'commented',
+            ]),
 
-            'subject_type' =>
-                fake()->randomElement([
-                    'task',
-                    'comment',
-                    'column',
-                    'board',
-                    'project',
-                    'workspace',
-                ]),
+            'subject_type' => fake()->randomElement([
+                'task',
+                'comment',
+                'column',
+                'board',
+                'project',
+                'workspace',
+            ]),
 
-            'subject_id' =>
-                fake()->numberBetween(
-                    1,
-                    1000
-                ),
+            'subject_id' => fake()->numberBetween(
+                1,
+                1000
+            ),
 
-            'subject_name' =>
-                fake()->sentence(3),
+            'subject_name' => fake()->sentence(3),
 
             'properties' => [
-                'description' =>
-                    fake()->sentence(),
+            'description' => fake()->sentence(),
             ],
         ];
     }

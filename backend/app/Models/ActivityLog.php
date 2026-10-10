@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\ActivityLogFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ActivityLog extends Model
 {
-    /** @use HasFactory<\Database\Factories\ActivityLogFactory> */
+    /** @use HasFactory<ActivityLogFactory> */
     use HasFactory;
 
     protected $fillable = [

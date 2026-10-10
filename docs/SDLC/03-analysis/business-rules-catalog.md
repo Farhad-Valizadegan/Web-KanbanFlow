@@ -1,5 +1,7 @@
 # KanbanFlow Business Rules Catalog
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 This catalog organizes documented domain rules and open policy boundaries. It is not a complete endpoint matrix or proof that every rule has fresh runtime evidence.
 
 | Rule area | Documented boundary | Analysis focus |

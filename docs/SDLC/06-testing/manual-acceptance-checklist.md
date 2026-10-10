@@ -1,5 +1,7 @@
 # KanbanFlow Manual Acceptance Checklist
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## How to use
 
 These scenarios are planned checks, not completed results. Record candidate, browser/version, viewport/zoom, theme, host configuration, actor, isolated fixture, expected outcome, actual observation, and evidence. Mark unexecuted scenarios Not run. Use the actual endpoint authority described in [design contracts](../04-design/route-and-request-contracts.md).

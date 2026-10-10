@@ -1,5 +1,7 @@
 # KanbanFlow Backup and Recovery Runbook
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Status and objectives
 
 No backup system, retention schedule, recovery-point objective (acceptable data loss), or recovery-time objective (acceptable outage) is established by the repository. Agree these values, responsible operators, protected locations, and verification frequency for the actual environment before relying on this runbook.

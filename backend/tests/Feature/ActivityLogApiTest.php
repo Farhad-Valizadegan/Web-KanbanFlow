@@ -129,9 +129,9 @@ class ActivityLogApiTest extends TestCase
 
         $response = $this->getJson(
             "/api/workspaces/{$workspace->id}/activities"
-                . '?action=created'
-                . '&subject_type=task'
-                . '&limit=1'
+                .'?action=created'
+                .'&subject_type=task'
+                .'&limit=1'
         );
 
         $response
@@ -164,8 +164,7 @@ class ActivityLogApiTest extends TestCase
             ),
             [
                 'title' => 'Create activity feed',
-                'description' =>
-                    'Record task actions.',
+                'description' => 'Record task actions.',
                 'priority' => 'high',
             ]
         );
@@ -182,14 +181,12 @@ class ActivityLogApiTest extends TestCase
         $this->assertDatabaseHas(
             'activity_logs',
             [
-                'workspace_id' =>
-                    $workspace->id,
+                'workspace_id' => $workspace->id,
                 'user_id' => $user->id,
                 'action' => 'created',
                 'subject_type' => 'task',
                 'subject_id' => $taskId,
-                'subject_name' =>
-                    'Create activity feed',
+                'subject_name' => 'Create activity feed',
             ]
         );
 
@@ -329,10 +326,9 @@ class ActivityLogApiTest extends TestCase
                 $board,
                 $sourceColumn,
                 $task
-            ) . '/move',
+            ).'/move',
             [
-                'column_id' =>
-                    $destinationColumn->id,
+                'column_id' => $destinationColumn->id,
                 'position' => 1,
             ]
         );
@@ -414,14 +410,12 @@ class ActivityLogApiTest extends TestCase
         $this->assertDatabaseHas(
             'activity_logs',
             [
-                'workspace_id' =>
-                    $workspace->id,
+                'workspace_id' => $workspace->id,
                 'user_id' => $user->id,
                 'action' => 'deleted',
                 'subject_type' => 'task',
                 'subject_id' => $task->id,
-                'subject_name' =>
-                    'Task to delete',
+                'subject_name' => 'Task to delete',
             ]
         );
     }
@@ -454,8 +448,7 @@ class ActivityLogApiTest extends TestCase
 
         $project =
             Project::factory()->create([
-                'workspace_id' =>
-                    $workspace->id,
+                'workspace_id' => $workspace->id,
             ]);
 
         $board =
@@ -486,10 +479,10 @@ class ActivityLogApiTest extends TestCase
         Column $column
     ): string {
         return "/api/workspaces/{$workspace->id}"
-            . "/projects/{$project->id}"
-            . "/boards/{$board->id}"
-            . "/columns/{$column->id}"
-            . '/tasks';
+            ."/projects/{$project->id}"
+            ."/boards/{$board->id}"
+            ."/columns/{$column->id}"
+            .'/tasks';
     }
 
     private function taskUrl(
@@ -504,6 +497,6 @@ class ActivityLogApiTest extends TestCase
             $project,
             $board,
             $column
-        ) . "/{$task->id}";
+        )."/{$task->id}";
     }
 }

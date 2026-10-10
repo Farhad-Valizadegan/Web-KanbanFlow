@@ -192,8 +192,7 @@ class TaskCommentApiTest extends TestCase
             [
                 'task_id' => $task->id,
                 'user_id' => $member->id,
-                'body' =>
-                    'This task needs additional review.',
+                'body' => 'This task needs additional review.',
             ]
         );
     }
@@ -656,8 +655,7 @@ class TaskCommentApiTest extends TestCase
 
         $project =
             Project::factory()->create([
-                'workspace_id' =>
-                    $workspace->id,
+                'workspace_id' => $workspace->id,
                 'created_by' => $owner->id,
             ]);
 
@@ -705,11 +703,11 @@ class TaskCommentApiTest extends TestCase
         Task $task
     ): string {
         return "/api/workspaces/{$workspace->id}"
-            . "/projects/{$project->id}"
-            . "/boards/{$board->id}"
-            . "/columns/{$column->id}"
-            . "/tasks/{$task->id}"
-            . '/comments';
+            ."/projects/{$project->id}"
+            ."/boards/{$board->id}"
+            ."/columns/{$column->id}"
+            ."/tasks/{$task->id}"
+            .'/comments';
     }
 
     private function commentUrl(
@@ -726,6 +724,6 @@ class TaskCommentApiTest extends TestCase
             $board,
             $column,
             $task
-        ) . "/{$comment->id}";
+        )."/{$comment->id}";
     }
 }

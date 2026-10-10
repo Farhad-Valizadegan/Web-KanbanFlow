@@ -1,5 +1,7 @@
 # KanbanFlow Implementation Guide
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and boundaries
 
 The application separates the React/TypeScript client in `frontend/` from the Laravel API in `backend/`. Trace a change through the consuming page or feature, API request, route, controller, policy, model, and migration as applicable. Consult [repository layout](../04-design/repository-layout.md) and [request contracts](../04-design/route-and-request-contracts.md) before adding parallel abstractions or changing response shapes.

@@ -1,5 +1,7 @@
 # Assumptions and Constraints
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 This document defines the conditions KanbanFlow depends on and the boundaries that affect its design, verification, and operation. Assumptions require confirmation in the target environment; constraints describe current implementation or explicit scope boundaries. Proposed operational targets are not service guarantees.
 
 ## User and collaboration assumptions

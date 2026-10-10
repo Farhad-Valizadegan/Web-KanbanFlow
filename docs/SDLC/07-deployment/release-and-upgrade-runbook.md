@@ -1,5 +1,7 @@
 # KanbanFlow Release and Upgrade Runbook
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Runbook status
 
 This is a preparation and execution framework. Fill in the actual target, operators, commands/service controls, timings, and evidence before use. No production operation, deployment authorization, or recovery success is inferred from this document.

@@ -1019,8 +1019,8 @@ class ColumnApiTest extends TestCase
         Board $board
     ): string {
         return "/api/workspaces/{$workspace->id}"
-            . "/projects/{$project->id}"
-            . "/boards/{$board->id}/columns";
+            ."/projects/{$project->id}"
+            ."/boards/{$board->id}/columns";
     }
 
     private function columnUrl(
@@ -1033,7 +1033,7 @@ class ColumnApiTest extends TestCase
             $workspace,
             $project,
             $board
-        ) . "/{$column->id}";
+        )."/{$column->id}";
     }
 
     private function columnMoveUrl(
@@ -1047,6 +1047,6 @@ class ColumnApiTest extends TestCase
             $project,
             $board,
             $column
-        ) . '/move';
+        ).'/move';
     }
 }

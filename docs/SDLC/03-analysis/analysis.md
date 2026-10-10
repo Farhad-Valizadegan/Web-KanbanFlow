@@ -1,5 +1,7 @@
 # KanbanFlow Analysis Guide
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Analyze a bounded requirement or defect before choosing a change. Trace frontend behavior, API requests, authorization, persisted records, and relevant tests. This guide does not assert a newly reproduced defect or fresh verification result.
 
 ## Investigation record

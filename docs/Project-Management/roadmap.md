@@ -1,5 +1,7 @@
 # KanbanFlow Roadmap
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and planning status
 
 This roadmap connects delivered capabilities to proposed improvements and their dependencies. It communicates direction rather than a dated delivery schedule.

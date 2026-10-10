@@ -1,5 +1,7 @@
 # KanbanFlow Deployment
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and status
 
 This phase prepares a named application candidate for an identified runtime environment and records the outcome of an authorized rollout. These documents are operational guidance, not evidence that production hosting, backups, restoration, or deployment have occurred. GitHub source publication and CI checks are separate from deployment.

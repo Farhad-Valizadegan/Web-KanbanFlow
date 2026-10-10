@@ -1,5 +1,7 @@
 # KanbanFlow Daily Progress and Blockers
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Use a short progress record to show what changed toward an agreed sprint goal, what should happen next, and what prevents progress. Update it when useful progress or a material blocker occurs. This guide does not establish a mandatory daily meeting, reporting schedule, or historical sprint activity.
 
 The record supports coordination and review. Describe observed outcomes rather than hours, commit counts, or activity alone. An implementation step and a verified user outcome are different states.

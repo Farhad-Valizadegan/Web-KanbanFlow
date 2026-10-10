@@ -1,5 +1,7 @@
 # KanbanFlow Upgrade Activity
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose
 
 The activity below describes an upgrade decision process. It is not a record of an upgrade performed. Use the [release and upgrade runbook](release-and-upgrade-runbook.md) to supply target-specific controls and commands.

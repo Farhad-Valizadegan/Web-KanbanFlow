@@ -1,5 +1,7 @@
 # KanbanFlow Local Review Fixes
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 This record explains the ten corrections identified in the original local source review, their release context, and the limits of the recorded verification. The initial fixes shipped in [v1.0.1](Releases/v1.0.1.md); [v1.0.2](Releases/v1.0.2.md) subsequently addressed session configuration, analytics refresh, and specific verification gaps. This document update does not change application behavior or constitute a fresh application test run.
 
 ## Review scope and evidence

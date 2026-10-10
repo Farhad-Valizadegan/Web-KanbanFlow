@@ -74,7 +74,7 @@ class WorkspaceMemberApiTest extends TestCase
         ]);
     }
 
-    public function test_manager_can_add_a_member(): void
+    public function test_manager_cannot_add_a_member(): void
     {
         $owner = User::factory()->create();
         $manager = User::factory()->create();
@@ -94,9 +94,9 @@ class WorkspaceMemberApiTest extends TestCase
                 'email' => $newMember->email,
                 'role' => 'viewer',
             ]
-        )->assertCreated();
+        )->assertForbidden();
 
-        $this->assertDatabaseHas('workspace_user', [
+        $this->assertDatabaseMissing('workspace_user', [
             'workspace_id' => $workspace->id,
             'user_id' => $newMember->id,
             'role' => 'viewer',
@@ -260,7 +260,7 @@ class WorkspaceMemberApiTest extends TestCase
         ]);
     }
 
-    public function test_manager_can_remove_a_member(): void
+    public function test_manager_cannot_remove_a_member(): void
     {
         $owner = User::factory()->create();
         $manager = User::factory()->create();
@@ -280,9 +280,9 @@ class WorkspaceMemberApiTest extends TestCase
 
         $this->deleteJson(
             "/api/workspaces/{$workspace->id}/members/{$member->id}"
-        )->assertOk();
+        )->assertForbidden();
 
-        $this->assertDatabaseMissing('workspace_user', [
+        $this->assertDatabaseHas('workspace_user', [
             'workspace_id' => $workspace->id,
             'user_id' => $member->id,
         ]);
@@ -325,12 +325,33 @@ class WorkspaceMemberApiTest extends TestCase
             );
     }
 
+    public function test_manager_cannot_remove_and_readd_member_with_another_role(): void
+    {
+        $owner = User::factory()->create();
+        $manager = User::factory()->create();
+        $member = User::factory()->create();
+        $workspace = $this->createWorkspaceFor($owner);
+        $workspace->members()->attach($manager->id, ['role' => 'manager']);
+        $workspace->members()->attach($member->id, ['role' => 'viewer']);
+        Sanctum::actingAs($manager);
+        $this->deleteJson("/api/workspaces/{$workspace->id}/members/{$member->id}")->assertForbidden();
+        $this->postJson("/api/workspaces/{$workspace->id}/members", [
+            'email' => $member->email,
+            'role' => 'manager',
+        ])->assertForbidden();
+        $this->assertDatabaseHas('workspace_user', [
+            'workspace_id' => $workspace->id,
+            'user_id' => $member->id,
+            'role' => 'viewer',
+        ]);
+    }
+
     private function createWorkspaceFor(User $user): Workspace
     {
         $workspace = Workspace::query()->create([
             'owner_id' => $user->id,
             'name' => 'Test Workspace',
-            'slug' => 'test-workspace-' . $user->id,
+            'slug' => 'test-workspace-'.$user->id,
             'description' => null,
             'visibility' => 'private',
         ]);

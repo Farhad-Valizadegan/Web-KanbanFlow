@@ -396,8 +396,8 @@ class WorkspaceAnalyticsApiTest extends TestCase
 
         $response = $this->getJson(
             "/api/workspaces/{$workspace->id}/analytics"
-                . '?upcoming_limit=0'
-                . '&assigned_limit=51'
+                .'?upcoming_limit=0'
+                .'&assigned_limit=51'
         );
 
         $response
@@ -437,8 +437,7 @@ class WorkspaceAnalyticsApiTest extends TestCase
 
         $project =
             Project::factory()->create([
-                'workspace_id' =>
-                    $workspace->id,
+                'workspace_id' => $workspace->id,
                 'created_by' => $user->id,
                 'status' => 'active',
             ]);

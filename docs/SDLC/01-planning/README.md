@@ -1,5 +1,7 @@
 # KanbanFlow SDLC — 01 Planning
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Planning turns a product need into bounded work with explicit outcomes, scope, dependencies, risks, and evidence expectations. It prepares the requirements phase and management backlog without assuming committed delivery dates or staffing.
 
 This folder contains working guidance, not proof that planning has been completed for every feature or that production delivery has occurred. Planning can be revisited as requirements, implementation evidence, or priorities change.

@@ -1,5 +1,7 @@
 # KanbanFlow Definition of Done
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 An item is Done when its agreed outcome is demonstrated, relevant checks pass, scoped review is complete, and affected documentation is updated. Completion is assessed against the item's acceptance criteria and an identified source revision, not against elapsed time or the amount of activity performed.
 
 This guide defines a completion gate for sprint work. It does not assert that existing backlog items already satisfy the gate or that a completed item has been released or deployed. Agree material item-specific requirements during [planning](sprint-planning.md) and [readiness assessment](definition-of-ready.md).

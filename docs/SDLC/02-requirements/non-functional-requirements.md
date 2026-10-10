@@ -1,5 +1,7 @@
 # KanbanFlow Non-functional Requirements
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Quality requirements describe observable constraints on behavior. This guide identifies relevant categories without inventing numerical service targets, a complete browser matrix, or production certification.
 
 ## Quality categories

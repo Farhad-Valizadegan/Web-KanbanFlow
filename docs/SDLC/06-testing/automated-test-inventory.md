@@ -1,5 +1,7 @@
 # KanbanFlow Automated Test Inventory
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Inventory basis
 
 This inventory describes committed test files and configured commands inspected during documentation work. No application test execution or numeric coverage measurement is claimed here. Inspect the assertions and run the candidate before assigning a pass status.
@@ -20,13 +22,13 @@ All feature files below are under [backend/tests/Feature](../../../backend/tests
 | `ReviewRegressionTest.php` | Private-board visibility including tasks/analytics/activity, removed-author denial, board/column deletion ordering, login throttling. |
 | Feature `ExampleTest.php` | Health endpoint response; not database readiness. |
 
-[Unit ExampleTest](../../../backend/tests/Unit/ExampleTest.php) is framework baseline material; its presence is not domain coverage. Existing direct-role tests do not close the manager removal/re-addition issue in [DEC-003](../../Project-Management/decision-register.md).
+[Unit ExampleTest](../../../backend/tests/Unit/ExampleTest.php) is framework baseline material; its presence is not domain coverage. The 2026-10-10 membership regression amendment closes the manager removal/re-addition issue in [DEC-003](../../Project-Management/decision-register.md).
 
 ## Commands and automation
 
 Run `php artisan test` from `backend/`. [PHPUnit configuration](../../../backend/phpunit.xml) defines Unit/Feature suites with in-memory SQLite, array sessions/cache/mail, and synchronous queues. This does not reproduce MySQL lock contention, browser cookie behavior, or production worker configuration.
 
-From `frontend/`, `npm run lint` checks ESLint and `npm run build` performs the TypeScript/Vite build. The [manifest](../../../frontend/package.json) defines no automated test script; no frontend behavioral coverage is asserted.
+From `frontend/`, `npm run lint` checks ESLint and `npm run build` performs the TypeScript/Vite build. The [manifest](../../../frontend/package.json) now defines `npm test` for ten protected-route session-boundary regression checks. These use controlled query outcomes and do not establish complete browser behavior.
 
 [CI](../../../.github/workflows/ci.yml) configures backend tests on PHP 8.4 and frontend lint/build on Node.js 24 for main pushes and pull requests. Capture an actual run link and SHA before reporting CI success.
 
@@ -60,7 +62,7 @@ Reinspect the candidate when source changes. Do not use the snapshot as a fixed 
 | Active-task WIP | TaskApiTest includes full-column creation, completed-task creation/movement, and reopening rejection cases. | Engine-specific competing operations and final persisted state when affected. |
 | Private data | ReviewRegressionTest includes private-board tasks/analytics/activity and deleted-task activity visibility cases. | Other changed routes, filters, roles, and consumers require their own acceptance cases. |
 | Removed access | ReviewRegressionTest includes removed comment-author edit/delete denial. | Current membership changes and related endpoints must be assessed separately. |
-| Membership authority | WorkspaceMemberApiTest includes direct role-change restrictions and manager add/remove cases. | The indirect remove/re-add bypass remains open; these tests do not resolve DEC-003. |
+| Membership authority | WorkspaceMemberApiTest includes direct role-change restrictions and manager add/remove cases. | Owner-only membership enforcement and indirect-path rejection checks now resolve DEC-003 locally. |
 | Own-user notifications | NotificationApiTest includes list/read/delete/read-all isolation and assignment-change behavior. | Actual runtime services and consumer behavior are separate checks. |
 
 Method names help locate evidence; they are not a substitute for reading assertions or executing the candidate. Consult [security matrix](security-regression-matrix.md) and [manual acceptance](manual-acceptance-checklist.md) for complementary scenarios.
@@ -79,7 +81,7 @@ Use [verification records](verification-record-template.md) to capture actual di
 
 ## Gaps and inventory evolution
 
-- Frontend static/build checks exist, but no automated frontend behavior test script is declared in the inspected manifest.
+- Frontend session regression checks now supplement static/build checks; complete browser journeys remain unverified here.
 - Browser acceptance, keyboard/focus, themes, real session behavior, and optimistic failure recovery need appropriate observations or newly implemented meaningful coverage.
 - MySQL contention, production-like workers, performance measurements, recovery rehearsal, and infrastructure security require separate environments and evidence.
 - Proposed attachment/PDF/sharing/password-change designs must not be listed as passing endpoint tests without implementation and actual checks.

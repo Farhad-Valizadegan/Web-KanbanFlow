@@ -33,7 +33,7 @@ class ProjectController extends Controller
         Request $request,
         Workspace $workspace
     ): JsonResponse {
-        $this->authorize('manageMembers', $workspace);
+        $this->authorize('manageProjects', $workspace);
 
         $validated = $request->validate([
             'name' => [
@@ -71,14 +71,10 @@ class ProjectController extends Controller
                 $workspace,
                 $validated['name']
             ),
-            'description' =>
-                $validated['description'] ?? null,
-            'status' =>
-                $validated['status'] ?? 'active',
-            'start_date' =>
-                $validated['start_date'] ?? null,
-            'due_date' =>
-                $validated['due_date'] ?? null,
+            'description' => $validated['description'] ?? null,
+            'status' => $validated['status'] ?? 'active',
+            'start_date' => $validated['start_date'] ?? null,
+            'due_date' => $validated['due_date'] ?? null,
         ]);
 
         $project->load('creator:id,name,email');
@@ -224,10 +220,9 @@ class ProjectController extends Controller
                 ->withTrashed()
                 ->when(
                     $ignoreProjectId !== null,
-                    fn ($query) =>
-                        $query->whereKeyNot(
-                            $ignoreProjectId
-                        )
+                    fn ($query) => $query->whereKeyNot(
+                        $ignoreProjectId
+                    )
                 )
                 ->where('slug', $slug)
                 ->exists()

@@ -1,5 +1,7 @@
 # Milestone 5 — Collaboration and Activity Tracking
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Historical status and source identity
 
 **Recorded status: Completed.** The original milestone record states completion after PR #29 merged. The local Git history confirms that cc326c6 is the merge commit for the activity-feed frontend pull request.

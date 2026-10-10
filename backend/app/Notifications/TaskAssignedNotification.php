@@ -16,8 +16,7 @@ class TaskAssignedNotification extends Notification
         private readonly Task $task,
         private readonly Workspace $workspace,
         private readonly User $assignedBy
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<int, string>
@@ -37,22 +36,14 @@ class TaskAssignedNotification extends Notification
     ): array {
         return [
             'type' => 'task_assigned',
-            'workspace_id' =>
-                $this->workspace->id,
-            'workspace_name' =>
-                $this->workspace->name,
-            'task_id' =>
-                $this->task->id,
-            'task_title' =>
-                $this->task->title,
-            'column_id' =>
-                $this->task->column_id,
-            'assigned_by_id' =>
-                $this->assignedBy->id,
-            'assigned_by_name' =>
-                $this->assignedBy->name,
-            'message' =>
-                "{$this->assignedBy->name} assigned you to task \"{$this->task->title}\".",
+            'workspace_id' => $this->workspace->id,
+            'workspace_name' => $this->workspace->name,
+            'task_id' => $this->task->id,
+            'task_title' => $this->task->title,
+            'column_id' => $this->task->column_id,
+            'assigned_by_id' => $this->assignedBy->id,
+            'assigned_by_name' => $this->assignedBy->name,
+            'message' => "{$this->assignedBy->name} assigned you to task \"{$this->task->title}\".",
         ];
     }
 }

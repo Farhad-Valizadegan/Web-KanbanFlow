@@ -1,5 +1,7 @@
 # KanbanFlow Security and Privacy Requirements
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Specify security and privacy at the affected access and data boundary. This guide is not a security audit, compliance certification, or proof that all defects are closed.
 
 ## Requirement boundaries

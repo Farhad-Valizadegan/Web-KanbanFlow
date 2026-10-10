@@ -1,5 +1,7 @@
 # KanbanFlow Authorization Decision Flow
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and design
 
 Resolve the authenticated actor and requested resource chain before evaluating the operation. Workspace membership is a read boundary; board visibility adds private-board restrictions. Board mutations require board visibility and owner/manager authority. Other resources must use their actual endpoint policy, not a blanket role assumption.

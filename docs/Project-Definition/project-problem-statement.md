@@ -1,5 +1,7 @@
 # KanbanFlow Project Problem Statement
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Core problem
 
 Teams organizing shared project work need to discover what tasks exist, who owns them, and where they sit in the workflow. When work information is scattered across notes, lists, and separate conversations, answering these questions can require manual reconstruction.

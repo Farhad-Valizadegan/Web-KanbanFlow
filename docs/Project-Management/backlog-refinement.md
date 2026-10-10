@@ -1,5 +1,7 @@
 # KanbanFlow Backlog Refinement
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose
 
 Refinement turns a candidate improvement or defect into work with a clear user outcome, scope, dependencies, and verification criteria. It reduces uncertainty before implementation without inventing estimates, approval, or delivery commitments.

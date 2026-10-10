@@ -129,8 +129,7 @@ class BoardApiTest extends TestCase
             ),
             [
                 'name' => 'Development Board',
-                'description' =>
-                    'Main software delivery board.',
+                'description' => 'Main software delivery board.',
                 'visibility' => 'workspace',
             ]
         );
@@ -998,7 +997,7 @@ class BoardApiTest extends TestCase
         Project $project
     ): string {
         return "/api/workspaces/{$workspace->id}"
-            . "/projects/{$project->id}/boards";
+            ."/projects/{$project->id}/boards";
     }
 
     private function boardUrl(
@@ -1009,7 +1008,7 @@ class BoardApiTest extends TestCase
         return $this->boardsUrl(
             $workspace,
             $project
-        ) . "/{$board->id}";
+        )."/{$board->id}";
     }
 
     private function boardMoveUrl(
@@ -1021,6 +1020,6 @@ class BoardApiTest extends TestCase
             $workspace,
             $project,
             $board
-        ) . '/move';
+        ).'/move';
     }
 }

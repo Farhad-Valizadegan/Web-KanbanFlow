@@ -1,5 +1,7 @@
 # KanbanFlow Design Decisions and Tradeoffs
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and design
 
 Record design choices in the project decision register with problem, alternatives, chosen direction, rationale, consequences, status, and evidence. Existing React/Laravel conventions are the starting point; a materially different interface or data boundary needs an explicit decision.

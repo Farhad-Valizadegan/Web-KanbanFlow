@@ -1,5 +1,7 @@
 # KanbanFlow Repository Layout
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and design
 
 `frontend/` contains the React application, with route pages in `src/pages`, shared components in `src/components`, feature code in `src/features`, and API configuration in `src/api`. `backend/` contains Laravel routes, controllers, policies, models, migrations, and tests.

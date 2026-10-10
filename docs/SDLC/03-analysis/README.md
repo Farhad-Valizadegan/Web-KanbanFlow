@@ -1,5 +1,7 @@
 # KanbanFlow SDLC — 03 Analysis
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Analysis connects agreed requirements to an evidence-based understanding of affected behavior, data, permissions, and technical constraints. Reproduce a defect when applicable, distinguish supported causes from hypotheses, and compare bounded approaches before handing work to design.
 
 This folder provides investigation guides and conceptual models. It does not establish a newly reproduced defect, complete security audit, exact physical database schema, or fresh application test result.

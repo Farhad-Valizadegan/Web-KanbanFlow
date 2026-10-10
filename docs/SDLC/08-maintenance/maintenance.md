@@ -1,5 +1,7 @@
 # KanbanFlow Maintenance Guide
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Intake and classification
 
 Record the reported behavior, expected outcome, affected actor/journey, candidate/runtime identity, environment, reproduction steps, and impact. Separate feature requests, defects, environment problems, documentation errors, and incidents using evidence. A login failure may reflect origin/session/API configuration rather than invalid credentials.

@@ -1,12 +1,13 @@
 {
   "name": "kanbanflow",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "test": "node --test tests/*.test.cjs",
     "preview": "vite preview"
   },
   "dependencies": {

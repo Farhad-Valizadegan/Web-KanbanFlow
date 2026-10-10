@@ -1,5 +1,7 @@
 # KanbanFlow Design
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and evidence
 
 This catalog connects requirements and analysis to frontend, API, authorization, data, and operational design. Documents distinguish source-observed behavior from proposed capabilities; documentation completion does not establish runtime verification.

@@ -1,5 +1,7 @@
 # KanbanFlow Authentication and Authorization
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and design
 
 The browser uses the configured Axios API client with credentials and XSRF support. Auth helpers obtain the Sanctum CSRF cookie before login/register/logout. Backend web routes expose guest login/register and authenticated logout; API resource routes use `auth:sanctum`.
@@ -36,7 +38,7 @@ After login/logout or actor changes, inspect actual query/cache and page state. 
 | --- | --- | --- |
 | Workspace/project reads | Current workspace membership | Check actual endpoint calls and nested ancestry |
 | Workspace update/delete | `owner_id` matches actor | Do not substitute manager authority for this rule |
-| Membership management | Owner or current manager | Indirect role changes through remove/re-add remain unresolved |
+| Membership management | Owner only | Add/remove and role updates share the owner boundary; managers retain project management separately |
 | Direct membership role update | Owner only | Does not by itself close the indirect escalation path |
 | Project update/delete | Owner or current manager | Endpoint context and parent consistency remain necessary |
 | Board reads | Membership required; workspace visibility or creator/owner/current manager satisfies additional visibility condition | Creator/owner status alone does not bypass the membership condition in `visibleTo` |
@@ -70,7 +72,7 @@ Use isolated accounts/resources. Record candidate commit, browser/backend origin
 
 ## Open issue and change review
 
-DEC-003/PB-001 remains open: managers can reach membership management while direct role updates are owner-only. Any policy change must address the indirect remove/re-add path, define intended manager authority, and verify positive/negative cases. Owner-only operational practice does not enforce a server restriction.
+DEC-003/PB-001 is implemented locally: membership mutations are owner-only, including removal/re-addition. API regression checks cover denied manager requests and preserved owner operations.
 
 Revisit this design after changes to session configuration, login limits, guards, membership rules, private visibility, nested endpoints, or account capabilities. Cross-check the [authorization flow](authorization-decision-flow.md), [request contracts](route-and-request-contracts.md), [error handling](error-handling-design.md), and [threat analysis](../03-analysis/security-threat-model-and-risk-analysis.md).
 

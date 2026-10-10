@@ -1,5 +1,7 @@
 # KanbanFlow Testing Verification Record Template
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Use
 
 Copy the record below and replace placeholders with actual observations. A blank template is not a completed review. Link the [release verification template](../../Releases/verification-template.md) when the candidate is being assessed for release; avoid conflicting duplicate result records.

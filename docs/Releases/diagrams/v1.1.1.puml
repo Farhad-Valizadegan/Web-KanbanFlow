@@ -1,0 +1,14 @@
+@startuml
+title KanbanFlow v1.1.1 Patch Scope
+rectangle "Owner-only membership\nSession error recovery\nPlain metadata UI" as Fix
+rectangle "Formatting and license metadata\nDocumentation and regression tests" as Support
+rectangle "Local candidate checks" as Check
+rectangle "Annotated source tag v1.1.1" as Tag
+Fix --> Check
+Support --> Check
+Check --> Tag
+note bottom of Tag
+Source publication is distinct from
+production deployment and data recovery.
+end note
+@enduml

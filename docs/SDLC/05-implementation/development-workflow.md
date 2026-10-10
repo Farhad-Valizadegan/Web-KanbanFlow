@@ -1,5 +1,7 @@
 # KanbanFlow Development Workflow
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Prepare the local checkout
 
 Inspect branch, remote, working-tree changes, and applicable repository instructions before editing. Preserve existing work and identify the exact requirement and affected paths. Use a focused branch for a new application change when appropriate; inspect its base before integrating. Do not reset or discard unrelated changes to obtain a clean tree.

@@ -131,7 +131,7 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::patch(
         'workspaces/{workspace}/projects/{project}'
-            . '/boards/{board}/move',
+            .'/boards/{board}/move',
         [
             BoardController::class,
             'move',
@@ -145,8 +145,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::patch(
         'workspaces/{workspace}/projects/{project}'
-            . '/boards/{board}'
-            . '/columns/{column}/move',
+            .'/boards/{board}'
+            .'/columns/{column}/move',
         [
             ColumnController::class,
             'move',
@@ -160,9 +160,9 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
     Route::patch(
         'workspaces/{workspace}/projects/{project}'
-            . '/boards/{board}'
-            . '/columns/{column}'
-            . '/tasks/{task}/move',
+            .'/boards/{board}'
+            .'/columns/{column}'
+            .'/tasks/{task}/move',
         [
             TaskController::class,
             'move',

@@ -1,5 +1,7 @@
 # KanbanFlow Public Access Sequence
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and design
 
 Frontend home/login/register routes provide public entry points; the backend health endpoint is outside the authenticated resource group. Workspace/project/board/task API resources remain authenticated. Public resource sharing is not established by public landing pages.

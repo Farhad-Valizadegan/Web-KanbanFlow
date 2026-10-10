@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.1 — 2026-10-10
+
+### Fixed
+
+- Reserve workspace membership additions/removals and role changes to owners, closing the manager remove/re-add bypass; update the UI to match.
+- Keep protected routes recoverable on network/server session-check failures; redirect only on confirmed HTTP 401.
+- Align backend license metadata with the existing proprietary repository terms.
+- Correct backend formatting and add protected-route session regression checks to CI.
+
+### Upgrade
+
+- No migrations or dependency version changes. Update the backend and rebuild the frontend. Managers must ask the owner to change workspace membership.
+- See [QA correction record](docs/SDLC/06-testing/qa-corrections-2026-10-10.md). Historical release issues below describe their original release state.
+
 ## 1.1.0 — 2026-10-07
 
 ### UI and UX

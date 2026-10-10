@@ -15,7 +15,7 @@ The repository is named **Web-KanbanFlow**; the application name is **KanbanFlow
 
 ## Version and status
 
-The frontend package declares version **1.1.0**. Consult release records and Git tags for published versions; a package version does not identify the source running on a server.
+The frontend package declares version **1.1.1**. Consult release records and Git tags for published versions; a package version does not identify the source running on a server.
 
 Workspace collaboration, Kanban workflows, comments, notifications, analytics, and light/dark themes are implemented. Verification results belong to a particular commit and environment. This README does not certify a current passing CI run or production deployment.
 
@@ -192,14 +192,15 @@ Run frontend checks from `frontend`:
 
 ```bash
 npm run lint
+npm test
 npm run build
 ```
 
 `npm run preview` serves a built frontend for local inspection; it still needs the API and compatible authentication configuration. It is not a production deployment procedure.
 
-The [CI workflow](.github/workflows/ci.yml) configures backend tests on PHP 8.4 and frontend lint/build on Node.js 24 for pushes and pull requests targeting `main`. Check [GitHub Actions](https://github.com/Farhad-Valizadegan/Web-KanbanFlow/actions) for results tied to the relevant commit.
+The [CI workflow](.github/workflows/ci.yml) configures backend tests on PHP 8.4 and frontend lint, session regression tests, and build on Node.js 24 for pushes and pull requests targeting `main`. Check [GitHub Actions](https://github.com/Farhad-Valizadegan/Web-KanbanFlow/actions) for results tied to the relevant commit.
 
-Backend SQLite tests do not establish MySQL locking or contention behavior. Frontend lint/build do not verify browser journeys or accessibility; there is currently no frontend behavioral-test script. Use the [manual acceptance checklist](docs/SDLC/06-testing/manual-acceptance-checklist.md), [automated test inventory](docs/SDLC/06-testing/automated-test-inventory.md), and [verification record template](docs/SDLC/06-testing/verification-record-template.md) to record actual results and limitations.
+Backend SQLite tests do not establish MySQL locking or contention behavior. Frontend lint/build do not verify browser journeys or accessibility; `npm test` covers the protected-route session boundary with controlled query outcomes, rather than complete browser journeys. Use the [manual acceptance checklist](docs/SDLC/06-testing/manual-acceptance-checklist.md), [automated test inventory](docs/SDLC/06-testing/automated-test-inventory.md), and [verification record template](docs/SDLC/06-testing/verification-record-template.md) to record actual results and limitations.
 
 ## Authorization and data boundaries
 
@@ -209,7 +210,7 @@ Nested-resource checks protect workspace/project/board/column/task relationships
 
 ## Known limitations
 
-- **DEC-003/PB-001 remains open:** manager remove/re-add membership behavior can indirectly escalate roles. Follow the [decision register](docs/Project-Management/decision-register.md) and [product backlog](docs/Project-Management/product-backlog.md) for remediation scope.
+- Membership changes are owner-only, including adding and removing users, to prevent indirect role changes. See [DEC-003](docs/Project-Management/decision-register.md) and [PB-001](docs/Project-Management/product-backlog.md).
 - Attachment uploads, PDF/export, public sharing, and password-change/recovery flows are proposed documentation topics, not implemented application endpoints.
 - Soft deletion does not establish a general descendant restore or permanent-erasure workflow.
 - Production hosting, operational monitoring, backup schedules, and recovery targets require target-specific setup and verification.
@@ -237,4 +238,4 @@ Copyright © 2026 Farhad Valizadegan. All rights reserved.
 
 This repository and its source code are provided solely for portfolio review. No permission is granted to copy, use, modify, distribute, publish, sublicense, sell, or create derivative works from any part of this project without the author's prior written permission.
 
-The backend Composer manifest currently declares `MIT`, which conflicts with the repository terms above. This metadata discrepancy remains unresolved; this README update preserves the author's existing terms.
+The backend Composer manifest declares `proprietary`, consistent with these repository terms. Third-party dependencies retain their own licenses.

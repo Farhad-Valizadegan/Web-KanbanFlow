@@ -1,5 +1,7 @@
 # KanbanFlow Verification Layers
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Evidence boundaries
 
 Choose the layer capable of answering the actual question. More passing checks at a weaker layer do not establish an untested property at another layer.

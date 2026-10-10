@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
 import { getCurrentUser } from '../../features/auth/api';
 
@@ -10,15 +11,23 @@ function ProtectedRoute() {
     });
 
     if (userQuery.isPending) {
-        return (
-            <main role="status" className="min-h-screen bg-slate-950 p-8 text-slate-300">
-                Loading session...
-            </main>
-        );
+        return <main role="status" className="state-screen"><p className="loading-state">Loading session…</p></main>;
     }
 
     if (userQuery.isError) {
-        return <Navigate to="/login" replace />;
+        if (isAxiosError(userQuery.error) && userQuery.error.response?.status === 401) {
+            return <Navigate to="/login" replace />;
+        }
+        return (
+            <main className="state-screen" role="alert">
+                <h1>Unable to check your session</h1>
+                <p>We couldn’t reach your account. Check your connection and try again.</p>
+                <button className="primary-button" disabled={userQuery.isFetching}
+                    onClick={() => void userQuery.refetch()}>
+                    {userQuery.isFetching ? 'Checking…' : 'Try again'}
+                </button>
+            </main>
+        );
     }
 
     return <Outlet />;

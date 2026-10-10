@@ -46,7 +46,7 @@ class ActivityLogController extends Controller
             ->whereHas('board', fn ($boards) => $boards->withTrashed()->visibleTo($request->user())))->select('id');
 
         $activities = ActivityLog::query()
-            ->when(! $request->user()->can('manageMembers', $workspace), fn ($query) => $query->where(fn ($activities) => $activities->where('subject_type', '!=', 'task')
+            ->when(! $request->user()->can('manageProjects', $workspace), fn ($query) => $query->where(fn ($activities) => $activities->where('subject_type', '!=', 'task')
                 ->orWhereIn('subject_id', $visibleTaskIds)))
             ->where(
                 'workspace_id',

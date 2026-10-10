@@ -1,5 +1,7 @@
 # KanbanFlow Sprints
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 This section provides guides and templates for planning, executing, and reviewing agreed sprints. It does not establish dated sprint history, staffing, velocity, or completion from repository commits. Historical delivery milestones are recorded in the [milestones index](../Project-Management/milestones.md).
 
 Use a sprint to pursue a clear user or operational outcome within agreed dates and available capacity. The guidance here complements KanbanFlow's backlog and ongoing workflow; it does not impose a fixed sprint length or invent commitments for the project.

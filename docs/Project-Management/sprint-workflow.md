@@ -1,5 +1,7 @@
 # KanbanFlow Sprint Workflow
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and planning boundary
 
 This guide describes a working sprint process for delivering a coherent outcome with evidence. It connects refinement, planning, implementation, verification, review, and follow-up.

@@ -1,5 +1,7 @@
 # KanbanFlow Sprint Planning
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Sprint planning agrees a coherent goal and a feasible set of work for actual participants and dates. It connects refined needs to observable acceptance criteria, dependencies, ownership, and verification. A planning record describes agreed intentions; it does not demonstrate implementation or completion.
 
 This guide does not impose a fixed sprint duration or assert a scheduled sprint, team size, velocity, or capacity baseline. Use the [sprint index](README.md) to create records only when a sprint is agreed.

@@ -1,5 +1,7 @@
 # KanbanFlow System Architecture Diagram
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and design
 
 KanbanFlow uses a React/TypeScript frontend with Vite, shared theme/layout/UI components, API helpers, and query state. A Laravel backend handles session authentication, API controllers, policies, validation, Eloquent persistence, and database notifications.

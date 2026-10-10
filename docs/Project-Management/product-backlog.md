@@ -1,5 +1,7 @@
 # KanbanFlow Product Backlog
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and current boundary
 
 This backlog records candidate improvements, one known defect, and ongoing documentation work. It is a planning record, not an imported GitHub issue list, sprint commitment, or assertion that all items are ready.
@@ -10,7 +12,7 @@ The stable IDs PB-001 through PB-004 are retained. Named owners, estimates, deli
 
 | ID | Outcome | Dependency | State |
 | --- | --- | --- | --- |
-| PB-001 | Close the manager remove/re-add role-change loophole. | DEC-003 membership policy agreement. | Policy blocked; known defect. |
+| PB-001 | Close the manager remove/re-add role-change loophole. | DEC-003 membership policy agreement. | Implemented locally; owner-only membership enforcement. |
 | PB-002 | Provide verified user guidance for core journeys. | Agreed journeys and behavior; final membership guidance depends on PB-001. | Proposed. |
 | PB-003 | Provide environment-specific, verified backup and recovery guidance. | Target environment, recovery decisions, and isolated test setup. | Proposed. |
 | PB-004 | Keep documentation claims, links, sources, and previews consistent. | Changes to source, policy, paths, and releases. | Ongoing maintenance practice; no permanent completion claim. |
@@ -32,7 +34,7 @@ Managers can bypass intended owner-only role changes by removing and re-adding a
 
 ### Dependencies, exclusions, and state
 
-Resolve [DEC-003](decision-register.md) before selecting enforcement implementation. Do not assume that managers may manage only viewers or that owners exclusively manage all membership; these remain candidate directions.
+DEC-003 selected owner-only membership mutations on 2026-10-10. Implementation and API regressions close the bypass locally; the earlier problem description records its original motivation.
 
 Exclude unrelated role redesign or account administration. The item remains open and policy blocked. Owners should manage membership meanwhile. Link actual implementation and checks before marking it done.
 

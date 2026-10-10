@@ -1,5 +1,7 @@
 # KanbanFlow Monitoring and Incident Response
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Current evidence and limits
 
 [Laravel logging configuration](../../../backend/config/logging.php) defines selectable channels; the example environment uses a stack with a single-file log. This is configuration, not proof of deployed collection, alert routing, retention, or operator response. CI is development verification, not production monitoring. No observability service or scheduled monitoring job is installed by this document.

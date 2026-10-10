@@ -142,8 +142,7 @@ class WorkspaceApiTest extends TestCase
         $this->patchJson(
             "/api/workspaces/{$workspace->id}",
             [
-                'name' =>
-                    'Unauthorized Update',
+                'name' => 'Unauthorized Update',
             ]
         )->assertForbidden();
 
@@ -152,8 +151,7 @@ class WorkspaceApiTest extends TestCase
         $this->patchJson(
             "/api/workspaces/{$workspace->id}",
             [
-                'name' =>
-                    'Updated Workspace',
+                'name' => 'Updated Workspace',
             ]
         )
             ->assertOk()
@@ -212,10 +210,8 @@ class WorkspaceApiTest extends TestCase
         $deletedWorkspace =
             Workspace::query()->create([
                 'owner_id' => $user->id,
-                'name' =>
-                    'Engineering Workspace',
-                'slug' =>
-                    'engineering-workspace',
+                'name' => 'Engineering Workspace',
+                'slug' => 'engineering-workspace',
                 'description' => null,
                 'visibility' => 'private',
             ]);
@@ -242,8 +238,7 @@ class WorkspaceApiTest extends TestCase
             Workspace::query()->create([
                 'owner_id' => $user->id,
                 'name' => 'Test Workspace',
-                'slug' =>
-                    'test-workspace-' .
+                'slug' => 'test-workspace-'.
                     $user->id,
                 'description' => null,
                 'visibility' => 'private',

@@ -1,5 +1,7 @@
 # KanbanFlow SDLC — 02 Requirements
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Requirements translate a user need and agreed planning scope into observable behavior and constraints. Include relevant role permissions, validation, failure feedback, persistence, and accessibility. Keep delivered behavior, proposed changes, and unresolved decisions distinct.
 
 This guide defines a working process and reusable record. It does not establish that every requirement is agreed, implemented, tested, or deployed. Iterate when analysis or new evidence reveals ambiguity.

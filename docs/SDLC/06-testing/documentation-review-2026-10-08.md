@@ -1,5 +1,7 @@
 # KanbanFlow Testing Documentation Review — 2026-10-08
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and baseline
 
 This record concerns creation of the `docs/SDLC/06-testing` catalog and supporting documents. The starting repository baseline was `cab28f31817c69441a99f544439c97d465ca0990`. The original documentation delivery commit was `63adaf5ea3bbf0682f4c80584582a3ff3fe4b6ca`. It is not described as an application-tested candidate. Later amendments are identified in Git history and do not change the original review date.

@@ -34,19 +34,22 @@ class WorkspacePolicy
     }
 
     /**
-     * Determine whether the user can manage workspace members.
+     * Manage workspace projects and privileged activity visibility.
      */
-    public function manageMembers(User $user, Workspace $workspace): bool
+    public function manageProjects(User $user, Workspace $workspace): bool
     {
         if ($workspace->owner_id === $user->id) {
             return true;
         }
 
-        $role = $workspace->members()
+        return $workspace->members()
             ->where('users.id', $user->id)
-            ->value('workspace_user.role');
+            ->value('workspace_user.role') === 'manager';
+    }
 
-        return $role === 'manager';
+    public function manageMembers(User $user, Workspace $workspace): bool
+    {
+        return $workspace->owner_id === $user->id;
     }
 
     /**

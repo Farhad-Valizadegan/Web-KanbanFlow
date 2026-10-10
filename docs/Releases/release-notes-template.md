@@ -1,5 +1,7 @@
 # KanbanFlow Release Notes Template
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and use
 
 Use this document to prepare notes for an actual KanbanFlow source release. It provides a copyable format and review guidance; it is not itself a published release, version approval, or deployment record.

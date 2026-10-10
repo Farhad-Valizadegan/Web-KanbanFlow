@@ -1,5 +1,7 @@
 # KanbanFlow Testing Procedure
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Prepare
 
 Record full candidate SHA, affected requirements, actual tool versions, environment, and data isolation. Inspect local changes and test configuration before running commands. Preserve unrelated work and never use destructive database reset commands against an unidentified or shared database.

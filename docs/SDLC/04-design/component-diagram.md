@@ -1,5 +1,7 @@
 # KanbanFlow Component Diagram
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and design
 
 The frontend comprises route pages, auth guards, layout/theme/UI components, feature components, API helpers, and query state. Laravel comprises routes, controllers, validation, policies, Eloquent models, and persisted records. These are responsibility boundaries rather than independently deployed microservices.

@@ -1,5 +1,7 @@
 # KanbanFlow Test Strategy
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Objectives and scope
 
 Demonstrate accepted user behavior while preventing unauthorized access, cross-workspace changes, corrupt ordering, and misleading client state. Tie the scope to the candidate diff and [requirements](../02-requirements/README.md). Prioritize integrity and confidentiality failures before cosmetic defects; document the impact rather than relying on an invented severity score.

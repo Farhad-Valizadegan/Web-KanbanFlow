@@ -1,5 +1,7 @@
 # KanbanFlow Security Regression Matrix
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope
 
 Use isolated users and fixtures to assess application authority and confidentiality. This matrix is a verification plan with source references, not an executed penetration test. Resolve exact expectations against current controllers/policies and agreed requirements before recording outcomes.

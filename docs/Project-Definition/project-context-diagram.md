@@ -1,5 +1,7 @@
 # KanbanFlow Project Context
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose
 
 This document locates KanbanFlow among its users, supporting services, and development infrastructure. It explains the major interaction and responsibility boundaries without prescribing a hosting provider or deployment topology.

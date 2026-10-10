@@ -1,5 +1,7 @@
 # KanbanFlow Incident Triage
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and prerequisites
 
 Triage determines observed impact, immediate containment needs, and the next evidence-based action. No active incident, on-call owner, response-time commitment, or notification channel is established here. Select those responsibilities for the actual environment.

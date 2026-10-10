@@ -1,5 +1,7 @@
 # KanbanFlow Sprint Backlog Template
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Use a sprint backlog to record the work selected for an agreed sprint, its intended outcomes, current states, dependencies, and evidence. It is a working record linked to the sprint goal, not a promise that every proposed item will be completed.
 
 This document is a reusable guide and template. Placeholder items, dates, and owners below are not scheduled commitments or actual sprint history. Create a record using the [sprint index](README.md) only after the sprint is agreed.

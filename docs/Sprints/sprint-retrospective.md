@@ -1,5 +1,7 @@
 # KanbanFlow Sprint Retrospective Template
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Use a retrospective to examine how work was planned, coordinated, verified, and reviewed, then agree practical process improvements. Discuss what helped delivery, what hindered it, and what should change next. Separate process observations from unsupported assumptions about people.
 
 This guide is a reusable template. It does not establish a meeting, attendance, satisfaction score, or completed improvement. A retrospective complements the [sprint review](sprint-review.md): the review assesses demonstrated product outcomes, while the retrospective examines the working process.

@@ -1,10 +1,16 @@
 # KanbanFlow Releases
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Purpose and evidence boundary
 
 This section records published source releases and provides working guidance for preparing, verifying, publishing, upgrading, and assessing rollback. The [changelog](../../CHANGELOG.md) remains the main released change history.
 
 A release record describes a particular source version and its reported validation. It does not establish production deployment, a service-level guarantee, or verified data recovery. Historical results are not fresh test evidence for current main.
+
+## Latest source tag
+
+[v1.1.1](v1.1.1.md) — 2026-10-10: membership security, session recovery, formatting/license corrections, and documentation. This source tag is separate from the historical GitHub Release records below.
 
 ## Published release index
 

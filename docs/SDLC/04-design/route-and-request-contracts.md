@@ -1,5 +1,7 @@
 # KanbanFlow Route and Request Contracts
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 ## Scope and design
 
 Frontend navigation routes are declared in `frontend/src/App.tsx`. Backend auth routes are in `backend/routes/web.php`; API routes in `backend/routes/api.php` expose nested workspace/project/board/column/task/comment resources and relevant move endpoints.

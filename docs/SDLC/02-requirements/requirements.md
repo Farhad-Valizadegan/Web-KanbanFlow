@@ -1,5 +1,7 @@
 # KanbanFlow Requirements Specification Guide
 
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+
 Use this document to organize requirements for a bounded change. It is a specification framework, not a completed approval or verification record. The [requirements index](README.md) defines the phase and its analysis handoff.
 
 ## Specification contents
