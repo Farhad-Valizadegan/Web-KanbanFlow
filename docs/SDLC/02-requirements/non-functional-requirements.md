@@ -1,6 +1,6 @@
 # KanbanFlow Non-functional Requirements
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Quality requirements describe observable constraints on behavior. This guide identifies relevant categories without inventing numerical service targets, a complete browser matrix, or production certification.
 
@@ -68,7 +68,7 @@ Browser-local theme storage is separate from shared work data; it does not imply
 
 ## Risk-based selection
 
-Assess affected user journeys and failure consequences using the quality and risk plan. Include permission revocation, stale state, rollback, and contention when relevant. The manager remove/re-add role loophole remains tracked in DEC-003/PB-001; an access-protection criterion depending on its unresolved policy cannot be declared complete.
+Assess affected user journeys and failure consequences using the quality and risk plan. Include permission revocation, stale state, rollback, and contention when relevant. DEC-003/PB-001 records owner-only membership enforcement; recheck direct/indirect access criteria for affected candidates.
 
 Use the [decision register](../../Project-Management/decision-register.md) for actual policy or target agreement and [product backlog](../../Project-Management/product-backlog.md) for follow-up work. Keep unrelated residual risks visible without treating every one as a blocker for every documentation item.
 

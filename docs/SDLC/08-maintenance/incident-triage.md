@@ -1,6 +1,6 @@
 # KanbanFlow Incident Triage
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and prerequisites
 
@@ -67,7 +67,7 @@ Avoid reproducing harmful writes or exposure against real users to prove a hypot
 | Login or service outage | Actual response/origin/session/service/database behavior and affected scope; do not assume credentials are wrong. |
 | Intermittent stale/movement issue | Competing operations, source/destination, conflicts, final ordering/WIP, and engine-specific behavior. |
 | Client-only inconsistency | Running assets/API, response/cache state, failure recovery, browser context, and persistence after refresh. |
-| Known policy issue | Link DEC-003 or relevant decision; do not confuse documentation with a fix or invent policy approval. |
+| Known policy issue | Link the relevant decision; DEC-003 records the corrected owner-only rule and regression evidence, not a current open defect. |
 
 Prioritize confirmed confidentiality/integrity risk and ongoing harm. If impact remains uncertain, keep the uncertainty visible while gathering bounded evidence; unrelated successful checks do not disprove the reported problem.
 

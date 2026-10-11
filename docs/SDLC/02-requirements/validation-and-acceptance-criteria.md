@@ -1,6 +1,6 @@
 # KanbanFlow Validation and Acceptance Criteria
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Acceptance criteria define observable success for an agreed requirement. Validation rules specify allowed input and state conditions. Neither is a performed test result until evidence is recorded at an identified candidate.
 
@@ -77,7 +77,7 @@ The following examples are specification aids, not newly agreed scope or fresh r
 | Removed comment author | Former member attempts a comment mutation | Applicable access is revoked despite authorship | Combined controller and policy checks |
 | Invalid form | Input violates an actual validation rule | Useful field/error feedback and no false persisted success | Actual field rule and request behavior |
 
-Do not close a defect using a demonstration that omits its failing boundary. The manager remove/re-add role loophole remains tracked by DEC-003/PB-001; a direct owner-only role-update check does not close that indirect path.
+Do not close a defect using a demonstration that omits its failing boundary. DEC-003/PB-001 records owner-only membership enforcement and direct/indirect regression evidence. Candidate checks must cover manager add/remove/re-add rejection and unchanged persisted membership as well as direct role updates.
 
 ## Copyable criterion and check record
 

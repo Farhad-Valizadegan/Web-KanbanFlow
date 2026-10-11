@@ -1,13 +1,13 @@
 # KanbanFlow Domain Model
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 This conceptual model explains the workspace/project/board/column/task hierarchy and supporting collaboration data. It is not a complete physical database schema. Check actual migrations, model relations, keys, and deletion behavior before a data-model change.
 
 | Concept | Domain responsibility | Boundary |
 | --- | --- | --- |
 | User | Account participating in workspaces | Session identity is separate from resource permission |
-| Workspace membership | Relate a user to workspace access/role | Current role and unresolved membership policy matter |
+| Workspace membership | Relate a user to workspace access/role | Current role and owner-only membership mutation policy matter |
 | Workspace | Organize projects and membership | Ownership and membership must not be conflated |
 | Project | Group boards within a workspace | Nested ancestry |
 | Board | Define visible workflow context | Workspace/private visibility |
@@ -52,7 +52,7 @@ An authenticated user identity is distinct from workspace membership, ownership,
 
 Private-board visibility uses current membership plus creator/owner/manager conditions. Assignment or comment authorship does not grant universal board access. Removing membership must revoke applicable access even when authored content remains stored.
 
-Use [roles requirements](../02-requirements/roles-and-use-cases.md) and [business rules](business-rules-catalog.md) for combined policy/controller boundaries. DEC-003/PB-001 remains the unresolved manager remove/re-add role issue; the model does not imply that intended role restrictions are fully enforced.
+Use [roles requirements](../02-requirements/roles-and-use-cases.md) and [business rules](business-rules-catalog.md) for combined policy/controller boundaries. DEC-003/PB-001 records owner-only membership enforcement; candidate-specific role checks remain required.
 
 ## State and invariants
 

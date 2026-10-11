@@ -1,6 +1,6 @@
 # KanbanFlow Schema Reference
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -89,7 +89,7 @@ Role/status/priority/visibility columns are strings with defaults, not declared 
 
 WIP limit nullability/type does not implement active-task counting. Position indexes do not ensure contiguous ordering. Date columns do not enforce the project's date-order rule. A logo_path string does not implement uploads, and notification storage does not establish email/SMS or streaming.
 
-Model casts, fillable fields, JSON serialization, and endpoint accepted fields have different responsibilities. Cross-check the model and selected API contract instead of equating schema availability with client authority. DEC-003/PB-001 membership authority remains unresolved independently of schema uniqueness.
+Model casts, fillable fields, JSON serialization, and endpoint accepted fields have different responsibilities. Cross-check the model and selected API contract instead of equating schema availability with client authority. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Migration change and verification record
 

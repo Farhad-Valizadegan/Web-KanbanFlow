@@ -1,6 +1,6 @@
 # KanbanFlow Security and Privacy Requirements
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Specify security and privacy at the affected access and data boundary. This guide is not a security audit, compliance certification, or proof that all defects are closed.
 
@@ -24,7 +24,7 @@ Private-board visibility applies to listings, nested tasks/comments, analytics, 
 
 ## Known unresolved issue
 
-The manager remove/re-add membership role loophole remains open under DEC-003/PB-001. Direct owner-only role updates do not close the indirect path. Owners should manage membership until the policy and enforcement are resolved. Link the [decision register](../../Project-Management/decision-register.md) rather than presenting an undecided rule as settled.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. The add/remove endpoints enforce the same owner-only boundary. Link the [decision register](../../Project-Management/decision-register.md) for the selected rule and dated regression evidence.
 
 ## Change-specific record
 
@@ -79,7 +79,7 @@ The browser is a client, not the authority for server access. Hidden controls an
 | Ordinary member requests another user's private board | Restricted board and nested/aggregate data remain unavailable |
 | Client submits an identifier from another resource hierarchy | Ancestry and authorization checks reject the request |
 | Client keeps outdated permissions | Server uses current rules rather than trusting cached UI state |
-| Manager changes a role through remove/re-add | Keep the known loophole and required policy decision explicit |
+| Manager changes a role through remove/re-add | Reject manager add/remove requests and preserve persisted membership under DEC-003 |
 | Repeated login attempts | Assess recorded limits and structured rejection in isolated checks |
 | Error output or screenshot includes secrets | Remove sensitive detail and retain a safe, relevant summary |
 

@@ -1,6 +1,6 @@
 # KanbanFlow Sprint Backlog Template
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Use a sprint backlog to record the work selected for an agreed sprint, its intended outcomes, current states, dependencies, and evidence. It is a working record linked to the sprint goal, not a promise that every proposed item will be completed.
 
@@ -81,7 +81,7 @@ Use the [Definition of Done](definition-of-done.md) for completion. A started ta
 
 Link blockers in [daily progress](daily-progress.md). Describe the missing condition, the affected criterion or next step, and what would resolve it. Continue independent work only when it does not depend on the missing condition and still supports the goal.
 
-The membership-policy decision in DEC-003 and related PB-001 work remain tracked in the [decision register](../Project-Management/decision-register.md) and product backlog. Do not mark dependent role-enforcement implementation Ready or Done while its required policy is unresolved. A bounded investigation may be separately defined with its own question and evidence output.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Future delegation remains dependent on a new safe policy; investigations must state their question, evidence output, and stopping point.
 
 ## Scope changes
 

@@ -6,7 +6,7 @@ start
 :Record v1.0.1 automated evidence;
 :Record v1.0.2 session and analytics follow-up;
 :Distinguish browser and MySQL scenario evidence;
-:Keep membership policy loophole open;
+:Link v1.1.1 owner-only membership correction;
 :Verify affected behavior for each new candidate;
 stop
 @enduml

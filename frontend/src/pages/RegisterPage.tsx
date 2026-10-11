@@ -1,5 +1,7 @@
 import { authenticationErrorMessage } from '../features/auth/errorMessage';
 import PasswordField from '../components/ui/PasswordField';
+import AuthLayout from '../components/auth/AuthLayout';
+import Icon from '../components/ui/Icon';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
@@ -81,13 +83,8 @@ function RegisterPage() {
     };
 
     return (
-        <main className="flex min-h-screen items-center justify-center bg-slate-950 px-6 py-12 text-slate-100">
-            <section className="w-full max-w-md border border-slate-800 bg-slate-900 p-8">
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                    KanbanFlow
-                </p>
-
-                <h1 className="mt-3 text-3xl font-bold">
+        <AuthLayout>
+                <h1 className="text-3xl font-bold">
                     Create account
                 </h1>
 
@@ -207,11 +204,12 @@ function RegisterPage() {
                     <button
                         type="submit"
                         disabled={registerMutation.isPending}
-                        className="w-full bg-blue-600 px-4 py-2 font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+                        className="primary-button w-full disabled:cursor-not-allowed disabled:opacity-60"
                     >
                         {registerMutation.isPending
                             ? 'Creating account...'
                             : 'Create account'}
+                        {!registerMutation.isPending && <Icon name="arrow" size={18} />}
                     </button>
                 </form>
 
@@ -224,8 +222,7 @@ function RegisterPage() {
                         Sign in
                     </Link>
                 </p>
-            </section>
-        </main>
+        </AuthLayout>
     );
 }
 

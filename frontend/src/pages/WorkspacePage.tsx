@@ -71,13 +71,9 @@ function WorkspacePage() {
                     &larr; Back to dashboard
                 </Link>
 
-                <header className="mt-6 border border-slate-800 bg-slate-900 p-8">
+                <header className="page-heading mt-6 border border-slate-800 bg-slate-900 p-8">
                     <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
                         <div>
-                            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                                Workspace
-                            </p>
-
                             <h1 className="mt-3 text-3xl font-bold">
                                 {
                                     workspace.name
@@ -112,10 +108,6 @@ function WorkspacePage() {
 
                 <section className="mt-10">
                     <div>
-                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                            Projects
-                        </p>
-
                         <h2 className="mt-2 text-2xl font-bold">
                             Workspace projects
                         </h2>

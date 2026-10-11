@@ -15,7 +15,7 @@ The repository is named **Web-KanbanFlow**; the application name is **KanbanFlow
 
 ## Version and status
 
-The frontend package declares version **1.1.1**. Consult release records and Git tags for published versions; a package version does not identify the source running on a server.
+The frontend package declares version **1.2.0**. Consult release records and Git tags for published versions; a package version does not identify the source running on a server.
 
 Workspace collaboration, Kanban workflows, comments, notifications, analytics, and light/dark themes are implemented. Verification results belong to a particular commit and environment. This README does not certify a current passing CI run or production deployment.
 

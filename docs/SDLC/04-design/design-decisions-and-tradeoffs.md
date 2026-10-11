@@ -1,6 +1,6 @@
 # KanbanFlow Design Decisions and Tradeoffs
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -8,7 +8,7 @@ Record design choices in the project decision register with problem, alternative
 
 Evaluate client responsiveness against authoritative server state, reusable components against feature-specific behavior, and transaction scope against contention. Document actual consequences rather than invented performance numbers.
 
-DEC-003/PB-001 membership authority is unresolved. PDF export, attachments, public sharing, saved drafts, and password change require new scoped decisions; their presence in this catalog does not approve implementation.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. PDF export, attachments, public sharing, saved drafts, and password change require new scoped decisions; their presence in this catalog does not approve implementation.
 
 ## Authority and decision status
 
@@ -18,7 +18,7 @@ The [decision register](../../Project-Management/decision-register.md) owns stab
 | --- | --- | --- |
 | DEC-001: naming | Implemented: product KanbanFlow; repository/folder Web-KanbanFlow | Use consistent user-facing names and setup references without rewriting historical release facts |
 | DEC-002: themes | Implemented: Light/Dark/System with browser-local preference | Review consuming UI for appearance, focus, and readability; account-wide cross-device preference is not established |
-| DEC-003 / PB-001: membership authority | Open | Do not infer a chosen policy from the role name or from direct role-update restrictions |
+| DEC-003 / PB-001: membership authority | Implemented | Owner-only membership mutations; see the decision register and dated QA correction |
 
 An observed implementation without a separate approval record must retain that limitation. A diagram, published document, or completed source change does not establish that a material policy decision was approved or verified.
 
@@ -45,7 +45,7 @@ These comparisons are review prompts, not records of rejected options or new sel
 | Client feedback versus authoritative state | Feature UI/query state presents requests; server validates and persists | Optimistic updates may improve perceived responsiveness but need rollback/reconciliation and denied/uncertain-response handling |
 | Query freshness versus request volume | Current query defaults include 30-second stale time, one retry, no focus refetch; per-query overrides exist | More refetching or polling changes traffic and freshness; streaming requires an explicit new contract and evidence |
 | Shared UI versus feature specialization | Layout/theme/UI components coexist with feature components | More reuse can improve consistency but can obscure operation-specific states; specify which behavior belongs in each component |
-| Delegated membership versus owner control | Direct role updates are owner-only; manager add/remove path leaves DEC-003 open | Owner-exclusive or explicitly constrained manager operations need agreed rules and direct/indirect enforcement |
+| Delegated membership versus owner control | All membership mutations are owner-only under DEC-003 | Managers retain project/board management; future membership delegation requires a new safe policy and regressions |
 | Transaction scope versus contention | Relevant board/column/task paths use transactions/locks | Broader locks may simplify invariants but affect contention; narrower locks require evidence that ordering/WIP remains valid |
 | Soft deletion versus physical cleanup | Core resource models use soft deletion; physical foreign keys have cascade/null actions | Retention, restore, or erasure changes need explicit lifecycle rules, migration implications, and recoverable evidence |
 | Local theme versus account preference | DEC-002 stores preference in the browser | Account persistence introduces server/profile contracts and cross-device behavior; it is not implied by tab synchronization |
@@ -55,11 +55,11 @@ For concurrency comparisons, SQLite results alone do not establish MySQL content
 
 ## DEC-003 worked comparison
 
-The unresolved problem is indirect role change through manager removal/re-addition. The decision register identifies two candidate directions: owners manage membership exclusively, or managers have an explicitly constrained subset of operations. Neither is selected by this document.
+The original problem was indirect role change through manager removal/re-addition. DEC-003 selected owner-exclusive membership mutations on 2026-10-10. Constrained manager delegation remains a possible future change requiring an explicit safe policy.
 
-Compare each direction against permitted add/remove/assigned roles, protection of owners and existing members, current-membership checks, delegated administration needs, and failure feedback. Then define regression scenarios for direct role update, removal, re-addition, denied actors, and owner protections. A frontend restriction or owner-only operating practice cannot close a backend authorization gap.
+The selected rule reduces delegated administration while preserving owner control. Regression scenarios cover direct role updates, manager addition/removal and re-addition attempts, denied actors, and owner protections. A frontend restriction or owner-only operating practice cannot close a backend authorization gap.
 
-Once an actual outcome is recorded, link PB-001 implementation and candidate-specific checks. Preserve the open state until the required decision and enforcement evidence exist.
+PB-001 links the implemented outcome and dated QA evidence. Revalidate affected candidates before claiming current acceptance or deployment.
 
 ## Decision record template
 

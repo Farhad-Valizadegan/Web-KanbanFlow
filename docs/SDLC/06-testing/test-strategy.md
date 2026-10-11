@@ -1,6 +1,6 @@
 # KanbanFlow Test Strategy
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Objectives and scope
 
@@ -81,7 +81,7 @@ Entry requires an identifiable candidate, explicit acceptance cases, appropriate
 | Missing required layer | Record Not run or a gap with next action; do not infer correctness from another layer. |
 | Affected cases demonstrated | Record candidate/environment-specific scope and residual limits; release/deployment uses its own assessment. |
 
-DEC-003 remains a known policy/enforcement issue. Proposed files/PDF/sharing/password-change designs are not passing endpoint capabilities. No numerical coverage target, uptime achievement, performance benchmark, or conformance certification is created by this strategy.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Proposed files/PDF/sharing/password-change designs are not passing endpoint capabilities. No numerical coverage target, uptime achievement, performance benchmark, or conformance certification is created by this strategy.
 
 ## Reporting and maintenance
 
@@ -93,7 +93,7 @@ Update the strategy when actual risks, implementation, tooling, or environments 
 
 Run targeted cases first, then the relevant existing suite and configured static/build checks. Investigate failures without deleting assertions or weakening authority to obtain green results. Recheck the corrected candidate and affected consumers. Capture pass, fail, blocked, not run, or justified not applicable for each criterion.
 
-Exit requires evidence for the affected acceptance cases and disclosure of material gaps. Unresolved [DEC-003](../../Project-Management/decision-register.md) remains an open issue, not an accepted fix. No accessibility certification, performance threshold, or security audit is inferred from lint/build or source inspection.
+Exit requires evidence for the affected acceptance cases and disclosure of material gaps. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. No accessibility certification, performance threshold, or security audit is inferred from lint/build or source inspection.
 
 Use [testing procedure](testing.md), [manual checklist](manual-acceptance-checklist.md), and [verification record](verification-record-template.md) to execute and record the strategy.
 

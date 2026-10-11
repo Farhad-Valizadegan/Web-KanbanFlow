@@ -1,6 +1,6 @@
 # KanbanFlow Maintenance Guide
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Intake and classification
 
@@ -12,7 +12,7 @@ Protect private data when collecting screenshots or logs. Do not publish credent
 
 Prioritize confidentiality/integrity failures, widespread service disruption, and blocked core journeys by observed impact. Record uncertainty, workarounds, acceptance cases, and dependencies. Link [product backlog](../../Project-Management/product-backlog.md) and [decision register](../../Project-Management/decision-register.md) rather than inventing approval dates, owners, or numerical service targets.
 
-DEC-003 covers the manager removal/re-addition role bypass. Documentation and direct-role tests do not resolve it. Agree the intended policy, cover indirect operations, implement server enforcement, and verify before closing the issue.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Preserve backend enforcement and direct/indirect regressions during maintenance.
 
 ## Fix and verify
 

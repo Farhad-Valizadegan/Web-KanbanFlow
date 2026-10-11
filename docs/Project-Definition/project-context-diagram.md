@@ -1,6 +1,6 @@
 # KanbanFlow Project Context
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose
 
@@ -25,7 +25,7 @@ The application boundary includes the React/TypeScript frontend and Laravel back
 | Maintainer | Changes source, reviews implementation, and examines automated verification. |
 | Operator | Configures and runs services, maintains database availability, and plans recovery. |
 
-Responsibilities are distinct from a complete authorization matrix. The known manager remove/re-add role-change loophole remains unresolved; this context diagram does not claim that all intended role boundaries are fully enforced.
+Responsibilities are distinct from a complete authorization matrix. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Systems and boundaries
 
@@ -75,7 +75,7 @@ This document describes architectural responsibilities, not a security certifica
 
 The view does not promise offline editing, a guaranteed real-time synchronization service, external task integrations, billing, or email/SMS delivery. Current notification documentation describes database notifications.
 
-Hosting topology, numerical availability/capacity targets, recovery objectives, and a supported browser matrix remain operational decisions. The manager membership policy requires explicit agreement and enforcement before its known loophole can be closed.
+Hosting topology, numerical availability/capacity targets, recovery objectives, and a supported browser matrix remain operational decisions. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Diagram notation
 

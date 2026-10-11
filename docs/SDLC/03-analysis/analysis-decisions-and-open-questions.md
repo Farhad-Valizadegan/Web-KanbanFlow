@@ -1,6 +1,6 @@
 # KanbanFlow Analysis Decisions and Open Questions
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Record analysis findings, competing explanations, and decisions without turning an assumption into an established rule. This guide is a reusable register, not actual sign-off or completed investigation evidence.
 
@@ -14,7 +14,7 @@ Keep policy decisions in the [decision register](../../Project-Management/decisi
 
 ## Known question
 
-DEC-003/PB-001 track the manager remove/re-add role loophole. Dependent enforcement requires an agreed membership policy; direct owner-only role updates do not close the indirect path. A bounded investigation may assess options without claiming a policy decision.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Investigation method
 
@@ -78,9 +78,9 @@ For a diagnosis, identify what observation would distinguish competing explanati
 
 ## Membership-policy dependency example
 
-DEC-003/PB-001 is an existing open dependency, not a new decision made here. Analysis should distinguish direct role update from removal/re-addition, identify affected actors, and compare policy options without silently choosing one.
+DEC-003/PB-001 records the owner-only policy selected on 2026-10-10 and its implementation. Analysis should distinguish direct role updates from add/remove/re-add paths and preserve coverage for each.
 
-Record the intended permitted actions, owner/member protections, rejected paths, and verification implications of any actually agreed rule. Until then, dependent enforcement remains blocked. Investigation completion alone does not close the loophole.
+Future membership delegation requires a new explicit safe policy, owner/member protections, rejected-path definitions, and regression evidence. Investigation completion alone does not authorize a permission change.
 
 Use the [roles guide](../02-requirements/roles-and-use-cases.md) and [security/privacy requirements](../02-requirements/security-and-privacy-requirements.md) for relevant boundaries.
 

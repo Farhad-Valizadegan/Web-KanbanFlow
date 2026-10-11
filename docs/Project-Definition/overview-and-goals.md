@@ -1,6 +1,6 @@
 # KanbanFlow Overview and Goals
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Product overview
 
@@ -24,7 +24,7 @@ This purpose is a product definition, not proof of increased productivity. Valid
 | Viewer | Inspect information within permitted workspaces. |
 | Maintainer or operator | Develop, verify, configure, and run the application. |
 
-These descriptions are not a complete authorization matrix. The manager remove/re-add role-change loophole remains unresolved; owners should manage membership until the policy and enforcement are corrected.
+These descriptions are not a complete authorization matrix. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Work model
 
@@ -78,7 +78,7 @@ Consult [scope and stakeholders](scope-and-stakeholders.md), the [scope boundary
 
 ## Priorities and maintenance
 
-Resolve the membership policy and enforcement gap before claiming full role-boundary correctness. Proposed user guidance, recovery procedures, and usability reviews are tracked in the [roadmap](../Project-Management/roadmap.md); they are not dated delivery commitments.
+Preserve the owner-only membership rule and assess role boundaries against candidate-specific regression evidence. Proposed user guidance, recovery procedures, and usability reviews are tracked in the [roadmap](../Project-Management/roadmap.md); they are not dated delivery commitments.
 
 Update this overview when implemented capabilities, target users, scope, or agreed goals change. Keep source diagrams and image previews synchronized, and keep historical validation separate from fresh results.
 

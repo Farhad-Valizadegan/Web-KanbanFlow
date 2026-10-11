@@ -1,6 +1,6 @@
 # KanbanFlow Daily Progress and Blockers
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Use a short progress record to show what changed toward an agreed sprint goal, what should happen next, and what prevents progress. Update it when useful progress or a material blocker occurs. This guide does not establish a mandatory daily meeting, reporting schedule, or historical sprint activity.
 
@@ -73,7 +73,7 @@ Do not assign another person responsibility without agreement. If ownership is m
 5. Link material policy decisions in the [decision register](../Project-Management/decision-register.md) and record any agreed scope change.
 6. On resolution, capture evidence, reassess readiness, and update affected item states.
 
-Avoid substituting an unapproved workaround for an unresolved requirement. For example, the manager remove/re-add role issue requires the membership-policy decision tracked in DEC-003 and PB-001; a daily note cannot establish that policy or close its implementation work.
+Avoid substituting an unapproved workaround for an unresolved requirement. DEC-003/PB-001 records the owner-only membership correction; a daily note alone cannot authorize future permission changes or establish their verification.
 
 When a blocker threatens the goal or an agreed delivery decision, bring the recorded impact and options to the people responsible for that decision. This guide specifies no automatic escalation deadline or notification channel. Record the actual decision instead of assuming approval from elapsed time.
 

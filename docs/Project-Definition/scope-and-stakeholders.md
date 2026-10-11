@@ -1,6 +1,6 @@
 # KanbanFlow Scope and Stakeholders
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Responsibilities described here are not a complete authorization matrix or a rec
 | Area | Included capabilities | Boundary |
 | --- | --- | --- |
 | Accounts and sessions | Registration, login, logout, authenticated-user access, and protected routes. | Correct session, cookie, origin, and CSRF configuration is required. |
-| Workspaces and membership | Workspace organization and owner, manager, member, and viewer membership roles. | The manager remove/re-add role-change loophole is unresolved. |
+| Workspaces and membership | Workspace organization and owner, manager, member, and viewer membership roles. | All membership mutations are owner-only; the bypass is corrected under DEC-003/PB-001. |
 | Projects and boards | Project organization, board visibility, ordered boards, and resource-list search. | Visibility and nested resource access must be enforced by the backend. |
 | Workflow columns | Ordered stages and optional WIP limits. | Limits and ordering require appropriate integrity and contention checks. |
 | Tasks | Creation, editing, priorities, descriptions, due dates, assignments, completion, and movement. | Management and contribution actions depend on authorization. |
@@ -49,7 +49,7 @@ A responsibility explains a stakeholder's intended contribution. A permission sp
 
 Examples requiring backend verification include private-board access, nested task/comment requests, membership changes, removed-member access, and workspace-scoped analytics. The known manager removal/re-addition path must be assessed alongside direct role updates.
 
-Owners should manage membership while the loophole remains open. See the [decision register](../Project-Management/decision-register.md) for the unresolved policy question.
+Only owners can mutate membership under the implemented rule. See the [decision register](../Project-Management/decision-register.md) for the recorded owner-only policy.
 
 ## Supporting systems and project activities
 
@@ -74,7 +74,7 @@ These exclusions describe current scope, not a permanent prohibition on future f
 
 | Topic | Needed decision or evidence |
 | --- | --- |
-| Manager membership operations | Define allowed add/remove and role-assignment behavior, then enforce and regression-test indirect role changes. |
+| Future manager membership delegation | Requires a new explicit safe policy and direct/indirect regression coverage; current mutations are owner-only. |
 | Browser support | Agree the supported matrix and verify relevant browser and keyboard journeys. |
 | Operational readiness | Define hosting, recovery objectives, backups, and restore evidence before production claims. |
 | Product success targets | Establish user observations and baselines before numerical commitments. |
@@ -137,7 +137,7 @@ Operator --> Ops : configuration and recovery
 Ops ..> W : supports application
 note bottom of W
 Responsibilities are not an authorization matrix.
-Manager membership loophole remains open.
+Membership mutations are owner-only.
 end note
 @enduml
 ```

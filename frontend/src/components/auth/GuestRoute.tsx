@@ -11,7 +11,7 @@ export default function GuestRoute() {
     if (session.isSuccess) return <Navigate to="/dashboard" replace />;
     if (isAxiosError(session.error) && session.error.response?.status === 401) return <Outlet />;
     return <main className="state-screen" role="alert"><h1>Unable to connect</h1>
-        <p>We couldn’t check your session. Make sure the local backend is running, then try again.</p>
-        <button className="primary-button" onClick={() => void session.refetch()}>Try again</button>
+        <p>We couldn’t check your session. Check your connection and try again. For local development, the API and database both need to be running.</p>
+        <button className="primary-button" disabled={session.isFetching} onClick={() => void session.refetch()}>{session.isFetching ? 'Checking…' : 'Try again'}</button>
     </main>;
 }

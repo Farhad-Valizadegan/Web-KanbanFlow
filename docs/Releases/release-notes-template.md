@@ -1,6 +1,6 @@
 # KanbanFlow Release Notes Template
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and use
 
@@ -91,7 +91,7 @@ No database reset command should be presented as an ordinary upgrade step.
 
 ## Known issues and policy decisions
 
-Keep the manager remove/re-add role-change loophole in notes while it remains unresolved. Do not declare it fixed because unrelated membership tests or CI passed.
+Older release notes retain the manager remove/re-add issue; v1.1.1 records its owner-only correction. New notes must distinguish that historical fix from fresh candidate checks and any new regressions.
 
 Record other open defects, failed criteria, and operational limits specific to the candidate. The absence of a reported issue is not a guarantee of defect-free software.
 

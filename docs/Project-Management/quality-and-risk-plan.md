@@ -1,6 +1,6 @@
 # KanbanFlow Quality and Risk Plan
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and status
 
@@ -18,7 +18,7 @@ It is a working strategy, not a claim that every scenario has been executed for 
 - Documents and diagrams match implementation and evidence.
 - Deployment and recovery claims are supported by environment-specific checks.
 
-The manager remove/re-add loophole remains a known exception to intended role-boundary correctness.
+The manager remove/re-add loophole was corrected through owner-only membership mutations; preserve direct/indirect regression coverage.
 
 ## Current automated baseline
 
@@ -35,7 +35,7 @@ CI uses PHP 8.4 and Node.js 24 in the checked-in workflow. It does not automatic
 
 | Risk | Required response when affected |
 | --- | --- |
-| Manager indirect role-change bypass | Agree DEC-003, enforce direct and remove/re-add paths, and regression-test denied operations. |
+| Manager indirect role-change bypass | Preserve the owner-only DEC-003 rule and regression-test direct and remove/re-add rejection paths. |
 | Private or nested resource exposure | Test membership, visibility, current access, and direct API requests. |
 | Session/origin mismatch | Exercise registration, login/logout, expired sessions, and existing-session redirects with actual configured hosts. |
 | Concurrent WIP/ordering conflicts | Run relevant backend checks and isolated MySQL contention/stale-state scenarios. |

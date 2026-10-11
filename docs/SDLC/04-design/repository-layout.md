@@ -1,6 +1,6 @@
 # KanbanFlow Repository Layout
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -95,7 +95,7 @@ Milestone records reside under `docs/Project-Management/Milestones/`. PlantUML s
 | Theme/accessibility | Theme/shared UI and consuming views | Representative browser/keyboard/layout checks |
 | Release claim | Version record/CHANGELOG | Exact tag/commit and its historical checks; later candidates need fresh evidence |
 
-Use paths and source evidence to bound the change; avoid modifying unrelated files merely because they share a directory. Keep DEC-003/PB-001 membership authority open until its actual decision and implementation evidence exist.
+Use paths and source evidence to bound the change; avoid modifying unrelated files merely because they share a directory. Preserve the DEC-003/PB-001 owner-only outcome and direct/indirect regression evidence.
 
 ## Verification entry points
 

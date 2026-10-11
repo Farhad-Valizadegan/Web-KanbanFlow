@@ -1,6 +1,6 @@
 # KanbanFlow Analysis Guide
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Analyze a bounded requirement or defect before choosing a change. Trace frontend behavior, API requests, authorization, persisted records, and relevant tests. This guide does not assert a newly reproduced defect or fresh verification result.
 
@@ -93,7 +93,7 @@ Include retaining current behavior or deferring work when viable. Prefer an appr
 
 ## Dependencies and known open policy
 
-DEC-003/PB-001 track the manager remove/re-add membership role loophole. Analyze direct and indirect paths separately. Dependent enforcement requires the actual policy decision; a technical recommendation or investigation result does not establish agreement or close the defect.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Analyze direct and indirect paths separately when revising membership authority.
 
 Record next actions and agreed responsibility, or unassigned ownership. A bounded investigation may proceed independently while dependent implementation remains blocked. Unrelated findings become linked follow-up candidates rather than silent scope additions.
 

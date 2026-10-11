@@ -1,6 +1,6 @@
 # KanbanFlow Component Diagram
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -66,7 +66,7 @@ ActivityLogger records subject type/id/name and optional properties, not a unive
 | Derived state or notification | Mutation call site, logger/notification, reader endpoint, cache | Actual recipients, visible freshness, and authorized response scope |
 | Shared theme/UI change | Shared components and representative consuming pages | Both themes, narrow layout, keyboard/focus, and error states |
 
-Record candidate commit, affected source paths, actor/resource scope, request and persisted results, UI observations, and remaining gaps. This document describes source responsibilities and verification planning; no fresh application test is claimed. The membership authority issue DEC-003/PB-001 remains open independently of the component structure.
+Record candidate commit, affected source paths, actor/resource scope, request and persisted results, UI observations, and remaining gaps. This document describes source responsibilities and verification planning; no fresh application test is claimed. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Related component views
 

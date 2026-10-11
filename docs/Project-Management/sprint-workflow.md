@@ -1,6 +1,6 @@
 # KanbanFlow Sprint Workflow
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and planning boundary
 
@@ -27,7 +27,7 @@ Confirm the user problem, current behavior, affected roles, scope/exclusions, ac
 
 Apply [backlog refinement](backlog-refinement.md) and the [definition of ready](../Sprints/definition-of-ready.md). Ready means the work can be understood and verified, not that it is approved for every external action.
 
-For PB-001, resolve DEC-003 before selecting membership enforcement. Do not infer the final manager rule from role names.
+PB-001 implements DEC-003 owner-only membership enforcement. Future permission work must preserve the selected rule or record an explicit safe replacement; do not infer authority from role names.
 
 ## 2. Plan the sprint goal
 

@@ -154,7 +154,7 @@ function SortableBoardCard({
         <article
             ref={setNodeRef}
             style={style}
-            className="border border-slate-800 bg-slate-900 p-6 transition hover:border-blue-500"
+            className="resource-card border border-slate-800 bg-slate-900 p-6 transition hover:border-blue-500"
         >
             <Link
                 to={`/workspaces/${workspaceId}/projects/${projectId}/boards/${board.id}`}

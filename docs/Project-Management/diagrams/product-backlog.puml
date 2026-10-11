@@ -1,8 +1,8 @@
 @startuml
 title KanbanFlow Product Backlog Dependencies
 left to right direction
-rectangle "DEC-003\nMembership policy agreement" as D
-rectangle "PB-001\nMembership enforcement" as P1
+rectangle "DEC-003\nOwner-only policy selected" as D
+rectangle "PB-001\nOwner-only enforcement implemented" as P1
 rectangle "PB-002\nUser guidance" as P2
 rectangle "Target environment and recovery decisions" as O
 rectangle "PB-003\nBackup and recovery guidance" as P3
@@ -14,7 +14,8 @@ P4 ..> P1 : documentation review
 P4 ..> P2 : links and previews
 P4 ..> P3 : evidence consistency
 note bottom of P1
-Known defect; no completed fix recorded.
+Implemented: owner-only mutations.
+QA regression evidence dated 2026-10-10.
 end note
 note bottom of P3
 Proposed work, not a verified restore procedure.

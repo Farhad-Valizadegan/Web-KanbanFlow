@@ -32,6 +32,6 @@ stop
 note right
 Conceptual review flow; actual ordering varies by endpoint.
 Current membership and ancestry matter.
-DEC-003/PB-001 remains open.
+DEC-003/PB-001: owner-only membership mutations.
 end note
 @enduml

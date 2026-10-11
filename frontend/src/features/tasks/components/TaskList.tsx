@@ -826,22 +826,24 @@ function TaskList({
                                     }
                                 >
                                     <article
+                                        data-priority={task.priority}
+                                        data-completed={task.completed_at !== null}
                                         className={
                                             isOverview
-                                                ? 'border border-slate-700 bg-slate-950 p-3 pr-12'
-                                                : 'border border-slate-700 bg-slate-950 p-4 pr-16'
+                                                ? 'task-card border border-slate-700 bg-slate-950 p-3'
+                                                : 'task-card border border-slate-700 bg-slate-950 p-4'
                                         }
                                     >
-                                        <div className="flex items-start justify-between gap-2">
+                                        <div className="task-heading flex flex-col items-start gap-2">
                                             <div className="min-w-0">
                                                 <h4
                                                     className={
                                                         task.completed_at
                                                             ? isOverview
-                                                                ? 'truncate text-sm font-semibold text-slate-500 line-through'
+                                                                ? 'text-sm font-semibold text-slate-500 line-through'
                                                                 : 'font-semibold text-slate-500 line-through'
                                                             : isOverview
-                                                              ? 'truncate text-sm font-semibold text-slate-100'
+                                                              ? 'text-sm font-semibold text-slate-100'
                                                               : 'font-semibold text-slate-100'
                                                     }
                                                     title={
@@ -853,25 +855,14 @@ function TaskList({
                                                     }
                                                 </h4>
 
-                                                <p
-                                                    className={
-                                                        isOverview
-                                                            ? 'mt-1 text-[10px] text-slate-500'
-                                                            : 'mt-1 text-xs text-slate-500'
-                                                    }
-                                                >
-                                                    Position{' '}
-                                                    {
-                                                        task.position
-                                                    }
-                                                </p>
+
                                             </div>
 
                                             <span
                                                 className={
                                                     isOverview
-                                                        ? 'shrink-0 border border-slate-700 px-1.5 py-1 text-[9px] uppercase tracking-wide text-slate-300'
-                                                        : 'shrink-0 border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300'
+                                                        ? 'task-priority shrink-0 border border-slate-700 px-1.5 py-1 text-[10px] uppercase tracking-wide text-slate-300'
+                                                        : 'task-priority shrink-0 border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300'
                                                 }
                                             >
                                                 {

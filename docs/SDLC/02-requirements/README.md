@@ -1,6 +1,6 @@
 # KanbanFlow SDLC — 02 Requirements
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Requirements translate a user need and agreed planning scope into observable behavior and constraints. Include relevant role permissions, validation, failure feedback, persistence, and accessibility. Keep delivered behavior, proposed changes, and unresolved decisions distinct.
 
@@ -82,7 +82,7 @@ Leave missing ownership, dates, policy, and evidence pending. Record actual agre
 
 ## Permission decisions and blockers
 
-Resolve essential permission ambiguity before dependent enforcement implementation. The manager remove/re-add role issue remains tracked by DEC-003 and PB-001 in the decision register and product backlog. Do not describe its intended policy as settled or its enforcement as complete.
+Resolve essential permission ambiguity before dependent enforcement implementation. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 Differentiate a bounded policy investigation from implementing a chosen rule. The investigation can define its question and output while dependent work remains blocked. Record the next action, affected requirement, and agreed owner or missing ownership.
 

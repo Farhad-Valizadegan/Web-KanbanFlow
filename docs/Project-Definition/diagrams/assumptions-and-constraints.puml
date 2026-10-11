@@ -16,7 +16,7 @@ Backend --> Database
 Ops ..> Session : configure
 Ops ..> Database : protect and recover
 note bottom of Backend
-Manager membership policy remains open.
+Membership mutations are owner-only.
 SQLite tests do not prove MySQL contention.
 end note
 @enduml

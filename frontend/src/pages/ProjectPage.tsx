@@ -82,13 +82,9 @@ function ProjectPage() {
                     &larr; Back to workspace
                 </Link>
 
-                <header className="mt-6 border border-slate-800 bg-slate-900 p-8">
+                <header className="page-heading mt-6 border border-slate-800 bg-slate-900 p-8">
                     <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
                         <div>
-                            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                                Project
-                            </p>
-
                             <h1 className="mt-3 text-3xl font-bold">
                                 {project.name}
                             </h1>
@@ -143,10 +139,6 @@ function ProjectPage() {
 
                 <section className="mt-10">
                     <div>
-                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                            Boards
-                        </p>
-
                         <h2 className="mt-2 text-2xl font-bold">
                             Project boards
                         </h2>

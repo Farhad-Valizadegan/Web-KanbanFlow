@@ -1,6 +1,6 @@
 # KanbanFlow Dependency and Change Management
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Baseline and scope
 
@@ -67,7 +67,7 @@ For an urgent fix keep scope, cause, acceptance cases, evidence, and recovery ex
 | --- | --- |
 | Runtime/dependencies | Can the actual target install and execute the intended locked combination? |
 | API/client | Do request/response changes preserve or deliberately update affected consumers and failure recovery? |
-| Authority/privacy | Do direct/indirect paths and downstream visibility remain correct? DEC-003 stays open until policy/enforcement evidence exists. |
+| Authority/privacy | Do direct/indirect paths and downstream visibility remain correct? Preserve DEC-003 owner-only enforcement and direct/indirect regression evidence. |
 | Data/schema | Can existing records and any overlapping runtime safely use the assessed schema? |
 | Configuration/assets | Do effective URLs, sessions, key, services, and frontend build match the candidate? |
 | Recovery | Is the prior source/assets/runtime compatible with resulting schema/data, or does recovery need an assessed restore? |

@@ -1,6 +1,6 @@
 # KanbanFlow Authentication and Authorization
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -39,7 +39,7 @@ After login/logout or actor changes, inspect actual query/cache and page state. 
 | Workspace/project reads | Current workspace membership | Check actual endpoint calls and nested ancestry |
 | Workspace update/delete | `owner_id` matches actor | Do not substitute manager authority for this rule |
 | Membership management | Owner only | Add/remove and role updates share the owner boundary; managers retain project management separately |
-| Direct membership role update | Owner only | Does not by itself close the indirect escalation path |
+| Direct membership role update | Owner only | Add/remove operations also use owner-only authority |
 | Project update/delete | Owner or current manager | Endpoint context and parent consistency remain necessary |
 | Board reads | Membership required; workspace visibility or creator/owner/current manager satisfies additional visibility condition | Creator/owner status alone does not bypass the membership condition in `visibleTo` |
 | Board update/delete policy | Board view must pass, then owner/current manager | A private-board creator is not automatically permitted to mutate |
@@ -66,7 +66,7 @@ Use a consistent configured hostname and inspect cookie/origin behavior without 
 | Removed member or changed role | Direct request after the change, returned data, denied mutation, and persisted state |
 | Private board / mismatched ancestry | Authorized and unauthorized actors plus direct identifier mismatch cases |
 | Backend unavailable during session check | ProtectedRoute and GuestRoute behavior recorded separately |
-| Membership remove/re-add | Agreed policy, regression scenario, and actual enforcement before closing DEC-003/PB-001 |
+| Membership remove/re-add | Owner-only policy under DEC-003/PB-001; regression-check denied manager requests and unchanged persisted membership |
 
 Use isolated accounts/resources. Record candidate commit, browser/backend origin, environment, actor, endpoint, response, visible behavior, and persisted result; redact cookies, tokens, passwords, and private content. Source inspection in this document is not a newly executed security test.
 

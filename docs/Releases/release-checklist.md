@@ -1,6 +1,6 @@
 # KanbanFlow Release Checklist
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## How to use this checklist
 
@@ -32,7 +32,7 @@ Use the [verification template](verification-template.md) for detailed evidence.
 - [ ] Select the version using the [version policy](../Project-Management/versioning-strategy.md).
 - [ ] Identify open decisions and dependencies.
 
-A commit prefix or file count does not determine version significance. Keep the manager remove/re-add loophole visible unless an agreed policy and enforcement evidence close it.
+A commit prefix or file count does not determine version significance. Record the v1.1.1 owner-only correction and disclose any new membership regressions with candidate-specific evidence.
 
 ## 2. Metadata and release notes
 

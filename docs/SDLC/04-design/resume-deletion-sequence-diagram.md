@@ -1,6 +1,6 @@
 # KanbanFlow Resource Deletion Sequence
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -83,7 +83,7 @@ Use isolated records; do not run these scenarios against production data. Record
 
 ## Handoff and maintenance
 
-If contiguous task ordering, descendant cleanup, restoration, permanent deletion, or retention is required, create an explicit scoped requirement and decision rather than changing the documented guarantee without implementation evidence. Keep DEC-003/PB-001 membership authority unresolved independently of this deletion guide.
+If contiguous task ordering, descendant cleanup, restoration, permanent deletion, or retention is required, create an explicit scoped requirement and decision rather than changing the documented guarantee without implementation evidence. Preserve the DEC-003/PB-001 owner-only membership rule independently of deletion semantics.
 
 Cross-check [authorization flow](authorization-decision-flow.md), [request contracts](route-and-request-contracts.md), [error handling](error-handling-design.md), [editor interaction](editor-interaction-flow.md), and [data lifecycle](../03-analysis/data-classification-and-lifecycle.md). Revisit after endpoint, ordering, logging, or lifecycle changes.
 

@@ -1,6 +1,6 @@
 # KanbanFlow SDLC
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 This section organizes software lifecycle guidance into the eight requested phases. It describes a working process, not evidence that every phase has been completed or that production deployment has occurred. Phases may iterate as requirements and evidence change.
 
@@ -51,7 +51,7 @@ A document, test file, configured CI job, or package version is not a fresh pass
 
 Connect user need or backlog item to acceptance criteria, domain/policy decision, design contract, changed source, verification observation, defect/correction, and actual delivery identity. Record missing links and unresolved expectations instead of inventing approvals, testers, dates, or measurements.
 
-Use [traceability](../Project-Management/traceability.md), [documentation traceability](../Project-Management/documentation-traceability.md), and [decision register](../Project-Management/decision-register.md). DEC-003/PB-001 remains open for manager remove/re-add role escalation until policy, enforcement, and direct/indirect acceptance evidence justify closure.
+Use [traceability](../Project-Management/traceability.md), [documentation traceability](../Project-Management/documentation-traceability.md), and [decision register](../Project-Management/decision-register.md). Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Applying the lifecycle to common work
 

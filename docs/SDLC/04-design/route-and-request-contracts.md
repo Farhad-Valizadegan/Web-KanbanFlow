@@ -1,6 +1,6 @@
 # KanbanFlow Route and Request Contracts
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -65,9 +65,9 @@ Parent identifiers must describe the same resource chain. Board/task/column move
 | PATCH `C/move` | Separate column movement request and position validation |
 | PATCH `T/move` | Client uses source column in path and payload `{ column_id, position }` for destination/order |
 | GET `W/members` | Workspace-scoped membership response |
-| POST `W/members` | Add-member input; owner/manager management boundary with unresolved indirect role issue |
+| POST `W/members` | Add-member input; owner-only `manageMembers` boundary |
 | PATCH `W/members/{user}` | Direct role update; owner-only authority |
-| DELETE `W/members/{user}` | Removal; inspect owner/current membership protections |
+| DELETE `W/members/{user}` | Owner-only removal; owner/current membership protections apply |
 | GET `W/analytics`, `W/activities` | Helpers send filter parameters; inspect actual filter validation, scope, and response |
 | GET `/api/notifications` | Helper sends optional limit/unread_only filters and returns full list response |
 | GET `/api/notifications/unread-count` | Helper reads `data.unread_count` |
@@ -75,7 +75,7 @@ Parent identifiers must describe the same resource chain. Board/task/column move
 | PATCH `/api/notifications/{notification}/read` | Returns notification inside data envelope |
 | DELETE `/api/notifications/{notification}` | Actual recipient-scoped delete contract; client returns void |
 
-Normal board/column/task updates prohibit position input in inspected controllers; use the move endpoint. Do not infer shared pagination, maximum limits, recipient authority, or aggregate visibility solely from a query type. DEC-003/PB-001 remains open; endpoint documentation does not resolve membership policy.
+Normal board/column/task updates prohibit position input in inspected controllers; use the move endpoint. Do not infer shared pagination, maximum limits, recipient authority, or aggregate visibility solely from a query type. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Request and response ownership
 

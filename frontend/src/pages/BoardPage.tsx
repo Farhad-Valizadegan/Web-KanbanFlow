@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getBoard } from '../features/boards/api';
 import ColumnList from '../features/columns/components/ColumnList';
+import Icon from '../components/ui/Icon';
 import CreateColumnForm from '../features/columns/components/CreateColumnForm';
 
 export type BoardViewMode =
@@ -34,6 +35,8 @@ function BoardPage() {
         numericProjectId > 0 &&
         Number.isInteger(numericBoardId) &&
         numericBoardId > 0;
+
+    const [isColumnFormOpen, setIsColumnFormOpen] = useState(false);
 
     const storageKey = `board-view-mode-${numericBoardId}`;
 
@@ -120,13 +123,9 @@ function BoardPage() {
                     &larr; Back to project
                 </Link>
 
-                <header className="mt-6 border border-slate-800 bg-slate-900 p-8">
+                <header className="page-heading board-heading mt-6 border border-slate-800 bg-slate-900 p-8">
                     <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
                         <div>
-                            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                                Board
-                            </p>
-
                             <h1 className="mt-3 text-3xl font-bold">
                                 {board.name}
                             </h1>
@@ -141,9 +140,7 @@ function BoardPage() {
                                 {board.visibility}
                             </span>
 
-                            <span className="border border-slate-700 px-3 py-2 text-xs uppercase tracking-wide text-slate-300">
-                                Position {board.position}
-                            </span>
+
                         </div>
                     </div>
 
@@ -181,24 +178,19 @@ function BoardPage() {
                 </header>
 
                 <section className="mt-10">
-                    <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+                    <div className="floating-toolbar flex flex-col justify-between gap-4 lg:flex-row lg:items-center">
                         <div>
-                            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                                Columns
-                            </p>
-
                             <h2 className="mt-2 text-2xl font-bold">
                                 Board workflow
                             </h2>
 
                             <p className="mt-2 max-w-3xl text-slate-400">
-                                Use detailed mode for full task information
-                                or overview mode to see more columns and
-                                tasks at once.
+                                Drag tasks to move work forward. Switch to overview for a wider view.
                             </p>
                         </div>
 
-                        <div className="flex w-fit border border-slate-700 bg-slate-900 p-1">
+                        <div className="flex flex-wrap items-center gap-3">
+                        <div className="segmented-control" role="group" aria-label="Board view">
                             <button
                                 type="button"
                                 onClick={() =>
@@ -241,9 +233,11 @@ function BoardPage() {
                                 Overview
                             </button>
                         </div>
+                        {canManage && <button type="button" className="primary-button" aria-expanded={isColumnFormOpen} aria-controls="column-create" onClick={() => setIsColumnFormOpen(open => !open)}><Icon name="plus" size={16} />{isColumnFormOpen ? "Close form" : "Add column"}</button>}
+                        </div>
                     </div>
 
-                    {canManage && (<CreateColumnForm
+                    {canManage && isColumnFormOpen && (<div id="column-create"><CreateColumnForm
                         workspaceId={
                             numericWorkspaceId
                         }
@@ -251,7 +245,7 @@ function BoardPage() {
                             numericProjectId
                         }
                         boardId={numericBoardId}
-                    />)}
+                    /></div>)}
 
                     <ColumnList
                         workspaceId={

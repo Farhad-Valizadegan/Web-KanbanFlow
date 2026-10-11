@@ -1,6 +1,6 @@
 # KanbanFlow Data Classification and Lifecycle
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Classify data by access and purpose before changing collection, exposure, or lifecycle behavior. This is an analysis framework, not an agreed legal retention schedule or proof of implemented deletion/export controls.
 
@@ -70,7 +70,7 @@ Inspect calling controllers, model hooks, actual schema, and relevant queries be
 | Physical deletion | Which constraints, references, and backups are affected? |
 | Recovery | Which actual restore process and compatibility checks are required? |
 
-Data access revocation and data erasure are different outcomes. Removing membership must revoke applicable access, but does not automatically prove deletion of authored content or account data. The membership-policy loophole remains tracked in DEC-003/PB-001.
+Data access revocation and data erasure are different outcomes. Removing membership must revoke applicable access, but does not automatically prove deletion of authored content or account data. DEC-003/PB-001 records the corrected owner-only mutation rule.
 
 ## Collection, retention, and export decisions
 

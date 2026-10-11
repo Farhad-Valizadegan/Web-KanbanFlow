@@ -27,7 +27,7 @@ Users --> UX
 CI ..> Work : supports delivery
 Operations ..> Auth : supports operation
 note bottom of Auth
-Membership policy loophole remains open.
+Membership mutations are owner-only.
 Included scope is not proof of complete enforcement.
 end note
 note bottom of Integration

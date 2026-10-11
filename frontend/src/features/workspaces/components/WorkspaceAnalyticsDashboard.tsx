@@ -18,8 +18,8 @@ function SummaryCard({
     description,
 }: SummaryCardProps) {
     return (
-        <article className="border border-slate-800 bg-slate-900 p-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+        <article className="summary-card border border-slate-800 bg-slate-900 p-5">
+            <p className="text-sm font-medium text-slate-400">
                 {label}
             </p>
 
@@ -87,7 +87,7 @@ function TaskAnalyticsItem({
         getTaskLocation(task);
 
     return (
-        <li className="border border-slate-800 bg-slate-950 p-4">
+        <li className="analytics-task-row border-b border-slate-800 py-4">
             <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                 <div>
                     <p className="font-semibold text-slate-100">
@@ -224,10 +224,6 @@ function WorkspaceAnalyticsDashboard({
     return (
         <section className="mt-10">
             <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-400">
-                    Analytics
-                </p>
-
                 <h2 className="mt-2 text-2xl font-bold">
                     Workspace overview
                 </h2>
@@ -444,7 +440,7 @@ function WorkspaceAnalyticsDashboard({
 
                     {analytics.upcoming_tasks.length ===
                     0 ? (
-                        <p className="mt-5 border border-slate-800 bg-slate-950 p-4 text-sm text-slate-500">
+                        <p className="mt-5 py-2 text-sm text-slate-500">
                             No upcoming tasks were found.
                         </p>
                     ) : (
@@ -472,7 +468,7 @@ function WorkspaceAnalyticsDashboard({
 
                     {analytics.assigned_to_me.length ===
                     0 ? (
-                        <p className="mt-5 border border-slate-800 bg-slate-950 p-4 text-sm text-slate-500">
+                        <p className="mt-5 py-2 text-sm text-slate-500">
                             No open tasks are assigned to you.
                         </p>
                     ) : (

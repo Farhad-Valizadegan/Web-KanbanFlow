@@ -1,6 +1,6 @@
 # KanbanFlow Sprint Retrospective Template
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Use a retrospective to examine how work was planned, coordinated, verified, and reviewed, then agree practical process improvements. Discuss what helped delivery, what hindered it, and what should change next. Separate process observations from unsupported assumptions about people.
 
@@ -46,7 +46,7 @@ No mandatory meeting length, format, or cadence is imposed here. A small project
 
 For example, repeated verification delays could justify investigating environment preparation. That observation does not establish that a particular person caused the delay. Describe causal explanations as hypotheses unless evidence supports them.
 
-The membership-policy dependency tracked in DEC-003 and PB-001 can be discussed as a planning or decision blocker. A retrospective does not itself decide the policy or close its enforcement work; link any actual decision through the [decision register](../Project-Management/decision-register.md).
+DEC-003/PB-001 is a completed example of resolving a policy dependency through owner-only enforcement. Retrospectives may assess that outcome; future permission changes require a recorded decision and regression evidence in the [decision register](../Project-Management/decision-register.md).
 
 ## Copyable retrospective record
 

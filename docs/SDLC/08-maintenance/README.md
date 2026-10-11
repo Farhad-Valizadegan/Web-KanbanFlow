@@ -1,6 +1,6 @@
 # KanbanFlow Maintenance
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and status
 
@@ -40,7 +40,7 @@ Collect enough context to diagnose without exposing passwords, session cookies, 
 
 Prioritize observed confidentiality/integrity failures, ongoing harmful mutations, widespread disruption, and blocked core journeys before cosmetic defects. Record uncertainty, workaround limits, acceptance cases, and dependencies. Use [quality and risk plan](../../Project-Management/quality-and-risk-plan.md) rather than inventing numerical severity, response deadlines, or a service agreement.
 
-DEC-003/PB-001 remains open for manager removal/re-addition role escalation. Direct-role restrictions and documentation completion do not close that path. Agree the policy, implement direct and indirect enforcement, and capture relevant regression acceptance before updating its state. Proposed file/PDF/sharing/password-change designs remain separate from implemented capabilities.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. The dated QA correction records backend enforcement and direct/indirect regressions; recheck affected maintenance candidates. Proposed file/PDF/sharing/password-change designs remain separate from implemented capabilities.
 
 ## Responsibilities
 
@@ -96,7 +96,7 @@ Preserve historical records and link new candidate-specific evidence through [tr
 
 Inputs include reproducible reports, actual target/candidate identity, safe diagnostics, known issues, and agreed acceptance criteria. Outcomes include a maintained backlog, scoped fixes with verification, documented operational decisions, updated guidance, and visible residual risks.
 
-Keep the manager remove/re-add issue open until policy is decided and enforcement is verified. Source publication alone does not close an operational incident or prove deployment.
+Preserve the recorded DEC-003 owner-only outcome and verify affected candidates. Source publication alone does not close an operational incident or prove deployment.
 
 See [quality and risk plan](../../Project-Management/quality-and-risk-plan.md), [testing](../06-testing/README.md), [deployment](../07-deployment/README.md), [releases](../../Releases/README.md), and [SDLC index](../README.md).
 

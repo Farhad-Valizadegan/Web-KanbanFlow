@@ -134,13 +134,14 @@ function SortableColumnCard({
         <article
             ref={setNodeRef}
             style={style}
+            data-tone={column.position % 4}
             className={
                 isOverview
-                    ? 'w-64 shrink-0 border border-slate-800 bg-slate-900 p-3'
-                    : 'w-96 shrink-0 border border-slate-800 bg-slate-900 p-5'
+                    ? 'kanban-column w-64 shrink-0 border border-slate-800 bg-slate-900 p-3'
+                    : 'kanban-column w-96 shrink-0 border border-slate-800 bg-slate-900 p-5'
             }
         >
-            <div className="flex items-start justify-between gap-3">
+            <div className="column-heading flex items-start justify-between gap-3">
                 <div className="min-w-0">
                     <h3
                         className={
@@ -1040,8 +1041,8 @@ function ColumnList({
                     <div
                         className={
                             viewMode === 'overview'
-                                ? 'flex gap-2 overflow-x-auto pb-4'
-                                : 'flex gap-4 overflow-x-auto pb-6'
+                                ? 'kanban-track flex gap-2 overflow-x-auto pb-4'
+                                : 'kanban-track flex gap-4 overflow-x-auto pb-6'
                         }
                     >
                         {columns.map((column) => {

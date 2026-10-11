@@ -1,6 +1,6 @@
 # KanbanFlow Sprint Planning
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Sprint planning agrees a coherent goal and a feasible set of work for actual participants and dates. It connects refined needs to observable acceptance criteria, dependencies, ownership, and verification. A planning record describes agreed intentions; it does not demonstrate implementation or completion.
 
@@ -47,7 +47,7 @@ Apply the [Definition of Ready](definition-of-ready.md). Each selected item need
 - A feasible verification approach in an authorized environment.
 - Actual agreed ownership, or an explicit ownership gap that prevents selection where necessary.
 
-Clarify the manager membership policy before scheduling dependent enforcement implementation. DEC-003 and PB-001 track the unresolved remove/re-add role issue. A bounded investigation may be selected separately if its question, evidence output, and stopping point are clear; it does not automatically resolve policy or implement enforcement.
+DEC-003/PB-001 records the implemented owner-only membership correction. Any future delegation needs an explicit safe policy before scheduling dependent enforcement; a bounded investigation does not itself authorize that change.
 
 ## Select and sequence work
 

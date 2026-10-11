@@ -96,7 +96,7 @@ Examples or candidate labels must not be presented as stable release commitments
 
 Record exact commit, environment, check results, and known gaps with the [verification template](../Releases/verification-template.md). CI success alone does not establish browser usability, MySQL contention, deployment, or recovery.
 
-Keep the known manager membership loophole visible until policy and enforcement are resolved. A version bump cannot substitute for a fix or verification.
+Record the DEC-003 correction in v1.1.1 and disclose any new membership regressions. A version bump cannot substitute for a fix or verification.
 
 ## Maintenance
 

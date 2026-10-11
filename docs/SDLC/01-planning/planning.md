@@ -1,6 +1,6 @@
 # KanbanFlow Planning
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Use this guide to turn a product need into bounded, reviewable work before requirements and implementation proceed. Planning records intentions and decisions; it does not establish completed development, staffing, dates, or production readiness.
 
@@ -27,7 +27,7 @@ Use actual available resources and evidence. Historical commits or release test 
 6. Refine bounded candidates and agree priorities using the management backlog.
 7. Record actual scope agreement and next actions before dependent work begins.
 
-Keep implementation details open when they can be resolved within bounded analysis. Do not leave essential policy undefined while treating dependent implementation as ready. DEC-003 and PB-001 track the unresolved manager membership remove/re-add role issue.
+Keep implementation details open when they can be resolved within bounded analysis. Do not leave essential policy undefined while treating dependent implementation as ready. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Copyable planning record
 

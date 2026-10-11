@@ -1,6 +1,6 @@
 # KanbanFlow Testing
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and evidence rules
 
@@ -48,7 +48,7 @@ Do not run destructive fixture/reset operations against an unidentified or share
 | Dependencies/schema | Locked installation/platform checks, existing-record compatibility, affected behavior, and migration/recovery assessment. |
 | Documentation | Source accuracy, local links, embedded/editable diagram identity, readable previews, and patch formatting. |
 
-DEC-003, the manager remove/re-add role bypass, remains open in the [decision register](../../Project-Management/decision-register.md). Direct-role test coverage does not demonstrate that indirect operations are safe.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. The dated QA correction records direct and indirect checks; revalidate affected candidates.
 
 ## Configured baseline and limits
 

@@ -1,6 +1,6 @@
 # KanbanFlow Sprint Review Template
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Use the sprint review to compare demonstrated outcomes with the agreed goal and acceptance criteria, discuss actual feedback, and identify next actions. Assess the final selected scope alongside material changes made during execution.
 
@@ -55,7 +55,7 @@ Use Pass, Fail, Blocked, Not run, and justified Not applicable for individual ch
 - Passing scenarios support their checked revision and environment, not every workload or browser.
 - Source changes after testing require reassessing affected evidence.
 
-Choose checks through the [quality and risk plan](../Project-Management/quality-and-risk-plan.md). The membership-policy issue in DEC-003 and PB-001 remains tracked in the [decision register](../Project-Management/decision-register.md) and [product backlog](../Project-Management/product-backlog.md); review feedback alone does not resolve its policy or enforcement.
+Choose checks through the [quality and risk plan](../Project-Management/quality-and-risk-plan.md). DEC-003/PB-001 records owner-only membership enforcement in the [decision register](../Project-Management/decision-register.md) and [product backlog](../Project-Management/product-backlog.md); review affected candidates against direct/indirect regression evidence.
 
 ## Copyable review record
 

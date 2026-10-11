@@ -23,6 +23,6 @@ Operator --> Ops : configuration and recovery
 Ops ..> W : supports application
 note bottom of W
 Responsibilities are not an authorization matrix.
-Manager membership loophole remains open.
+Membership mutations are owner-only.
 end note
 @enduml

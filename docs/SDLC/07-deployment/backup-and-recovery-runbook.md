@@ -1,6 +1,6 @@
 # KanbanFlow Backup and Recovery Runbook
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Status and objectives
 
@@ -83,7 +83,7 @@ Do not assume restoration can be reversed by checking out the former source. Ret
 | Side effects/services | Relevant activity/notifications/queues match the recovered state without unintended replay or disclosure. |
 | Recovery objectives | Observed elapsed recovery and actual data gap, compared with previously agreed objectives. |
 
-Use isolated test accounts/data where possible. Record known defects such as DEC-003 separately; restoration is not a membership-policy fix. A health response or completed database import alone is insufficient acceptance.
+Use isolated test accounts/data where possible. Record open defects separately and ensure restored source retains the DEC-003 owner-only correction; rollback to affected older source can restore the bypass. A health response or completed database import alone is insufficient acceptance.
 
 ## Copyable operation evidence
 

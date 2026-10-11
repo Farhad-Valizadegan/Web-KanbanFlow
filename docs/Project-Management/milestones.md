@@ -49,19 +49,19 @@ Use [sprint guides](../Sprints/README.md) for planning and actual sprint records
 
 ## Published release baseline
 
-The [release index](../Releases/README.md) records v1.0.0, v1.0.1, v1.0.2, and v1.1.0. v1.1.0 introduced themes and broader UI improvements.
+The [release index](../Releases/README.md) records v1.0.0, v1.0.1, v1.0.2, v1.1.0, and v1.1.1. v1.1.0 introduced themes and broader UI improvements.
 
 Milestone numbers and release versions are independent. Later styling or documentation commits do not automatically create a new release or milestone. Use the [changelog](../../CHANGELOG.md) for published change history and inspect Git history for untagged source changes.
 
-## Proposed next milestone candidates
+## Membership correction and proposed next milestone candidates
 
-| Candidate | Dependency | Proposed completion evidence | State |
+| Item | Dependency | Completion evidence | State |
 | --- | --- | --- | --- |
-| Membership-policy closure | Explicit agreement on manager add/remove and role assignment. | Backend enforcement and direct/indirect role-change regression checks; updated interface feedback and documentation. | Policy blocked; no scheduled date. |
+| Membership-policy closure | Owner-only mutations selected in DEC-003 on 2026-10-10. | Backend direct/indirect regression checks and aligned UI permissions; see the dated QA correction. | Implemented in v1.1.1 source; deployment assessed separately. |
 | User guidance | Agreed journeys and final behavior. | Instructions exercised against the demo by representative users. | Proposed. |
 | Operational recovery guidance | Target environment and backup/recovery decisions. | Isolated restore evidence and clear deployment/rollback limits. | Proposed. |
 
-These candidates are not approved scope or dated delivery commitments. Track them through the [product backlog](product-backlog.md), [roadmap](roadmap.md), and [decision register](decision-register.md). The known membership loophole remains unresolved.
+The membership correction is implemented; the remaining candidates are not approved scope or dated delivery commitments. Track them through the [product backlog](product-backlog.md), [roadmap](roadmap.md), and [decision register](decision-register.md). Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Milestone record template
 
@@ -103,14 +103,14 @@ rectangle "M5\nCollaboration and activity" as M5
 rectangle "M6\nDatabase notifications" as M6
 rectangle "M7\nAnalytics and assignment controls" as M7
 rectangle "M8\nCI and frontend code splitting" as M8
-rectangle "Published releases\nv1.0.0 through v1.1.0" as R
-rectangle "Proposed\nMembership policy and enforcement" as P
+rectangle "Source releases\nv1.0.0 through v1.1.1" as R
+rectangle "Implemented\nOwner-only membership enforcement" as P
 rectangle "Proposed\nUser and operational guidance" as G
 M5 --> M6
 M6 --> M7
 M7 --> M8
 M8 --> R
-R ..> P : candidate, not scheduled
+R --> P : included in v1.1.1
 R ..> G : candidate, not scheduled
 note bottom of R
 Historical sequence, not a dated schedule.

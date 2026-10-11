@@ -1,6 +1,6 @@
 # KanbanFlow Verification Layers
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Evidence boundaries
 
@@ -74,7 +74,7 @@ Link existence is structural evidence, not proof that every linked claim is corr
 | Source pushed but target identity differs | Publication succeeded; rollout is separate and unverified for that target. |
 | Required environment unavailable | Record Blocked or Not run; another layer cannot silently substitute. |
 
-Choose scoped corrections and meaningful rechecks. More unchanged passing runs do not resolve missing evidence. DEC-003 remains open until policy and direct/indirect enforcement have appropriate acceptance evidence.
+Choose scoped corrections and meaningful rechecks. More unchanged passing runs do not resolve missing evidence. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Scope-specific completion
 

@@ -1,6 +1,6 @@
 # KanbanFlow Design Guide
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -14,7 +14,7 @@ Review against requirements, business rules, threat analysis, and the decision r
 
 Begin with a scoped requirement/backlog item, actor, expected outcome, acceptance constraints, and the candidate source. Use [requirements](../02-requirements/README.md), [business rules](../03-analysis/business-rules-catalog.md), [data flow](../03-analysis/data-flow-diagram.md), and [threat analysis](../03-analysis/security-threat-model-and-risk-analysis.md) to identify affected boundaries.
 
-Record missing information and material policy questions before choosing an implementation. DEC-003/PB-001 membership authority remains open; ordinary unrelated design work can proceed, while changes depending on that policy need its actual outcome. Do not invent approval, an assigned owner, or a completed check.
+Record missing information and material policy questions before choosing an implementation. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Do not invent approval, an assigned owner, or a completed check.
 
 ## Design workflow
 

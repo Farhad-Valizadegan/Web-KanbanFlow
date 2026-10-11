@@ -4,13 +4,13 @@
 
 This document connects material project risks to observable acceptance criteria and verification evidence. It supports planning and release review; it is not a security certification, service-level agreement, or assertion that all scenarios have passed.
 
-The manager membership loophole is a confirmed known issue. Other entries describe failure modes that require prevention and proportionate verification when affected. No statistical likelihood scores, financial estimates, named owners, or target dates have been agreed here.
+The manager membership loophole was corrected on 2026-10-10 through owner-only membership mutations; retain it as a regression risk. Other entries describe failure modes that require prevention and proportionate verification when affected. No statistical likelihood scores, financial estimates, named owners, or target dates have been agreed here.
 
 ## Risk register
 
 | ID | Risk and trigger | Potential impact | Response and verification | Current position |
 | --- | --- | --- | --- | --- |
-| R-01 | A manager removes and re-adds a member with a different role | Intended owner-only role changes can be bypassed. | Agree permitted manager operations; enforce them in the backend and verify both direct and indirect role-change paths. | Open policy decision and known defect. |
+| R-01 | Regression allowing a manager to remove/re-add a member with a different role | Could bypass owner-only role changes if mutation authority regresses. | Preserve owner-only backend mutations and direct/indirect regression checks. | Mitigated locally by DEC-003/PB-001; candidate checks remain required. |
 | R-02 | Frontend/backend hosts, cookies, or stateful origins disagree | Sign-in or authenticated actions fail. | Review environment configuration; verify registration, login, logout, expired sessions, and existing-session redirects. | Configuration-sensitive boundary; earlier defaults were corrected in v1.0.2. |
 | R-03 | Concurrent task or column changes contend for positions or WIP capacity | Invalid ordering, stale updates, or excess active work. | Preserve transactional enforcement and stale-state checks; run relevant regression and isolated MySQL contention scenarios. | Requires targeted checks when affected; SQLite alone is insufficient. |
 | R-04 | A mutation fails after an optimistic UI update | User sees a rejected change as accepted. | Verify clear feedback, rollback, cache refresh, and persisted state after reload. | Verify affected mutation paths. |
@@ -68,11 +68,11 @@ Backend tests use [in-memory SQLite](../../backend/phpunit.xml). They do not pro
 
 Use the [release verification template](../Releases/verification-template.md). Historical release test counts remain historical; do not reuse them as evidence for a newly changed commit.
 
-## Open membership decision
+## Membership decision and regression risk
 
-Determine which roles managers may add or remove, whether they may assign roles when adding members, and how removal/re-addition must preserve intended owner-only restrictions. Document the chosen policy before implementation.
+DEC-003 selected owner-only additions, removals, and role changes on 2026-10-10. Managers retain project/board management. Future delegation requires a new safe policy and corresponding regression coverage.
 
-Closure requires backend enforcement and regression coverage of direct role updates, removal, re-addition, current membership, and relevant owner protections. Until then, owners should manage membership. Track the decision in the [decision register](../Project-Management/decision-register.md) and the work in the [product backlog](../Project-Management/product-backlog.md).
+The dated QA correction records backend enforcement and regression coverage of direct role updates, manager add/remove/re-add rejection, and preserved owner operations. Recheck current membership and owner protections for affected candidates. Track the decision in the [decision register](../Project-Management/decision-register.md) and the work in the [product backlog](../Project-Management/product-backlog.md).
 
 ## Release review and residual risk
 

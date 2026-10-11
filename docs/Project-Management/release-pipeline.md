@@ -46,7 +46,7 @@ Review the scoped diff and demonstrate the agreed criteria. Run relevant backend
 
 Integrate the reviewed change into main using the agreed workflow. Verify the resulting exact commit and its CI result. A pull request is a review mechanism; this guide does not invent mandatory branch-protection rules.
 
-Record commit, environment, commands/scenarios, results, and gaps using the [verification template](../Releases/verification-template.md). Keep the manager membership loophole visible until a policy and regression-verified fix close it.
+Record commit, environment, commands/scenarios, results, and gaps using the [verification template](../Releases/verification-template.md). Link the v1.1.1 owner-only membership correction and recheck affected candidates; preserve historical issue wording in older release records.
 
 ## Stage 4 — Publication readiness
 

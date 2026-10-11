@@ -387,14 +387,15 @@ function WorkspaceList({
                     return (
                         <article
                             key={workspace.id}
-                            className="border border-slate-800 bg-slate-950 p-5 transition hover:border-blue-500 hover:bg-slate-900"
+                            className="resource-card border border-slate-800 bg-slate-950 p-5 transition hover:border-blue-500 hover:bg-slate-900"
                         >
                             <Link
                                 to={`/workspaces/${workspace.id}`}
                                 className="block"
                             >
                                 <div className="flex items-start justify-between gap-4">
-                                    <div>
+                                    <div className="flex min-w-0 items-center gap-3">
+                                        <span className="workspace-avatar" aria-hidden="true">{workspace.name.slice(0, 1).toUpperCase()}</span><div className="min-w-0">
                                         <h2 className="text-lg font-semibold text-slate-100">
                                             {workspace.name}
                                         </h2>
@@ -402,6 +403,7 @@ function WorkspaceList({
                                         <p className="mt-1 text-sm text-slate-500">
                                             {workspace.slug}
                                         </p>
+                                        </div>
                                     </div>
 
                                     <span className="border border-slate-700 px-2 py-1 text-xs uppercase tracking-wide text-slate-300">

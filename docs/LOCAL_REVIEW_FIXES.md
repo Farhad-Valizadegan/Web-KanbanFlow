@@ -1,6 +1,6 @@
 # KanbanFlow Local Review Fixes
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 This record explains the ten corrections identified in the original local source review, their release context, and the limits of the recorded verification. The initial fixes shipped in [v1.0.1](Releases/v1.0.1.md); [v1.0.2](Releases/v1.0.2.md) subsequently addressed session configuration, analytics refresh, and specific verification gaps. This document update does not change application behavior or constitute a fresh application test run.
 
@@ -41,7 +41,7 @@ Visibility rules apply to server responses as well as screen controls. Hiding a 
 
 Private-board access for current owners/managers is part of the recorded rule. Do not describe these boards as creator-only. The correction can remove access that an ordinary member previously had to another user's private board; this is an intentional historical access change.
 
-**Remaining issue:** a manager can remove and re-add a member with a different role, bypassing the intended owner-only direct role-change restriction. The direct-update correction in LR-05 does not close this indirect path. [DEC-003](Project-Management/decision-register.md) and [PB-001](Project-Management/product-backlog.md) track the unresolved policy and enforcement work. Workspace owners should manage membership until it is resolved.
+**Historical issue, now corrected:** LR-05 restricted direct role updates but left manager remove/re-add escalation open at that time. [DEC-003](Project-Management/decision-register.md) and [PB-001](Project-Management/product-backlog.md) now record owner-only membership mutations and the 2026-10-10 regression evidence.
 
 ## Interaction and ordering interpretation
 
@@ -71,7 +71,7 @@ The [v1.0.1 CI run](https://github.com/Farhad-Valizadegan/Web-KanbanFlow/actions
 | Stale workspace analytics after project changes | Open in v1.0.1. | Addressed by v1.0.2 cache invalidation and observed project-count refresh. |
 | Keyboard reorder and rollback browser evidence | Outstanding in v1.0.1. | Specific isolated scenarios recorded in v1.0.2. |
 | MySQL contention evidence | Outstanding in v1.0.1. | Specific disposable-data experiments recorded in v1.0.2. |
-| Manager remove/re-add role loophole | Open in v1.0.1. | Remains open in current planning. |
+| Manager remove/re-add role loophole | Open in v1.0.1. | Corrected by owner-only mutations in v1.1.1; see the dated QA evidence. |
 | Local Web-KanbanFlow folder rename | Pending in historical v1.0.2 notes. | Completed later; historical release notes retain their original context. |
 
 The later UI/theme release has its own [v1.1.0 evidence](Releases/v1.1.0.md). Do not combine historical totals into a new verification result or interpret a published source release as a production deployment.
@@ -106,7 +106,7 @@ start
 :Record v1.0.1 automated evidence;
 :Record v1.0.2 session and analytics follow-up;
 :Distinguish browser and MySQL scenario evidence;
-:Keep membership policy loophole open;
+:Link v1.1.1 owner-only membership correction;
 :Verify affected behavior for each new candidate;
 stop
 @enduml

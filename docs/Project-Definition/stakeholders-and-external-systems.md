@@ -1,6 +1,6 @@
 # KanbanFlow Stakeholders and External Systems
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and boundary
 
@@ -53,7 +53,7 @@ The browser and backend depend on a compatible Sanctum session and CSRF configur
 
 Backend authorization must cover direct and nested requests, including workspace membership and private-board visibility. Removed-member and role-change paths require their own checks. Sensitive data and credentials must not be copied into documentation, source commits, or verification artifacts.
 
-The known manager remove/re-add loophole remains open. Owners should manage membership until the intended policy is decided and backend enforcement verified. See the [decision register](../Project-Management/decision-register.md).
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Managers must ask the workspace owner to change membership. See the [decision register](../Project-Management/decision-register.md).
 
 ## Availability and failure implications
 

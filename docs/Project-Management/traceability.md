@@ -1,6 +1,6 @@
 # KanbanFlow Feature Traceability
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and distinction
 
@@ -63,9 +63,9 @@ Do not fill unavailable fields with fabricated owners, approvals, test outcomes,
 
 ### Membership policy closure
 
-PB-001 depends on DEC-003. Until the manager rule is agreed, the trace ends at an open policy question. A future implementation must connect the rule to backend direct/add/remove/re-add checks, persisted-state observations, interface feedback, and updated documentation.
+PB-001 implements the owner-only rule selected in DEC-003 on 2026-10-10. Trace the outcome to WorkspacePolicy, WorkspaceMemberController, WorkspaceMemberApiTest, frontend permissions, and the dated QA correction, including unchanged state for denied manager operations.
 
-The existing presence of membership tests does not mean the known loophole is fixed.
+The dated QA correction records targeted failing-then-passing membership regression evidence; later candidates require fresh affected checks.
 
 ### Theme delivery
 

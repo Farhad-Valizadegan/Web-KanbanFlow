@@ -1,6 +1,6 @@
 # KanbanFlow Backup Recovery Activity
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and inputs
 
@@ -59,7 +59,7 @@ For engine-specific or browser checks use [verification layers](../06-testing/ve
 
 If an artifact is unreadable, required key/configuration is absent, or runtime compatibility is unresolved, stop the restore path and retain the reason. If execution fails, inspect the resulting state before retrying or selecting another point. Preserve relevant diagnostics and avoid destructive resets that obscure the incident.
 
-If application validation fails after import, record expected/actual response and persisted state; assess whether the cause is data, source/assets, configuration, services, or a known product defect. DEC-003 remains open and is not repaired by restoration. A forward correction or compatible recovery needs its own identified candidate and recheck.
+If application validation fails after import, record expected/actual response and persisted state; assess whether the cause is data, source/assets, configuration, services, or a known product defect. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. A forward correction or compatible recovery needs its own identified candidate and recheck.
 
 Code rollback, database restoration, and migration reversal are distinct choices with different consequences. See [upgrade and rollback](../../Releases/upgrade-and-rollback.md); older source can reintroduce security defects, and restore can discard newer writes.
 

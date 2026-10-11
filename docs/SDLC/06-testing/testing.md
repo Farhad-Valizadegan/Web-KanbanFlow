@@ -1,6 +1,6 @@
 # KanbanFlow Testing Procedure
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Prepare
 
@@ -53,7 +53,7 @@ Targeted filters may omit related regressions; complete required broader checks 
 
 Use the [manual acceptance checklist](manual-acceptance-checklist.md) scenario IDs to record actor, resource tree, browser/version, viewport/zoom, theme, input method, and expected outcome. Exercise accepted behavior and denial/failure paths. Observe visible feedback and authoritative state after refresh rather than treating optimistic UI as proof of persistence.
 
-Use [security regression cases](security-regression-matrix.md) for direct API requests, wrong ancestry, private data visibility, notification ownership, and indirect membership paths. Include allowed controls so an unavailable service is not mistaken for correct authorization. DEC-003 remains open; document its scope without inventing a resolved policy.
+Use [security regression cases](security-regression-matrix.md) for direct API requests, wrong ancestry, private data visibility, notification ownership, and indirect membership paths. Include allowed controls so an unavailable service is not mistaken for correct authorization. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 For shared controls inspect representative consumers, labels, keyboard/focus, pending/error states, and themes. Selected keyboard movement support does not prove every drag path works without a pointer. Assistive-tool or contrast claims need their actual observations/measurements.
 

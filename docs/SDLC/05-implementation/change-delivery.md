@@ -1,6 +1,6 @@
 # KanbanFlow Change Delivery
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Delivery objective
 
@@ -36,7 +36,7 @@ Use the exact source identity in the delivery record. If checks were performed b
 | Publication contents | Are secrets, dumps, dependencies, and environment-specific generated files excluded? |
 | Documentation | Do source references, local links, embedded PlantUML, editable source, and previews agree? |
 
-Use [verification layers](../06-testing/verification-layers.md) to select evidence proportional to the change. Backend SQLite tests do not demonstrate MySQL contention; frontend lint/build do not demonstrate browser acceptance. Keep unresolved DEC-003 membership-policy work visible in the [decision register](../../Project-Management/decision-register.md).
+Use [verification layers](../06-testing/verification-layers.md) to select evidence proportional to the change. Backend SQLite tests do not demonstrate MySQL contention; frontend lint/build do not demonstrate browser acceptance. Keep the selected owner-only DEC-003 rule and affected regression evidence visible in the [decision register](../../Project-Management/decision-register.md).
 
 ## Commit and review description
 

@@ -1,6 +1,6 @@
 # KanbanFlow Testing Verification Record Template
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Use
 
@@ -92,7 +92,7 @@ Identify the candidate before execution and record actual context as checks proc
 
 When substantive edits, dependencies, configuration, or conflict resolutions change the checked behavior, identify the new candidate and recheck affected criteria. Keep the original failing observation and its evidence; do not overwrite it with a later Pass as if the failure never occurred. Historical results remain tied to their original state.
 
-A complete record can contain failures and gaps. Complete means the assessment and limitations are recorded, not that the product is universally correct or deployment is authorized. Keep DEC-003 and other unresolved issues linked rather than claiming closure from unrelated checks.
+A complete record can contain failures and gaps. Complete means the assessment and limitations are recorded, not that the product is universally correct or deployment is authorized. Link the DEC-003 correction and any open issues; historical or unrelated checks do not verify a new candidate.
 
 ## Evidence handling and consistency
 

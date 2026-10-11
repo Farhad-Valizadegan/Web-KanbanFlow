@@ -1,6 +1,6 @@
 # KanbanFlow Security Threat Model and Risk Analysis
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Use this bounded framework to assess affected actors, data, trust boundaries, and misuse scenarios. It is not a comprehensive audit, certification, or newly executed penetration test.
 
@@ -36,7 +36,7 @@ Paths for policies are relative to `backend/app/Policies/`; controller paths are
 | --- | --- | --- | --- |
 | TM-01 | Authenticated caller requests another workspace's nested identifiers | Inspect ancestry and authorization together | Direct mismatched requests and absence of unauthorized read/write; verification required |
 | TM-02 | Removed member retains an open form or comment authorship | Recheck board access at the endpoint | Denial and unchanged persisted state; previous authorship is insufficient evidence of access |
-| TM-03 | Manager changes privileges indirectly through remove/re-add | Compare membership store/destroy with owner-only role update | Known unresolved DEC-003/PB-001; define policy and implement/verify the agreed fix |
+| TM-03 | Manager changes privileges indirectly through remove/re-add | Compare membership store/destroy with owner-only role update | Mitigated by owner-only mutations under DEC-003/PB-001; retain direct/indirect regression checks |
 | TM-04 | Private data leaks through secondary responses | Review lists, analytics, activities, and notification recipients/content | Evidence for each response path; detail-page denial alone is insufficient |
 | TM-05 | Forged browser request or stolen session is used for mutation | Inspect CSRF/session configuration and actual request handling | Missing/invalid token and expired-session checks in the candidate environment; no new result claimed |
 | TM-06 | Untrusted task/comment content executes in the browser | Inspect rendering paths and handling of rich/HTML content | Safe display tests for actual components; no assumption that arbitrary HTML is supported or sanitized |
@@ -69,7 +69,7 @@ See [data flow](data-flow-diagram.md), [data classification](data-classification
 | Unauthorized private data read | Board/nested/aggregate visibility | Current membership, direct requests, and scoped responses | Record actual result or unverified gap |
 | Removed user mutation | Membership and authorship | Access revocation and persisted state | Record actual result |
 | Cross-resource request | Nested ancestry | Identifier mismatch and authorization guards | Record actual result |
-| Indirect role escalation | Membership operations | Remove/re-add versus direct role-update policy | DEC-003/PB-001 remains unresolved |
+| Indirect role escalation | Membership operations | Remove/re-add versus direct role-update policy | DEC-003/PB-001 is implemented with owner-only membership mutations |
 | Stale/conflicting mutation | State and integrity | Relevant locking, rejection, and recovery checks | SQLite alone does not prove MySQL contention |
 | Credential or private data leakage | Configuration/log/evidence | Inspect necessary content without exposing secrets | Pending or actual finding |
 

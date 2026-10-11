@@ -1,6 +1,6 @@
 # KanbanFlow System Architecture Diagram
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -38,7 +38,7 @@ The core persisted hierarchy is workspace → project → board → column → t
 
 Do not trust client role values, resource identifiers, cached content, or hidden buttons as permission. The server must evaluate current actor and the selected endpoint's actual authority and ancestry. Private visibility must cover secondary lists, aggregates, activity, and notification responses as applicable.
 
-Board mutations are not all authorized through the same policy invocation: board update/delete controllers use project authority, while task/column paths use board authority. Trace actual endpoints instead of inferring a universal board rule from a component diagram. DEC-003/PB-001 membership remove/re-add authority remains unresolved.
+Board mutations are not all authorized through the same policy invocation: board update/delete controllers use project authority, while task/column paths use board authority. Trace actual endpoints instead of inferring a universal board rule from a component diagram. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 Configuration and serialization are also boundaries. Keep credentials, sessions, tokens, private data, and operational diagnostics out of public responses and shared evidence. The public health endpoint reports status/application name; it is not a complete dependency-health or readiness probe.
 

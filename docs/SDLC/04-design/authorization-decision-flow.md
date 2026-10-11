@@ -1,6 +1,6 @@
 # KanbanFlow Authorization Decision Flow
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and design
 
@@ -8,7 +8,7 @@ Resolve the authenticated actor and requested resource chain before evaluating t
 
 Nested identifiers must describe the same workspace/project/board/column/task chain. A valid identifier alone is insufficient. Comment endpoints also check board access, so former authorship does not establish continued access after membership removal.
 
-Verify positive and negative cases for each operation, including mismatched parents and revoked membership. Keep the membership escalation decision open until server enforcement and regression evidence exist.
+Verify positive and negative cases for each operation, including mismatched parents and revoked membership. Preserve the recorded owner-only rule and direct/indirect regression coverage under DEC-003.
 
 ## Decision inputs and authoritative boundary
 
@@ -24,8 +24,8 @@ This flow is a review model, not a claim that every controller uses the same che
 | --- | --- | --- |
 | Workspace/project viewing | Current workspace membership | Successful login is insufficient |
 | Workspace update/delete | Owner identifier matches actor | Manager role does not grant these policy operations |
-| Membership add/remove | Owner or current manager through `manageMembers` | Indirect role escalation remains DEC-003/PB-001 |
-| Direct member role update | Owner through `changeMemberRoles` | Does not close remove/re-add escalation |
+| Membership add/remove | Owner only through `manageMembers` | Manager add/remove requests are denied under DEC-003/PB-001 |
+| Direct member role update | Owner through `changeMemberRoles` | Add/remove operations enforce the same owner-only boundary |
 | Project update/delete | Owner or current manager | Check invoked policy and matching parent |
 | Board viewing | `visibleTo` requires membership, then workspace visibility or creator/owner/current manager | Private-board creation history alone does not bypass membership |
 | Board update/delete policy | View must pass, then owner/current manager | Board creators are not automatically editors |
@@ -69,7 +69,7 @@ A caller authorized in workspace A cannot establish access to a task in workspac
 | Revoked membership or changed role | Submit after revocation/change with previously opened UI and inspect server result |
 | Comment author/moderator | Create, edit, and delete evaluated separately; verify removed author is denied |
 | Move operation | Origin/destination scope, authority, final parent, and ordering/state consistency |
-| Membership escalation | Direct role update versus remove/re-add; close only after an agreed rule is implemented and verified |
+| Membership escalation | Owner-only direct role update and add/remove/re-add paths; denied manager requests preserve membership |
 
 Record candidate commit, endpoint/method, actor, resource chain, relevant membership/visibility, request, response, persisted state, environment, and limitations. Use isolated accounts and redact secrets/private content. These are verification criteria, not newly executed tests.
 
@@ -77,7 +77,7 @@ Record candidate commit, endpoint/method, actor, resource chain, relevant member
 
 Trace `backend/routes/api.php`, `backend/app/Policies/WorkspacePolicy.php`, `ProjectPolicy.php`, `BoardPolicy.php`, `TaskCommentPolicy.php`, `backend/app/Models/Board.php`, and the selected controller under `backend/app/Http/Controllers/Api/`. A source reference must identify the inspected candidate when used as evidence.
 
-Revisit this flow after policy, membership, private visibility, nested route, comment moderation, or movement changes. Keep [authentication design](authentication-and-authorization.md), [request contracts](route-and-request-contracts.md), [business rules](../03-analysis/business-rules-catalog.md), and [threat analysis](../03-analysis/security-threat-model-and-risk-analysis.md) aligned. DEC-003/PB-001 remains unresolved; this documentation update does not change enforcement.
+Revisit this flow after policy, membership, private visibility, nested route, comment moderation, or movement changes. Keep [authentication design](authentication-and-authorization.md), [request contracts](route-and-request-contracts.md), [business rules](../03-analysis/business-rules-catalog.md), and [threat analysis](../03-analysis/security-threat-model-and-risk-analysis.md) aligned. DEC-003/PB-001 is implemented with owner-only membership mutations; this documentation update does not change enforcement.
 
 ## Review and evidence
 
@@ -133,7 +133,7 @@ stop
 note right
 Conceptual review flow; actual ordering varies by endpoint.
 Current membership and ancestry matter.
-DEC-003/PB-001 remains open.
+DEC-003/PB-001: owner-only membership mutations.
 end note
 @enduml
 ```

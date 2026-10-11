@@ -1,6 +1,6 @@
 # KanbanFlow Scope Boundary Diagram
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and interpretation
 
@@ -13,7 +13,7 @@ Included scope does not mean every behavior is defect-free or freshly verified. 
 | Area | Included scope | Boundary condition |
 | --- | --- | --- |
 | Authentication | Registration, login, logout, authenticated sessions, and protected routes. | Requires correctly configured origins, cookies, and CSRF behavior. |
-| Workspace organization | Workspaces, membership roles, and permitted management operations. | Manager remove/re-add can bypass intended owner-only role changes; policy and enforcement remain open. |
+| Workspace organization | Workspaces, membership roles, and permitted management operations. | All membership mutations are owner-only; managers retain project/board management. |
 | Project organization | Projects and boards, visibility, ordering, and list search. | Backend access rules apply to direct and nested requests. |
 | Workflow | Ordered columns, tasks, movement, and optional WIP limits. | Valid ordering and applicable limits must survive relevant concurrent operations. |
 | Task details | Priorities, descriptions, due dates, assignments, and completion state. | Changes must be accepted and persisted by the backend. |
@@ -57,7 +57,7 @@ The diagram describes scope; it is not a complete role/action matrix, database m
 
 ## Open decisions and assumptions
 
-The manager membership policy remains undecided. Define allowed add/remove and role-assignment behavior, then test direct and indirect role changes before treating owner-only restrictions as complete.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Preserve the selected owner-only rule and regression-test direct and indirect membership paths when affected.
 
 Supported browser coverage, hosting topology, recovery objectives, and numerical capacity targets require explicit decisions and environment evidence. Review [assumptions and constraints](assumptions-and-constraints.md) before broadening claims.
 
@@ -127,7 +127,7 @@ Users --> UX
 CI ..> Work : supports delivery
 Operations ..> Auth : supports operation
 note bottom of Auth
-Membership policy loophole remains open.
+Membership mutations are owner-only.
 Included scope is not proof of complete enforcement.
 end note
 note bottom of Integration

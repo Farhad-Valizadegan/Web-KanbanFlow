@@ -1,10 +1,10 @@
 # KanbanFlow Implementation Status
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Reading this status
 
-This is a source-backed capability inventory, not a fresh acceptance run or deployment report. The project and frontend metadata identify version 1.1.0. Historical release records remain historical; subsequent documentation commits do not certify application behavior or create a new tagged release.
+This is a source-backed capability inventory, not a fresh acceptance run or deployment report. The frontend package metadata identifies version 1.1.1. Historical release records remain historical; subsequent documentation commits do not certify application behavior or create a new tagged release.
 
 ## Capability inventory
 
@@ -17,9 +17,9 @@ This is a source-backed capability inventory, not a fresh acceptance run or depl
 | Client experience | Shared shell, dialogs, password visibility, Light/Dark/System themes, selected keyboard movement support. | [UI design](../04-design/ui-and-accessibility-design.md); no broad accessibility conformance claim. |
 | Automation | CI jobs for backend tests and frontend lint/build on main pushes and pull requests. | [Workflow](../../../.github/workflows/ci.yml); job configuration is not a passing run. |
 
-## Open issues and proposed capabilities
+## Membership correction and proposed capabilities
 
-The manager remove/re-add path can bypass intended owner-only role changes. Track [DEC-003](../../Project-Management/decision-register.md) and [PB-001](../../Project-Management/product-backlog.md); documentation does not close this defect or decide the future policy.
+All membership mutations are owner-only under [DEC-003](../../Project-Management/decision-register.md) and [PB-001](../../Project-Management/product-backlog.md). The [2026-10-10 QA correction](../06-testing/qa-corrections-2026-10-10.md) records enforcement and manager add/remove/re-add regression evidence. Managers retain project/board management.
 
 Attachment storage, PDF/export delivery, anonymous public sharing, and password-change journeys have design material but no established implemented endpoints in the documented baseline. Workspace visibility metadata does not itself establish public access. Soft deletion does not imply restore UI, physical erasure, or automatic descendant soft deletion.
 
@@ -53,7 +53,7 @@ Read a complete request path before concluding a capability is available or auth
 
 | Capability | Boundary to preserve in status reports |
 | --- | --- |
-| Workspace ownership and roles | Membership-scoped access and operation-specific authority; direct role restrictions do not resolve indirect manager changes. |
+| Workspace ownership and roles | Membership-scoped access and operation-specific authority; all membership mutations are owner-only; managers retain project/board management. |
 | Private boards | Visibility also affects downstream tasks, analytics, and activity. Creator read access does not establish mutation authority. |
 | Board mutation | Current controllers invoke project update authority; BoardPolicy existence alone does not describe endpoint enforcement. |
 | Movement and WIP | Dedicated move contracts, active-task rules, stale source conflicts, and persisted ordering need affected acceptance evidence. |
@@ -81,7 +81,7 @@ No numeric coverage percentage, measured performance threshold, uptime achieveme
 
 For a status change record capability/criterion, requirement or backlog reference, old/new state, source paths, full candidate SHA, actual checks, residual issues, and any release/runtime identity. Use [verification records](../06-testing/verification-record-template.md) and [traceability](../../Project-Management/traceability.md) to keep the assessment reviewable.
 
-Close DEC-003/PB-001 only after the intended membership policy is agreed, direct and indirect operations are enforced, and relevant acceptance/regression evidence exists. Do not mark proposed downloads, PDF, sharing, or password-change features implemented without routes, authority, storage/data behavior, and functioning consumer evidence.
+DEC-003/PB-001 is implemented locally with a recorded policy and direct/indirect regression evidence; future membership changes must preserve or explicitly revise that rule. Do not mark proposed downloads, PDF, sharing, or password-change features implemented without routes, authority, storage/data behavior, and functioning consumer evidence.
 
 Update this inventory when application behavior changes, not merely when another document is expanded. Preserve historical releases and identify later source changes through commit history; version metadata alone does not indicate what is installed or deployed.
 

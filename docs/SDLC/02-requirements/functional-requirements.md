@@ -1,6 +1,6 @@
 # KanbanFlow Functional Requirements
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 This catalog identifies functional areas and the behavior that a change-specific specification must clarify. It reflects the documented product scope without asserting a complete endpoint permission matrix or fresh feature verification.
 
@@ -30,7 +30,7 @@ The FR identifiers below are document-local catalog references, not external iss
 | --- | --- | --- | --- |
 | FR-01 | Registration and sessions | Users can establish and end an authenticated session through permitted flows | Valid/invalid input, trusted origin, sign-in/out, expired session, protected access |
 | FR-02 | Workspace organization | Users can inspect and manage workspaces according to applicable authorization | Current membership, permitted mutations, inaccessible resources, validation failures |
-| FR-03 | Membership administration | Applicable membership actions enforce the agreed role policy | Owner actions, direct role updates, removal/revocation, indirect role-change policy gap |
+| FR-03 | Membership administration | Applicable membership actions enforce the agreed role policy | Owner actions, manager add/remove/update rejection, removal/revocation, unchanged state after denied indirect changes |
 | FR-04 | Projects | Permitted users can maintain project information within its workspace | Create/edit/delete, resource ancestry, persisted fields, affected summary refresh |
 | FR-05 | Boards and visibility | Users see and act on boards allowed by membership and visibility | Workspace/private boards, creator/owner/manager access, ordinary member restrictions |
 | FR-06 | Columns and WIP | Permitted users maintain ordered workflow columns and applicable limits | Creation/deletion ordering, capacity rejection, isolated contention where relevant |
@@ -83,7 +83,7 @@ Use the [requirements guide](requirements.md), [roles and use cases](roles-and-u
 
 Link candidate work to the [product backlog](../../Project-Management/product-backlog.md). Catalog numbering does not assign priority, dates, capacity, or sprint selection. Essential policy ambiguity blocks dependent enforcement implementation.
 
-The membership role loophole in FR-03 requires DEC-003/PB-001 follow-up. A separate bounded investigation can clarify options without claiming the role policy is agreed or the loophole fixed. Record actual decisions through the [decision register](../../Project-Management/decision-register.md).
+FR-03 follows the owner-only membership rule selected in DEC-003 and implemented in PB-001. Any future delegation requires a new safe policy and regression evidence. Record actual decisions through the [decision register](../../Project-Management/decision-register.md).
 
 ## Verification matrix
 
@@ -105,7 +105,7 @@ Preserve superseded criteria and explain material changes. Requirement agreement
 
 Database notifications do not promise email/SMS delivery. Browser-local theme preferences do not imply account-wide synchronization. No automatic real-time external integration or offline persistence guarantee is established here.
 
-The manager remove/re-add role loophole remains unresolved in DEC-003/PB-001. Do not turn documented intended owner-only direct role changes into a claim that every indirect path is already enforced.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Keep direct role-update and add/remove/re-add regressions in candidate verification.
 
 ## Evidence
 

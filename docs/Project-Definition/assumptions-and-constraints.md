@@ -1,6 +1,6 @@
 # Assumptions and Constraints
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 This document defines the conditions KanbanFlow depends on and the boundaries that affect its design, verification, and operation. Assumptions require confirmation in the target environment; constraints describe current implementation or explicit scope boundaries. Proposed operational targets are not service guarantees.
 
@@ -10,7 +10,7 @@ This document defines the conditions KanbanFlow depends on and the boundaries th
 | --- | --- | --- |
 | A-01 | Users have a modern browser, network access, and cookies enabled. | Verify sign-in and core journeys in the supported target browsers; no browser compatibility matrix has been established. |
 | A-02 | Users organize work through workspaces, projects, boards, columns, and tasks. | Validate the workspace-to-task journey with representative users. |
-| A-03 | Workspace owners make membership decisions. | Confirm the intended manager policy before claiming owner-only role changes are fully enforced. |
+| A-03 | Workspace owners make membership decisions. | All membership mutations are owner-only under DEC-003; retain denied-manager regression checks. |
 | A-04 | Operators provide reachable application services and a configured database. | Verify runtime connectivity and environment configuration before use. |
 | A-05 | Users need visible task state and ownership. | Treat productivity benefits as hypotheses until supported by user observations. |
 
@@ -67,9 +67,9 @@ See the [scope boundary](scope-boundary-diagram.md) before proposing additions. 
 | Backup and recovery | A source release is not a data backup. | Define backup ownership, retention, restore steps, and a verified restore exercise. |
 | Deployment | CI runs checks; it does not establish a production deployment. | Confirm hosting, environment, deployment authorization, and smoke checks. |
 | Browser support | Modern browser use is assumed; no full compatibility matrix is recorded here. | Select and verify supported browsers and assistive interaction. |
-| Membership permissions | Manager remove/re-add can bypass intended owner-only role-change restrictions. | Decide the permitted manager operations, implement enforcement, and verify regression coverage. |
+| Membership permissions | Membership mutations are owner-only under DEC-003/PB-001. | Preserve backend enforcement and direct/indirect regression coverage. |
 
-Owners should manage membership while the known loophole remains unresolved. Track its decision in the [decision register](../Project-Management/decision-register.md).
+Only owners can mutate membership under the implemented rule. Track its decision in the [decision register](../Project-Management/decision-register.md).
 
 ## Validation and maintenance
 
@@ -102,7 +102,7 @@ Backend --> Database
 Ops ..> Session : configure
 Ops ..> Database : protect and recover
 note bottom of Backend
-Manager membership policy remains open.
+Membership mutations are owner-only.
 SQLite tests do not prove MySQL contention.
 end note
 @enduml

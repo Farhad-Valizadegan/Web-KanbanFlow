@@ -1,6 +1,6 @@
 # KanbanFlow Security Regression Matrix
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope
 
@@ -10,7 +10,7 @@ Use isolated users and fixtures to assess application authority and confidential
 | --- | --- | --- |
 | Authentication | Guest, valid session, logged-out session; unrelated origin and missing/invalid CSRF on applicable SPA mutations. | Protected data/mutations require authentication; record actual middleware response and absence of unauthorized state changes. See `SpaAuthenticationTest.php`; real browser checks remain separate. |
 | Workspace | Member versus outsider; owner versus manager for workspace mutation. | Membership-scoped reads and owner-only workspace update/delete. See `WorkspaceApiTest.php`. |
-| Membership | Owner, manager, member; direct role change and remove/re-add with changed role. | Owner/current-membership protections; direct restriction tests do not close indirect escalation. DEC-003 remains open pending policy and implementation. |
+| Membership | Owner, manager, member; direct role change and remove/re-add with changed role. | Owner-only mutations, owner/current-membership protections, and denied manager add/remove/re-add paths are covered by WorkspaceMemberApiTest. |
 | Nested resources | Valid object under a wrong workspace/project/board/column/task path. | Ancestry rejection and unchanged state; inspect project/board/column/task/comment suites. |
 | Private boards | Owner/manager/creator/member/viewer/outsider; list/detail/tasks/activity/analytics. | Prevent hidden content exposure across downstream routes; `ReviewRegressionTest.php` contains selected cases. Creator visibility does not imply mutation authority. |
 | Mutations | Member/viewer versus owner/manager; direct HTTP calls despite hidden UI. | Server enforcement independent of buttons. Board mutation controllers currently invoke project update authority. |
@@ -41,7 +41,7 @@ These IDs identify planned checks. Read the actual invoked controllers/middlewar
 | SEC-002 | Exercise relevant SPA mutations with missing/invalid CSRF and unrelated-origin context. | Record actual middleware/browser behavior; framework authenticated fixtures alone do not prove real cookie/origin behavior. |
 | SEC-003 | Read another workspace's data and update/delete workspace as a non-owner. | Membership/ownership boundaries hold and rejected requests leave records unchanged. |
 | SEC-004 | Change roles as manager/member and attempt owner-role removal/change. | Direct owner/current-role protections hold; verify state as well as response. |
-| SEC-005 | Remove and re-add a member with a different role as manager. | Document the indirect escalation path and DEC-003 impact; future acceptance depends on an agreed policy and implemented fix. Do not claim the current issue resolved. |
+| SEC-005 | Remove and re-add a member with a different role as manager. | Both requests return 403 for managers and preserve existing membership/role; owners retain permitted operations. Recheck DEC-003 against the candidate. |
 | SEC-006 | Substitute a valid project/board/column/task/comment ID into another parent path. | Nested ancestry is enforced, no cross-resource mutation occurs, and response content does not expose hidden data. |
 | SEC-007 | Inspect private-board detail, list, tasks, analytics, and activity as regular member/viewer/outsider. | Affected visibility paths do not leak private titles, descriptions, counts, or activity content outside applicable access. |
 | SEC-008 | Read a private board as creator and separately attempt mutation as an otherwise non-privileged actor. | Read visibility is assessed separately from mutation authority; current board mutation endpoints invoke project update authority. |
@@ -75,7 +75,7 @@ SQLite API tests can assess their executed assertions, but do not establish MySQ
 
 Use Pass, Fail, Blocked, Not run, or justified Not applicable in a [verification record](verification-record-template.md). Capture reproducible unauthorized read/write behavior, affected scope, safe evidence, and corrective acceptance cases. Preserve the failing candidate and identify corrected-candidate verification separately.
 
-Material confidentiality or integrity failures remain visible in readiness decisions. A known defect is not closed by documentation, a hidden button, or unrelated passing tests. DEC-003 closure requires an explicit policy outcome plus direct and indirect enforcement evidence.
+Material confidentiality or integrity failures remain visible in readiness decisions. A known defect is not closed by documentation, a hidden button, or unrelated passing tests. DEC-003 records that outcome and dated direct/indirect evidence; future candidates require affected checks.
 
 ## Assessment limits
 

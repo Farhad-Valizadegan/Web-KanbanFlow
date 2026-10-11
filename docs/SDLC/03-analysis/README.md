@@ -1,6 +1,6 @@
 # KanbanFlow SDLC — 03 Analysis
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Analysis connects agreed requirements to an evidence-based understanding of affected behavior, data, permissions, and technical constraints. Reproduce a defect when applicable, distinguish supported causes from hypotheses, and compare bounded approaches before handing work to design.
 
@@ -65,7 +65,7 @@ Policy methods alone do not describe an endpoint's complete access boundary. Rea
 
 Use the [verification template](../../Releases/verification-template.md) for actual checks, with revision, environment, result, and limits. Build success does not establish usability; SQLite tests do not establish MySQL contention behavior. Missing or blocked checks remain explicit.
 
-DEC-003/PB-001 track the unresolved manager remove/re-add role issue. Dependent enforcement needs an agreed policy; analysis can investigate options without implying that the rule is decided or implemented. Record actual decisions in their owning register.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Record actual decisions in their owning register.
 
 ## Outputs and design handoff
 

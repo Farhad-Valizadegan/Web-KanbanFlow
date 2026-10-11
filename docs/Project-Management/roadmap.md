@@ -1,6 +1,6 @@
 # KanbanFlow Roadmap
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and planning status
 
@@ -18,18 +18,19 @@ KanbanFlow supports authenticated workspace collaboration, projects, boards, ord
 | v1.0.1 | Privacy, authorization, and Kanban interactions. | [Release record](../Releases/v1.0.1.md). |
 | v1.0.2 | Local session configuration, analytics refresh, and naming. | [Release record](../Releases/v1.0.2.md). |
 | v1.1.0 | Themes and broader UI/UX improvements. | [Release record](../Releases/v1.1.0.md). |
+| v1.1.1 | Owner-only membership mutations and session error recovery. | [Source release record](../Releases/v1.1.1.md). |
 
-Main includes later source and documentation changes without a new published version. Use the [changelog](../../CHANGELOG.md), tags, and Git history to distinguish released behavior from later commits.
+The v1.1.1 source tag records the membership and session corrections. Main may contain later changes. Use the [changelog](../../CHANGELOG.md), tags, and Git history to distinguish released behavior from later commits.
 
-Delivered capabilities do not imply every scenario is defect-free. The manager remove/re-add role-change loophole remains open.
+Delivered capabilities do not imply every scenario is defect-free. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
-## Proposed horizons
+## Completed correction and proposed horizons
 
-### First — Resolve membership policy and enforcement
+### Completed — Membership policy and enforcement
 
-The known authorization gap deserves explicit priority review. Agree manager add/remove and role-assignment rules in DEC-003, then refine PB-001 and implement consistent backend enforcement across direct and indirect role changes.
+DEC-003 selected owner-only additions, removals, and role changes on 2026-10-10. PB-001 implements this boundary across direct and indirect paths; managers retain project/board management.
 
-Completion evidence includes the agreed rule, backend regression coverage, affected UI feedback, persisted-state checks for rejected operations, and updated documentation. Until closure, owners should manage membership. This is a dependency-bound candidate, not a scheduled fix.
+The dated QA correction records backend regression coverage, preserved membership for rejected manager operations, and aligned UI permissions. This is an implemented source correction; deployment and new candidate acceptance require their own evidence.
 
 ### Next — Verified user guidance
 
@@ -53,7 +54,7 @@ This is ongoing work, not a permanently completed milestone. New feature proposa
 
 | Direction | Existing reference | Key dependency | State |
 | --- | --- | --- | --- |
-| Membership enforcement | [PB-001](product-backlog.md), [DEC-003](decision-register.md) | Explicit policy decision. | Policy blocked. |
+| Membership enforcement | [PB-001](product-backlog.md), [DEC-003](decision-register.md) | Owner-only policy selected on 2026-10-10. | Implemented locally; dated regression evidence recorded. |
 | User guidance | PB-002 | Agreed journeys; final membership instructions depend on PB-001. | Proposed. |
 | Recovery guidance | PB-003 | Operational decisions and isolated restore environment. | Proposed. |
 | Documentation consistency | PB-004 | Affected changes and evidence. | Ongoing practice. |
@@ -109,15 +110,15 @@ Regenerate the diagram preview whenever dependencies or planning direction chang
 @startuml
 title KanbanFlow Evidence-Based Roadmap
 left to right direction
-rectangle "Delivered baseline\nPublished through v1.1.0" as B
-rectangle "DEC-003\nMembership policy agreement" as D
-rectangle "PB-001\nPermission enforcement" as P
+rectangle "Delivered source baseline\nv1.1.1" as B
+rectangle "DEC-003\nOwner-only policy selected" as D
+rectangle "PB-001\nOwner-only enforcement implemented" as P
 rectangle "PB-002\nVerified user guidance" as U
 rectangle "Operational decisions\nEnvironment and recovery objectives" as O
 rectangle "PB-003\nVerified recovery guidance" as R
 rectangle "Usability observations\nFuture refinement" as F
 rectangle "PB-004\nDocumentation consistency" as M
-B ..> D : proposed priority
+B ..> D : recorded policy
 D --> P : prerequisite
 P ..> U : final membership guidance
 B ..> U : independent core guidance

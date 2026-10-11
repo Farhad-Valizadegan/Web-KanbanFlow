@@ -1,6 +1,6 @@
 # KanbanFlow Monitoring and Incident Response
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Current evidence and limits
 
@@ -114,7 +114,7 @@ Link [verification records](../06-testing/verification-record-template.md) and [
 
 Review recurring signals, missing telemetry, false positives, diagnosis gaps, and recovery lessons as explicit backlog actions. Verify completed changes, update signal definitions/runbooks when actual dependencies/environment change, and exercise response through an agreed controlled procedure when established. No rehearsal schedule or monitoring service is created here.
 
-SQLite results do not prove MySQL contention, frontend builds do not prove browser acceptance, and documentation does not close DEC-003. This guide performs no live monitoring installation, alert delivery, incident response, advisory/security audit, deployment, or restore and claims no measured availability or recovery objective.
+SQLite results do not prove MySQL contention, frontend builds do not prove browser acceptance, and documentation alone does not verify deployed DEC-003 enforcement. This guide performs no live monitoring installation, alert delivery, incident response, advisory/security audit, deployment, or restore and claims no measured availability or recovery objective.
 
 ## PlantUML diagram
 

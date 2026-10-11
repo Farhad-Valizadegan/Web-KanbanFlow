@@ -1,6 +1,6 @@
 # KanbanFlow Release and Upgrade Runbook
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Runbook status
 
@@ -84,7 +84,7 @@ No provider-specific rollout, zero-downtime topology, automatic migration revers
 
 Use the identified DEP scenarios in [deployment guide](deployment.md) and relevant [manual cases](../06-testing/manual-acceptance-checklist.md). Inspect real browser sessions, allowed/denied/private paths, existing data, accepted/rejected mutations, task ordering/WIP, changed UI, and relevant collaboration/services.
 
-Record criterion-specific Pass, Fail, Blocked, Not run, or justified Not applicable. A healthy endpoint does not prove database readiness, and SQLite tests do not prove deployed MySQL contention. Keep DEC-003 and other known defects visible; source or infrastructure publication does not resolve an application policy issue.
+Record criterion-specific Pass, Fail, Blocked, Not run, or justified Not applicable. A healthy endpoint does not prove database readiness, and SQLite tests do not prove deployed MySQL contention. Verify the target includes the DEC-003 owner-only correction and keep open defects visible; source publication alone does not establish deployed behavior.
 
 ## Failure decision table
 

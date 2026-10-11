@@ -1,6 +1,6 @@
 # KanbanFlow Deployment Architecture
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Repository-backed components
 
@@ -82,7 +82,7 @@ No redundant hosting, automatic failover, deployment slots, autoscaling, or reco
 
 Distinguish static availability, API reachability, database-backed readiness, real SPA sessions, and accepted persisted mutations. The health response is narrower than an end-to-end journey. Inspect actual source/assets identity, relevant service diagnostics, current authority, and data state after a rollout or recovery.
 
-Backend SQLite results do not establish deployed MySQL contention; frontend builds do not establish browser behavior. Use [verification layers](../06-testing/verification-layers.md), [deployment guide](deployment.md), and [backup runbook](backup-and-recovery-runbook.md) for scoped evidence. DEC-003 remains an open application issue even in a functioning infrastructure layout.
+Backend SQLite results do not establish deployed MySQL contention; frontend builds do not establish browser behavior. Use [verification layers](../06-testing/verification-layers.md), [deployment guide](deployment.md), and [backup runbook](backup-and-recovery-runbook.md) for scoped evidence. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Target architecture record
 

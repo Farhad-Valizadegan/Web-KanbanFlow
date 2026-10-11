@@ -1,6 +1,6 @@
 # KanbanFlow Deployment Guide
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Scope and entry conditions
 
@@ -84,7 +84,7 @@ Use [backup runbook](backup-and-recovery-runbook.md) and [upgrade and rollback](
 
 Capture actual target/source/assets, operator/timestamps, steps, smoke evidence, failures, recovery choices, residual issues/data loss, and acceptance or pending state. Keep publication, tag, runtime rollout, and recovery identities separate. Do not report unobserved CI, performance, security/accessibility certification, or zero data loss.
 
-DEC-003 remains an open application policy/enforcement issue; deploying documentation does not resolve it. Link outstanding work to [maintenance](../08-maintenance/README.md) and retain candidate-specific evidence in the [release verification record](../../Releases/verification-template.md). This guide performs no runtime deployment, migration, or restoration.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Link outstanding work to [maintenance](../08-maintenance/README.md) and retain candidate-specific evidence in the [release verification record](../../Releases/verification-template.md). This guide performs no runtime deployment, migration, or restoration.
 
 ## Completion evidence
 

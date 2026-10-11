@@ -1,6 +1,6 @@
 # KanbanFlow User Stories and Use Cases
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Use stories to explain the actor's need and use cases to describe observable interactions. The examples and templates here are planning aids, not scheduled work or completed user research.
 
@@ -96,7 +96,7 @@ Build success does not demonstrate these observations, and SQLite tests do not e
 
 Split when a story mixes independent outcomes, has unclear boundaries, or cannot be verified in the agreed scope. Preserve links between supporting tasks and the user outcome so completing a technical subtask does not silently replace acceptance of the whole need.
 
-Use the [Definition of Ready](../../Sprints/definition-of-ready.md) before selection. Missing essential policy or environment access remains a dependency. DEC-003/PB-001 track the manager remove/re-add role issue; a membership story must not imply that policy is settled or the loophole closed.
+Use the [Definition of Ready](../../Sprints/definition-of-ready.md) before selection. Missing essential policy or environment access remains a dependency. Membership stories must follow the owner-only rule recorded in DEC-003/PB-001 and preserve denied-manager regression coverage.
 
 A bounded investigation can have a question, expected evidence output, and stopping point. It does not automatically authorize implementation of its recommendation.
 

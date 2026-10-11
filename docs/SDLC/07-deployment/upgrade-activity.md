@@ -1,6 +1,6 @@
 # KanbanFlow Upgrade Activity
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose
 
@@ -61,7 +61,7 @@ No universal migration reversal, zero-downtime topology, worker restart command,
 
 Use DEP scenario IDs in [deployment guide](deployment.md) and affected [manual acceptance cases](../06-testing/manual-acceptance-checklist.md). Check the response, visible behavior, and authoritative persisted state; a successful build or health response does not establish complete readiness.
 
-Record database/browser/runtime context and criterion-specific Pass, Fail, Blocked, Not run, or justified Not applicable. SQLite regression results do not prove MySQL contention. CI configuration is not an observed passing run and does not deploy the application. DEC-003 remains open rather than being repaired by an infrastructure upgrade.
+Record database/browser/runtime context and criterion-specific Pass, Fail, Blocked, Not run, or justified Not applicable. SQLite regression results do not prove MySQL contention. CI configuration is not an observed passing run and does not deploy the application. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Correction and recovery choices
 

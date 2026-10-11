@@ -1,6 +1,6 @@
 # KanbanFlow Product Backlog
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and current boundary
 
@@ -21,9 +21,9 @@ The stable IDs PB-001 through PB-004 are retained. Named owners, estimates, deli
 
 ### Problem and outcome
 
-Managers can bypass intended owner-only role changes by removing and re-adding a member with a different role. The desired outcome is consistent backend enforcement across direct and indirect membership operations.
+Before the 2026-10-10 correction, managers could bypass owner-only role changes by removing and re-adding a member with a different role. The desired outcome is consistent backend enforcement across direct and indirect membership operations.
 
-### Acceptance criteria after policy agreement
+### Acceptance criteria for the selected policy
 
 - Direct role updates follow the agreed rules.
 - Addition, removal, and re-addition cannot bypass those rules.
@@ -36,7 +36,7 @@ Managers can bypass intended owner-only role changes by removing and re-adding a
 
 DEC-003 selected owner-only membership mutations on 2026-10-10. Implementation and API regressions close the bypass locally; the earlier problem description records its original motivation.
 
-Exclude unrelated role redesign or account administration. The item remains open and policy blocked. Owners should manage membership meanwhile. Link actual implementation and checks before marking it done.
+Exclude unrelated role redesign or account administration. The item is implemented locally under the owner-only rule. See DEC-003 and the 2026-10-10 QA correction for implementation and regression evidence; deployment requires separate verification.
 
 ## PB-002 — User guidance
 
@@ -133,8 +133,8 @@ Update item states only when decisions or evidence change. Retain stable IDs, re
 @startuml
 title KanbanFlow Product Backlog Dependencies
 left to right direction
-rectangle "DEC-003\nMembership policy agreement" as D
-rectangle "PB-001\nMembership enforcement" as P1
+rectangle "DEC-003\nOwner-only policy selected" as D
+rectangle "PB-001\nOwner-only enforcement implemented" as P1
 rectangle "PB-002\nUser guidance" as P2
 rectangle "Target environment and recovery decisions" as O
 rectangle "PB-003\nBackup and recovery guidance" as P3
@@ -146,7 +146,8 @@ P4 ..> P1 : documentation review
 P4 ..> P2 : links and previews
 P4 ..> P3 : evidence consistency
 note bottom of P1
-Known defect; no completed fix recorded.
+Implemented: owner-only mutations.
+QA regression evidence dated 2026-10-10.
 end note
 note bottom of P3
 Proposed work, not a verified restore procedure.

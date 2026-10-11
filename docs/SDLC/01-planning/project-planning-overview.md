@@ -1,6 +1,6 @@
 # KanbanFlow Project Planning Overview
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 This overview connects KanbanFlow's product definition, management planning, lifecycle guidance, and sprint records. It provides a navigation and decision framework, not a committed schedule or a claim that every lifecycle phase has been completed.
 
@@ -28,7 +28,7 @@ Consider user impact, dependencies, uncertainty, and verification cost when sequ
 
 ## Decisions and known constraints
 
-Record important policy choices in the [decision register](../../Project-Management/decision-register.md). The manager remove/re-add membership role loophole remains an unresolved policy and enforcement issue in DEC-003/PB-001. Planning must keep that dependency visible for affected work.
+Record important policy choices in the [decision register](../../Project-Management/decision-register.md). Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Planning must preserve the selected rule or explicitly define a safe replacement for future delegation.
 
 Environment and test boundaries matter: SQLite regressions do not establish MySQL contention behavior, and frontend build success does not demonstrate browser usability. Plan appropriate evidence using the [quality and risk plan](../../Project-Management/quality-and-risk-plan.md).
 

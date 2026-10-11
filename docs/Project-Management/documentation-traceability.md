@@ -1,6 +1,6 @@
 # KanbanFlow Documentation Traceability
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose and distinction
 
@@ -16,7 +16,7 @@ Documentation traceability connects a statement in a document to the source, dec
 | Scope and stakeholders | [Scope](../Project-Definition/scope-and-stakeholders.md), [boundary](../Project-Definition/scope-boundary-diagram.md) | Implemented capabilities plus explicitly excluded/proposed scope. |
 | Runtime constraints | [Assumptions](../Project-Definition/assumptions-and-constraints.md) | Manifests, lockfiles, configuration, and intended environment evidence. |
 | System interactions | [Context](../Project-Definition/project-context-diagram.md), [external systems](../Project-Definition/stakeholders-and-external-systems.md) | Backend routes, frontend flows, persistence, and CI configuration. |
-| Membership policy | [Decision register](decision-register.md), [backlog](product-backlog.md) | Explicit policy decisions and backend enforcement; known loophole remains open. |
+| Membership policy | [Decision register](decision-register.md), [backlog](product-backlog.md) | Owner-only policy selected and enforced; see DEC-003 and the dated QA regression evidence. |
 | Management guidance | [Management index](README.md) and related guides | Actual decisions versus working process proposals. |
 | Historical milestones | [Milestone index](milestones.md), [Milestones folder](Milestones/) | Historical stage documents; not fresh verification. |
 | Sprint process and templates | [Sprint index](../Sprints/README.md) | Templates, with actual sprint records only when agreed and recorded. |
@@ -90,7 +90,7 @@ Historical files were moved into Project-Management/Milestones. Root and documen
 
 ### Membership loophole
 
-Scope, risk, decision, backlog, and release records must consistently state that manager remove/re-add remains unresolved. A future fix requires an agreed policy and backend regression evidence before those claims can be changed to resolved.
+Current scope, risk, decision, backlog, and release guidance must reflect the owner-only correction in DEC-003/PB-001. Historical records preserve the earlier issue and link to the dated QA correction.
 
 ### Published versus untagged changes
 

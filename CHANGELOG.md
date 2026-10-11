@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 — 2026-10-11
+
+- Introduce a responsive skeuomorphic workbench with enamel controls, recessed fields, paper-like cards, and coordinated entrance/interaction motion.
+- Improve board organization, notification popovers, task readability, primary-button contrast, analytics presentation, and session retry clarity.
+- Align guidance and diagrams with current membership policy. No API, dependency, or migration changes.
+- Validation: frontend build, lint, and 10 session regression tests pass; browser checks use the evidence boundaries in [release notes](docs/Releases/v1.2.0.md).
+
 ## 1.1.1 â€” 2026-10-10
 
 ### Fixed

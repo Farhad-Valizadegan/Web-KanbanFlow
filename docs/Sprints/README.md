@@ -1,6 +1,6 @@
 # KanbanFlow Sprints
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 This section provides guides and templates for planning, executing, and reviewing agreed sprints. It does not establish dated sprint history, staffing, velocity, or completion from repository commits. Historical delivery milestones are recorded in the [milestones index](../Project-Management/milestones.md).
 
@@ -26,7 +26,7 @@ Agree a sprint identifier, start/end dates, participants, one coherent goal, and
 
 Select items from the [product backlog](../Project-Management/product-backlog.md) after [refinement](../Project-Management/backlog-refinement.md). Each selected item needs an observable outcome, acceptance criteria, an accountable owner, dependencies, and a verification approach. Apply the Definition of Ready before committing to implementation.
 
-Items that require unresolved policy remain blocked for enforcement work. The membership remove/re-add role loophole is tracked in PB-001 and DEC-003; sprint selection does not resolve that decision. Separate policy investigation from implementation that depends on its outcome.
+Items that require unresolved policy remain blocked for enforcement work. PB-001/DEC-003 records the completed owner-only membership correction; any new delegation requires its own policy decision before dependent implementation.
 
 ## Create an actual sprint record
 

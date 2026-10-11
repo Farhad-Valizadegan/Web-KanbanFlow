@@ -1,6 +1,6 @@
 # KanbanFlow Documentation
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 Start here to find KanbanFlow's product definition, delivery guidance, planning records, and release evidence. For installation and the local demo, use the [project README](../README.md). For the recorded change history, use the [changelog](../CHANGELOG.md).
 
@@ -107,7 +107,7 @@ Recorded versions:
 
 ## Evidence and open issues
 
-[Local review fixes](LOCAL_REVIEW_FIXES.md) records earlier review findings and fixes. Consult the [product backlog](Project-Management/product-backlog.md), [decision register](Project-Management/decision-register.md), and [quality and risk plan](Project-Management/quality-and-risk-plan.md) for remaining work and unresolved decisions. In particular, the manager membership remove/re-add role loophole remains an open policy and implementation issue in those records.
+[Local review fixes](LOCAL_REVIEW_FIXES.md) records earlier review findings and fixes. Consult the [product backlog](Project-Management/product-backlog.md), [decision register](Project-Management/decision-register.md), and [quality and risk plan](Project-Management/quality-and-risk-plan.md) for remaining work and unresolved decisions. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 Treat planned checks, completed checks, and unavailable checks separately. Verification records should identify the exact commit, environment, result, and evidence. A guide, diagram, passing historical test count, or published GitHub release does not establish production deployment, restore readiness, or completion of every user journey.
 

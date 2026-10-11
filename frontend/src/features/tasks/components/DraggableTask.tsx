@@ -1,6 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { ReactNode } from 'react';
+import Icon from '../../../components/ui/Icon';
 
 interface DraggableTaskProps {
     taskId: number;
@@ -44,6 +45,8 @@ function DraggableTask({
         <div
             ref={setNodeRef}
             style={style}
+            className="draggable-task"
+            data-dragging={isDragging}
         >
             <div className="relative">
                 <button
@@ -54,9 +57,9 @@ function DraggableTask({
                     disabled={disabled}
                     aria-label="Drag task"
                     title="Drag task"
-                    className="absolute right-2 top-2 z-10 cursor-grab border border-slate-700 bg-slate-900 px-2 py-1 text-xs text-slate-400 hover:border-slate-500 hover:text-slate-200 active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-40"
+                    className="task-drag-handle absolute right-2 top-2 z-10 cursor-grab border border-slate-700 bg-slate-900 px-1 py-1 text-xs text-slate-400 hover:border-slate-500 hover:text-slate-200 active:cursor-grabbing disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                    Drag
+                    <Icon name="grip" size={16} />
                 </button>
 
                 {children}

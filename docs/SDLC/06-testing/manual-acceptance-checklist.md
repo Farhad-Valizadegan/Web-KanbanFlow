@@ -1,6 +1,6 @@
 # KanbanFlow Manual Acceptance Checklist
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## How to use
 
@@ -58,7 +58,7 @@ The IDs below identify planned cases for result records. Expected outcomes are a
 | MA-013 | Observe empty, slow/loading, denied, validation, and unavailable-API states. | Feedback and recovery are understandable; pending actions do not imply success before acceptance. |
 | MA-014 | Remove membership or change relevant visibility in another session, then revisit affected views/actions. | Current authority is respected; stale client UI does not authorize rejected server actions. |
 
-Use [security regression matrix](security-regression-matrix.md) for direct requests, wrong ancestry, and indirect membership operations. DEC-003 remains open; do not treat owner-only direct role-change behavior as proof that manager remove/re-add paths are safe.
+Use [security regression matrix](security-regression-matrix.md) for direct requests, wrong ancestry, and indirect membership operations. Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## UI acceptance details
 

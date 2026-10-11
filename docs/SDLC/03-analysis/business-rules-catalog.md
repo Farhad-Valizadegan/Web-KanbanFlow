@@ -1,6 +1,6 @@
 # KanbanFlow Business Rules Catalog
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 This catalog organizes documented domain rules and open policy boundaries. It is not a complete endpoint matrix or proof that every rule has fresh runtime evidence.
 
@@ -8,7 +8,7 @@ This catalog organizes documented domain rules and open policy boundaries. It is
 | --- | --- | --- |
 | Workspace access | Current membership defines the viewing context | Removal, role changes, and direct requests |
 | Private boards | Creator/current owner/manager access additionally requires membership | Nested tasks/comments and aggregate exposure |
-| Member-role updates | Direct role changes use owner-only policy | Remove/re-add indirect loophole remains unresolved |
+| Member-role updates | Direct role changes use owner-only policy | Add/remove operations also enforce owner-only authority |
 | Task movement | Valid ancestry, authorization, ordering, and applicable WIP constraints | Rejection, persistence, and stale state |
 | Ordered resources | Allocation/movement/deletion preserve applicable ordered positions | Locking and database contention |
 | Comments | Authorship does not override revoked board/workspace access | Combined controller and policy guards |
@@ -36,7 +36,7 @@ BR references are local documentation identifiers, not issue numbers or complete
 | --- | --- | --- | --- |
 | BR-01 | Workspace viewing checks current membership | [WorkspacePolicy](../../../backend/app/Policies/WorkspacePolicy.php) | Removed membership and direct resource requests |
 | BR-02 | Workspace update/delete policy checks ownership | WorkspacePolicy | Ownership differs from merely having a manager role |
-| BR-03 | Member management policy allows owner/current manager; direct role changes are owner-only | WorkspacePolicy and [member controller](../../../backend/app/Http/Controllers/Api/WorkspaceMemberController.php) | Remove/re-add loophole remains open |
+| BR-03 | Member additions/removals and role changes are owner-only | WorkspacePolicy and [member controller](../../../backend/app/Http/Controllers/Api/WorkspaceMemberController.php) | Manager add/remove rejected under DEC-003 |
 | BR-04 | Project viewing checks membership; update/delete policy allows owner/manager | [ProjectPolicy](../../../backend/app/Policies/ProjectPolicy.php) | Cross-workspace ancestry and surrounding guards |
 | BR-05 | Board access uses current membership and visibility; private access adds creator/owner/manager conditions | [Board model](../../../backend/app/Models/Board.php) and [BoardPolicy](../../../backend/app/Policies/BoardPolicy.php) | Former creator membership revoked; ordinary private-board access rejected |
 | BR-06 | Board update/delete policy first requires visibility, then owner/manager authorization | BoardPolicy | A role does not override missing view access |
@@ -67,7 +67,7 @@ Locking source indicates intended serialization boundaries, not proof of all dat
 | Known defect | Current behavior conflicts with an intended boundary |
 | Verification result | Actual check at an identified candidate/environment |
 
-DEC-003/PB-001 remains an unresolved policy/enforcement dependency for indirect membership role changes. Owner-only direct updates do not close removal/re-addition paths. Owners should manage membership until that issue is resolved.
+Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass. Owner-only add/remove enforcement also rejects the indirect path.
 
 ## Detailed rule and exception record
 

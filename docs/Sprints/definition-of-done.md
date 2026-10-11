@@ -1,6 +1,6 @@
 # KanbanFlow Definition of Done
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 An item is Done when its agreed outcome is demonstrated, relevant checks pass, scoped review is complete, and affected documentation is updated. Completion is assessed against the item's acceptance criteria and an identified source revision, not against elapsed time or the amount of activity performed.
 
@@ -50,7 +50,7 @@ Use Pass, Fail, Blocked, Not run, and justified Not applicable for individual ch
 
 A required failed, blocked, or unexecuted check prevents completion. An unrelated known issue can remain open if it does not prevent the agreed outcome, but its impact and tracking reference must remain visible. Do not quietly lower the criteria after a failed check; record and obtain the appropriate agreement for a legitimate scope change.
 
-The membership remove/re-add role loophole remains tracked by PB-001 and DEC-003 in the [backlog](../Project-Management/product-backlog.md) and [decision register](../Project-Management/decision-register.md). It prevents declaring that enforcement item complete while unresolved; it does not automatically prevent completion of every unrelated documentation item.
+The corrected membership remove/re-add issue is recorded by PB-001 and DEC-003 in the [backlog](../Project-Management/product-backlog.md) and [decision register](../Project-Management/decision-register.md). The dated QA correction records its implemented owner-only outcome; future candidates still need affected regression evidence.
 
 ## Copyable completion record
 

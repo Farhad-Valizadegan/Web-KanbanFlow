@@ -1,15 +1,15 @@
 @startuml
 title KanbanFlow Evidence-Based Roadmap
 left to right direction
-rectangle "Delivered baseline\nPublished through v1.1.0" as B
-rectangle "DEC-003\nMembership policy agreement" as D
-rectangle "PB-001\nPermission enforcement" as P
+rectangle "Delivered source baseline\nv1.1.1" as B
+rectangle "DEC-003\nOwner-only policy selected" as D
+rectangle "PB-001\nOwner-only enforcement implemented" as P
 rectangle "PB-002\nVerified user guidance" as U
 rectangle "Operational decisions\nEnvironment and recovery objectives" as O
 rectangle "PB-003\nVerified recovery guidance" as R
 rectangle "Usability observations\nFuture refinement" as F
 rectangle "PB-004\nDocumentation consistency" as M
-B ..> D : proposed priority
+B ..> D : recorded policy
 D --> P : prerequisite
 P ..> U : final membership guidance
 B ..> U : independent core guidance

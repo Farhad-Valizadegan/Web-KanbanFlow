@@ -1,6 +1,6 @@
 # KanbanFlow Definition of Ready
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 An item is Ready for sprint selection when its user problem, intended outcome, scope, acceptance criteria, dependencies, and verification approach are sufficiently clear to begin the agreed work. Readiness reduces avoidable uncertainty; it does not require every implementation detail to be designed in advance.
 
@@ -40,7 +40,7 @@ Avoid vague criteria such as “works well” or “improve security.” Specify
 | Scope is too large or mixes independent outcomes | Split during refinement and retain dependency links. |
 | Required preceding work has a clear completion condition | Record the dependency and assess whether it prevents starting the selected scope. |
 
-The manager remove/re-add role issue depends on the membership-policy decision tracked by DEC-003 and PB-001 in the [decision register](../Project-Management/decision-register.md) and [product backlog](../Project-Management/product-backlog.md). Dependent enforcement implementation remains blocked while that policy is undecided.
+DEC-003/PB-001 records implemented owner-only membership enforcement in the [decision register](../Project-Management/decision-register.md) and [product backlog](../Project-Management/product-backlog.md). Future delegation requires an explicit safe policy before dependent enforcement work is ready.
 
 A bounded investigation can be ready even when the implementation it informs is not. Define its question, scope, expected decision/evidence output, and stopping point. Completing investigation does not automatically resolve policy or implement the resulting feature.
 

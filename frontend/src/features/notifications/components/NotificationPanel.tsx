@@ -4,7 +4,7 @@ import {
     useQueryClient,
 } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
     deleteNotification,
     getNotifications,
@@ -12,6 +12,7 @@ import {
     markNotificationAsRead,
 } from '../api';
 import type { AppNotification } from '../types';
+import Icon from '../../../components/ui/Icon';
 
 interface ApiErrorResponse {
     message?: string;
@@ -45,6 +46,7 @@ function getErrorMessage(
 
 function NotificationPanel() {
     const queryClient = useQueryClient();
+    const panelRef = useRef<HTMLElement>(null);
 
     const [isOpen, setIsOpen] =
         useState(false);
@@ -223,12 +225,17 @@ function NotificationPanel() {
         <div className="relative">
             <button
                 type="button"
-                onClick={() =>
-                    setIsOpen(current => !current)
-                }
-                className="relative border border-slate-700 bg-slate-950 px-4 py-2 text-sm font-medium text-slate-200 hover:border-slate-500"
+                popoverTarget="notification-panel"
+                onClick={event => {
+                    const rect = event.currentTarget.getBoundingClientRect();
+                    panelRef.current?.style.setProperty("--notification-top", `${rect.bottom + 8}px`);
+                    panelRef.current?.style.setProperty("--notification-right", `${Math.max(16, window.innerWidth - rect.right)}px`);
+                }}
+                aria-expanded={isOpen}
+                aria-controls="notification-panel"
+                className="notification-trigger relative border border-slate-700 bg-slate-950 px-4 py-2 text-sm font-medium text-slate-200 hover:border-slate-500"
             >
-                Notifications
+                <Icon name="bell" size={18} /> Notifications
 
                 {unreadCount > 0 && (
                     <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-xs font-bold text-white">
@@ -239,8 +246,7 @@ function NotificationPanel() {
                 )}
             </button>
 
-            {isOpen && (
-                <section className="absolute right-0 z-50 mt-2 w-[min(92vw,28rem)] border border-slate-700 bg-slate-900 shadow-2xl">
+            <section ref={panelRef} id="notification-panel" popover="auto" onToggle={event => setIsOpen((event.nativeEvent as ToggleEvent).newState === "open")} aria-label="Notifications" className="notification-surface w-[min(92vw,28rem)] border border-slate-700 bg-slate-900">
                     <header className="border-b border-slate-800 p-4">
                         <div className="flex items-start justify-between gap-4">
                             <div>
@@ -257,7 +263,7 @@ function NotificationPanel() {
                             <button
                                 type="button"
                                 onClick={() =>
-                                    setIsOpen(false)
+                                    panelRef.current?.hidePopover()
                                 }
                                 className="text-sm text-slate-500 hover:text-slate-300"
                             >
@@ -444,7 +450,6 @@ function NotificationPanel() {
                         )}
                     </div>
                 </section>
-            )}
         </div>
     );
 }

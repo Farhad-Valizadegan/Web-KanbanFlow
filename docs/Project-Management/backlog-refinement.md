@@ -1,6 +1,6 @@
 # KanbanFlow Backlog Refinement
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../SDLC/06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose
 
@@ -76,21 +76,21 @@ Readiness is not completion, release authorization, or a promised delivery date.
 
 ## KanbanFlow example: manager membership loophole
 
-The known problem is that removing and re-adding a member with another role can bypass intended owner-only role changes. It is recorded as PB-001 and DEC-003 in the existing backlog and decision register.
+The original problem was that managers could remove and re-add members with another role to bypass owner-only direct role changes. It is recorded as PB-001 and DEC-003 in the existing backlog and decision register.
 
-### Required decision
+### Recorded membership decision
 
-Define which members managers may add/remove and which roles they may assign on addition. Do not substitute an assumed policy for this unresolved decision.
+DEC-003 selected owner-only additions, removals, and role updates on 2026-10-10. Managers retain project/board management; any future membership delegation requires an explicit safe policy.
 
-### Candidate acceptance criteria after policy agreement
+### Regression criteria for the selected policy
 
-- Direct role updates follow the agreed owner/manager rules.
+- Only owners can update roles or add/remove members; managers are denied.
 - Removal and re-addition cannot bypass those same rules.
 - Requests are checked in the backend even when sent without frontend controls.
 - Current membership, denied users, and applicable owner protections are covered.
 - Rejected operations leave persisted membership unchanged and produce clear feedback.
 
-These criteria are a refinement proposal, not a completed fix. The item remains policy-blocked until the rule is agreed; owners should manage membership meanwhile.
+The 2026-10-10 QA correction records implementation and regression evidence for PB-001. Recheck these criteria when membership authority changes; historical results do not verify a new candidate.
 
 ## Priority and estimation boundaries
 

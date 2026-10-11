@@ -1,6 +1,6 @@
 # KanbanFlow Implementation
 
-> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Earlier open-policy text and diagrams below describe the preceding state. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
+> **Policy amendment (2026-10-10):** Membership mutations are now owner-only; DEC-003/PB-001's bypass is fixed. Current guidance below reflects this rule; historical records retain their original scope. See [QA corrections](../06-testing/qa-corrections-2026-10-10.md) for the selected rule and regression evidence.
 
 ## Purpose
 
@@ -34,7 +34,7 @@ This index coordinates those guides; it is not a substitute for route/controller
 - Identify policy questions, dependency/runtime changes, migration needs, and recovery implications.
 - Choose meaningful verification layers and isolated fixtures before editing.
 
-If the intended permission policy is unresolved, return the question to [analysis decisions](../03-analysis/analysis-decisions-and-open-questions.md) and the [decision register](../../Project-Management/decision-register.md). DEC-003, the manager remove/re-add role bypass, remains open; this phase index neither selects its remedy nor closes it.
+If the intended permission policy is unresolved, return the question to [analysis decisions](../03-analysis/analysis-decisions-and-open-questions.md) and the [decision register](../../Project-Management/decision-register.md). Membership additions, removals, and role changes are owner-only under DEC-003/PB-001; the 2026-10-10 correction closes the manager remove/re-add bypass.
 
 ## Responsibilities and handoffs
 
