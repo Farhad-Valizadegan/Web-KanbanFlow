@@ -234,8 +234,13 @@ Start with the [development workflow](docs/SDLC/05-implementation/development-wo
 
 ## License
 
-Copyright © 2026 Farhad Valizadegan. All rights reserved.
+KanbanFlow is proprietary software. Copyright (c) 2026 Farhad Valizadegan.
+All rights reserved. No permission to use, copy, modify, distribute,
+sublicense, or sell the copyright holder's code or documentation is granted
+without prior written authorization, except where applicable law permits.
+See [LICENSE](./LICENSE).
 
-This repository and its source code are provided solely for portfolio review. No permission is granted to copy, use, modify, distribute, publish, sublicense, sell, or create derivative works from any part of this project without the author's prior written permission.
+Third-party components remain under their respective licenses. This notice
+does not revoke permissions previously granted for copies distributed under MIT.
 
-The backend Composer manifest declares `proprietary`, consistent with these repository terms. Third-party dependencies retain their own licenses.
+The backend Composer manifest declares `proprietary`, consistent with these repository terms.
